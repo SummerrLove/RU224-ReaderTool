@@ -38,6 +38,8 @@ import scannel.reader.ReaderUtility;
 
 public class ConfigurationFrame extends AnchorPane implements EventHandler<ActionEvent>, DigitalInputListener {
 
+	private RadioButton rb_power_global;
+	private RadioButton rb_power_per_port;
 	private TextField power;
 	private AntennaFrame antenna_list;
 	private ChoiceBox<Session> cb_session;
@@ -54,7 +56,7 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 	
 	public ConfigurationFrame() {
 		this.initComponents();
-		DigitalIOController.getInstance().setDigitalInputListener(this);
+//		DigitalIOController.getInstance().setDigitalInputListener(this);
 	}
 
 	public ConfigurationFrame(Node... children) {
@@ -69,11 +71,24 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 		AnchorPane.setTopAnchor(power_title, 10.0);
 		this.getChildren().add(power_title);
 		
+		rb_power_global = new RadioButton("Global");
+		rb_power_global.setOnAction(this);
+		AnchorPane.setLeftAnchor(rb_power_global, 30.0);
+		AnchorPane.setTopAnchor(rb_power_global, 40.0);
+		this.getChildren().add(rb_power_global);
+		
+		rb_power_per_port = new RadioButton("Per Port");
+		rb_power_per_port.setOnAction(this);
+		AnchorPane.setLeftAnchor(rb_power_per_port, 100.0);
+		AnchorPane.setTopAnchor(rb_power_per_port, 40.0);
+		this.getChildren().add(rb_power_per_port);
+		
 		power = new TextField();
 		power.setPrefWidth(60);
+		power.setPromptText("5 - 31.5");
 		AnchorPane.setLeftAnchor(power, 30.0);
 		AnchorPane.setTopAnchor(power, 40.0);
-		this.getChildren().add(power);
+//		this.getChildren().add(power);
 		
 		antenna_list = new AntennaFrame();
 		antenna_list.setVgap(15);
@@ -88,41 +103,41 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 		Label session_title = new Label("Session: ");
 		session_title.setFont(Font.font("Arial", FontWeight.BOLD, 16));
 		AnchorPane.setLeftAnchor(session_title, 30.0);
-		AnchorPane.setTopAnchor(session_title, 210.0);
+		AnchorPane.setTopAnchor(session_title, 310.0);
 		this.getChildren().add(session_title);
 		
 		cb_session = new ChoiceBox<Session>(FXCollections.observableArrayList(Session.S0, Session.S1, Session.S2, Session.S3));
 		cb_session.setTooltip(new Tooltip("Select a session value"));
 //		cb_session.setValue(Session.S0);
 		AnchorPane.setLeftAnchor(cb_session, 110.0);
-		AnchorPane.setTopAnchor(cb_session, 210.0);
+		AnchorPane.setTopAnchor(cb_session, 310.0);
 		this.getChildren().add(cb_session);
 		
 		
 		Label target_title = new Label("Target: ");
 		target_title.setFont(Font.font("Arial", FontWeight.BOLD, 16));
 		AnchorPane.setLeftAnchor(target_title, 30.0);
-		AnchorPane.setTopAnchor(target_title, 260.0);
+		AnchorPane.setTopAnchor(target_title, 360.0);
 		this.getChildren().add(target_title);
 		
 		cb_target = new ChoiceBox<Target>(FXCollections.observableArrayList(Target.A, Target.B, Target.AB, Target.BA));
 //		cb_target.setValue("A");
 		AnchorPane.setLeftAnchor(cb_target, 95.0);
-		AnchorPane.setTopAnchor(cb_target, 260.0);
+		AnchorPane.setTopAnchor(cb_target, 360.0);
 		this.getChildren().add(cb_target);
 		
 		
 		Label region_title = new Label("Region: ");
 		region_title.setFont(Font.font("Arial", FontWeight.BOLD, 16));
 		AnchorPane.setLeftAnchor(region_title, 30.0);
-		AnchorPane.setTopAnchor(region_title, 310.0);
+		AnchorPane.setTopAnchor(region_title, 410.0);
 		this.getChildren().add(region_title);
 		
 //		cb_region = new ChoiceBox<String>(FXCollections.observableArrayList("NA", "EU", "TW"));
 		cb_region = new ChoiceBox<Region>();
 //		cb_region.setValue("NA");
 		AnchorPane.setLeftAnchor(cb_region, 100.0);
-		AnchorPane.setTopAnchor(cb_region, 310.0);
+		AnchorPane.setTopAnchor(cb_region, 410.0);
 		this.getChildren().add(cb_region);
 		
 		
@@ -130,7 +145,7 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 		btn_start.setOnAction(this);
 		btn_start.setFont(new Font("Arial", 14));
 		AnchorPane.setLeftAnchor(btn_start, 30.0);
-		AnchorPane.setTopAnchor(btn_start, 350.0);
+		AnchorPane.setTopAnchor(btn_start, 450.0);
 		this.getChildren().add(btn_start);
 		
 		
@@ -138,7 +153,7 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 		separator.setOrientation(Orientation.HORIZONTAL);
 		AnchorPane.setLeftAnchor(separator, 20.0);
 		AnchorPane.setRightAnchor(separator, 20.0);
-		AnchorPane.setTopAnchor(separator, 390.0);
+		AnchorPane.setTopAnchor(separator, 490.0);
 		this.getChildren().add(separator);
 		
 		
@@ -180,6 +195,13 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 			}
 		}
 		
+		if (event.getSource() == rb_power_global) {
+			rb_power_per_port.setSelected(!rb_power_global.isSelected());
+		}
+		
+		if (event.getSource() == rb_power_per_port) {
+			rb_power_global.setSelected(!rb_power_per_port.isSelected());
+		}
 		
 		if (ACTIVATE_HOPTABLE && (event.getSource() == rb_hoptable)) {
 			if (rb_hoptable.isSelected()) {
@@ -209,7 +231,7 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 		}
 		
 		try {
-			this.setRFPower(Integer.parseInt(power.getText()));
+			this.setRFPower(Float.parseFloat(power.getText()));
 			this.setSession(cb_session.getSelectionModel().getSelectedItem());
 			this.setTargetFlag(cb_target.getSelectionModel().getSelectedItem());
 			this.setRegion(cb_region.getSelectionModel().getSelectedItem());
@@ -259,7 +281,7 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 		}
 	}
 	
-	private void setRFPower(int rfpower) throws ReaderException {
+	private void setRFPower(float rfpower) throws ReaderException {
 		MyLogger.printLog("Set RFPower: "+rfpower);
 		ReaderUtility.getInstance().setRFPower(rfpower);
 		ReaderConfig.getInstance().setRFPower(rfpower);
@@ -401,7 +423,7 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 			loadSupportRegion();
 		}
 		
-		power.setText(Integer.toString(ReaderConfig.getInstance().getRFPower()));
+		power.setText(Float.toString(ReaderConfig.getInstance().getRFPower()));
 		antenna_list.setAntennaList(ReaderConfig.getInstance().getAntennaList());
 		cb_session.setValue(ReaderConfig.getInstance().getSession());
 		cb_target.setValue(ReaderConfig.getInstance().getTargetFlag());

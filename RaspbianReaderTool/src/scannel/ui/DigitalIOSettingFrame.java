@@ -124,11 +124,11 @@ public class DigitalIOSettingFrame extends AnchorPane implements EventHandler<Ac
 	
 	public void applySetting() {
 		ReaderConfig.getInstance().setDITrigger(rb_activate_DI.isSelected());
-		DigitalIOController.getInstance().setDIActivation(rb_activate_DI.isSelected());
-		DigitalIOController.getInstance().removeDigitalInputListener();
+//		DigitalIOController.getInstance().setDIActivation(rb_activate_DI.isSelected());
+//		DigitalIOController.getInstance().removeDigitalInputListener();
 		ReaderConfig.getInstance().setDOTrigger(rb_activate_DO.isSelected());
-		DigitalIOController.getInstance().setDOActivation(rb_activate_DO.isSelected());
-		DigitalIOController.getInstance().removeDigitalOutputListener();
+//		DigitalIOController.getInstance().setDOActivation(rb_activate_DO.isSelected());
+//		DigitalIOController.getInstance().removeDigitalOutputListener();
 		
 		if (rb_activate_DI.isSelected()) {
 			boolean[] di_setting = di_frame.getIOSettingList();
@@ -136,7 +136,7 @@ public class DigitalIOSettingFrame extends AnchorPane implements EventHandler<Ac
 			ReaderConfig.getInstance().setDI2(di_setting[1]);
 			ReaderConfig.getInstance().setDI3(di_setting[2]);
 			ReaderConfig.getInstance().setDI4(di_setting[3]);
-			DigitalIOController.getInstance().enableDI(di_setting);
+//			DigitalIOController.getInstance().enableDI(di_setting);
 		}
 		
 		ReaderConfig.getInstance().setDOTrigger(rb_activate_DO.isSelected());
@@ -146,7 +146,7 @@ public class DigitalIOSettingFrame extends AnchorPane implements EventHandler<Ac
 			ReaderConfig.getInstance().setDO2(do_setting[1]);
 			ReaderConfig.getInstance().setDO3(do_setting[2]);
 			ReaderConfig.getInstance().setDO4(do_setting[3]);
-			DigitalIOController.getInstance().enableDO(do_setting);
+//			DigitalIOController.getInstance().enableDO(do_setting);
 		}
 	}
 }

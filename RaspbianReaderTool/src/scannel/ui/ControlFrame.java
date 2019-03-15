@@ -25,7 +25,7 @@ public class ControlFrame extends AnchorPane implements EventHandler<ActionEvent
 	private Circle status_light;
 	private Label status;
 	
-	private final static boolean USE_SERIAL_PORT = true;
+	private final static boolean USE_SERIAL_PORT = false;
 	private final static String URI_SERIAL = "tmr:///dev/ttyS0";
 	private final static String URI_IP = "192.168.100.160";
 	private final static String URI_PORT = "4001";
@@ -35,7 +35,7 @@ public class ControlFrame extends AnchorPane implements EventHandler<ActionEvent
 		
 		this.initComponents();
 		isConnected = false;
-		config.setDisable(true);
+//		config.setDisable(true);
 	}
 
 	public ControlFrame(Node... children) {
@@ -141,6 +141,10 @@ public class ControlFrame extends AnchorPane implements EventHandler<ActionEvent
 	
 	// Disable start button when reader is set to start reading by digital input
 	public void checkDITrigger() {
-		config.setDisable(ReaderConfig.getInstance().getDITrigger());
+		if (ReaderUtility.getInstance().isConnected()) {
+			config.setDisable(ReaderConfig.getInstance().getDITrigger());
+		} else {
+			config.setDisable(true);
+		}
 	}
 }

@@ -11,7 +11,7 @@ public class ReaderTool extends Application {
 
 	@Override
 	public void start(Stage mainStage) throws Exception {
-		DigitalIOController.getInstance().start();
+//		DigitalIOController.getInstance().start();
 		
 		MainWindow main = new MainWindow();
 		Scene scene = new Scene(main, 1000, 800);
@@ -22,15 +22,7 @@ public class ReaderTool extends Application {
 
 	@Override
 	public void stop(){
-//		if (ReaderConfig.getInstance().isDataLocalSaveEnabled()) {
-//			try {
-//				ReaderUtility.getInstance().saveTagDataToFile();
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-//		}
-
-		DigitalIOController.getInstance().destroy();
+//		DigitalIOController.getInstance().destroy();
 		ReaderUtility.getInstance().destroy();
 		ReaderConfig.getInstance().saveConfig();
 		ReaderConfig.getInstance().destroy();

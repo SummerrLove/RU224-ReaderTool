@@ -162,11 +162,11 @@ public class ReaderConfig {
 		return regionMap.get(region);
 	}
 	
-	public void setRFPower(int value) {
-		config_properties.setProperty(KEY_RFPOWER, Integer.toString(value));
+	public void setRFPower(float value) {
+		config_properties.setProperty(KEY_RFPOWER, Float.toString(value));
 	}
 	
-	public int getRFPower() {
+	public float getRFPower() {
 		String power = config_properties.getProperty(KEY_RFPOWER);
 		
 		// if no power value in configuration file, return default value
@@ -175,7 +175,7 @@ public class ReaderConfig {
 			config_properties.setProperty(KEY_RFPOWER, power);
 		}
 		
-		return Integer.parseInt(power);
+		return Float.parseFloat(power);
 	}
 	
 	public void setAntennaList(int[] list) {

@@ -140,7 +140,9 @@ public class ReaderUtility implements ReadListener {
 		tagReadList = new TagList();
 		isConnected = true;
 		System.out.println("connect reader!");
-		
+		System.out.println(myReader.paramGet(TMConstants.TMR_PARAM_RADIO_POWERMAX));
+		System.out.println(myReader.paramGet(TMConstants.TMR_PARAM_RADIO_POWERMIN));
+		System.out.println(myReader.paramGet(TMConstants.TMR_PARAM_RADIO_WRITEPOWER));
 	}
 	
 	public void connectReader(String port) throws ReaderException {
@@ -198,14 +200,18 @@ public class ReaderUtility implements ReadListener {
 		myReader.paramSet(TMConstants.TMR_PARAM_GEN2_TARGET, target);
 	}
 	
-	public void setRFPower(int power) throws ReaderException {
+	public void setRFPower(float power) throws ReaderException {
 		if (myReader == null) {
 			System.out.println("Reader is not initialized...");
 			return;
 		}
 		
 //		System.out.println("set RF power:"+power);
-		myReader.paramSet(TMConstants.TMR_PARAM_RADIO_READPOWER, new Integer(power*100));
+//		myReader.paramSet(TMConstants.TMR_PARAM_RADIO_READPOWER, new Integer((int) (power*100)));
+		
+		int[][] powerlist = new int[1][2];
+		powerlist[0] = new int[] {1, new Integer((int) (power*100))};
+		myReader.paramSet(TMConstants.TMR_PARAM_RADIO_PORTREADPOWERLIST, powerlist);
 	}
 	
 //	private void getRFPower() throws ReaderException {
@@ -310,7 +316,7 @@ public class ReaderUtility implements ReadListener {
 		}
 		isReading = false;
 		
-		DigitalIOController.getInstance().turnOffOutput();
+//		DigitalIOController.getInstance().turnOffOutput();
 	}
 	
 	public void resetData() {
@@ -373,11 +379,11 @@ public class ReaderUtility implements ReadListener {
 		try {
 			trd = myReader.read(READ_TIME);
 			
-			if (trd.length > 0) {
-				DigitalIOController.getInstance().turnOnOutput();
-			} else {
-				DigitalIOController.getInstance().turnOffOutput();
-			}
+//			if (trd.length > 0) {
+//				DigitalIOController.getInstance().turnOnOutput();
+//			} else {
+//				DigitalIOController.getInstance().turnOffOutput();
+//			}
 			
 			System.out.println("tag number = "+trd.length);
 			this.parseTagData(trd);

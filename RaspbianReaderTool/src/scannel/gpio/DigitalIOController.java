@@ -9,6 +9,7 @@ import com.pi4j.io.gpio.event.GpioPinDigitalStateChangeEvent;
 import com.pi4j.io.gpio.event.GpioPinListenerDigital;
 
 import scannel.reader.MyLogger;
+import scannel.reader.ReaderConfig;
 
 public class DigitalIOController implements GpioPinListenerDigital{
 
@@ -41,11 +42,37 @@ public class DigitalIOController implements GpioPinListenerDigital{
 		DI_list[2] = gpio.provisionDigitalInputPin(Constants.GPIO_INPUT_3);
 		DI_list[3] = gpio.provisionDigitalInputPin(Constants.GPIO_INPUT_4);
 		
-		DO_list[0] = gpio.provisionDigitalOutputPin(Constants.GPIO_OUTPUT_1, PinState.HIGH);
-		DO_list[1] = gpio.provisionDigitalOutputPin(Constants.GPIO_OUTPUT_2, PinState.HIGH);
-		DO_list[2] = gpio.provisionDigitalOutputPin(Constants.GPIO_OUTPUT_3, PinState.HIGH);
-		DO_list[3] = gpio.provisionDigitalOutputPin(Constants.GPIO_OUTPUT_4, PinState.HIGH);
+		DO_list[0] = gpio.provisionDigitalOutputPin(Constants.GPIO_OUTPUT_1, PinState.LOW);
+		DO_list[1] = gpio.provisionDigitalOutputPin(Constants.GPIO_OUTPUT_2, PinState.LOW);
+		DO_list[2] = gpio.provisionDigitalOutputPin(Constants.GPIO_OUTPUT_3, PinState.LOW);
+		DO_list[3] = gpio.provisionDigitalOutputPin(Constants.GPIO_OUTPUT_4, PinState.LOW);
 		
+		isDIActivated = ReaderConfig.getInstance().getDITrigger();
+		isDOActivated = ReaderConfig.getInstance().getDOTrigger();
+		
+		di_activate[0] = ReaderConfig.getInstance().getDI1();
+		di_activate[1] = ReaderConfig.getInstance().getDI2();
+		di_activate[2] = ReaderConfig.getInstance().getDI3();
+		di_activate[3] = ReaderConfig.getInstance().getDI4();
+		
+		for (int i=0; i<di_activate.length; i++) {
+			DI_list[i].removeAllListeners();
+			if (di_activate[i]) {
+				DI_list[i].addListener(this);
+			}
+		}
+		
+		do_activate[0] = ReaderConfig.getInstance().getDO1();
+		do_activate[1] = ReaderConfig.getInstance().getDO2();
+		do_activate[2] = ReaderConfig.getInstance().getDO3();
+		do_activate[3] = ReaderConfig.getInstance().getDO4();
+		
+		for (int i=0; i<do_activate.length; i++) {
+			DO_list[i].removeAllListeners();
+			if (do_activate[i]) {
+				DO_list[i].addListener(this);
+			}
+		}
 		
 //		System.out.println("================");
 //		System.out.println(DI_list[0].getPin().getAddress());

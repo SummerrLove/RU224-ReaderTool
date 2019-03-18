@@ -310,7 +310,7 @@ public class ReaderUtility implements ReadListener {
 		}
 		isReading = false;
 		
-		DigitalIOController.getInstance().turnOffOutput();
+		DigitalIOController.getInstance().turnOnOutput();
 	}
 	
 	public void resetData() {
@@ -374,9 +374,9 @@ public class ReaderUtility implements ReadListener {
 			trd = myReader.read(READ_TIME);
 			
 			if (trd.length > 0) {
-				DigitalIOController.getInstance().turnOnOutput();
-			} else {
 				DigitalIOController.getInstance().turnOffOutput();
+			} else {
+				DigitalIOController.getInstance().turnOnOutput();
 			}
 			
 			System.out.println("tag number = "+trd.length);

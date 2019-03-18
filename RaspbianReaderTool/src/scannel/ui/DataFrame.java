@@ -98,11 +98,11 @@ public class DataFrame extends AnchorPane implements DataUpdateListener, EventHa
 
 	@Override
 	public void dataUpdate() {
-		update_counter++;
-		
-		if (update_counter < 3) {
-			return;
-		}
+//		update_counter++;
+//		
+//		if (update_counter < 3) {
+//			return;
+//		}
 		
 		dataList.clear();
 		TagList tagList = ReaderUtility.getInstance().getTagData();

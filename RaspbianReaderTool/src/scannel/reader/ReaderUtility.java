@@ -37,6 +37,7 @@ public class ReaderUtility implements ReadListener {
 	
 	private static boolean isConnected;
 	private static boolean isReading;
+	private static boolean stopReading;
 	
 	private static DataUpdateListener updateListener;
 	private static String filter_str;
@@ -98,6 +99,9 @@ public class ReaderUtility implements ReadListener {
 
 					@Override
 					public void run() {
+						if (stopReading) {
+							return;
+						}
 						readData();
 						if (updateListener != null) {
 							updateListener.dataUpdate();
@@ -287,6 +291,7 @@ public class ReaderUtility implements ReadListener {
         // set up the timeout value
         myReader.paramSet(TMConstants.TMR_PARAM_TRANSPORTTIMEOUT, TIMEOUT);
 		
+        stopReading = false;
         if (USE_TIMER) {
         	initiateTimer();
         	readTimer.schedule(task, 0, INTERVAL);
@@ -303,6 +308,8 @@ public class ReaderUtility implements ReadListener {
 	
 	public void stopReading() {
 		if (USE_TIMER) {
+//			MyLogger.printLog("Stop reading timer...");
+			stopReading = true;
 			readTimer.cancel();
 			readTimer = null;
 		} else {

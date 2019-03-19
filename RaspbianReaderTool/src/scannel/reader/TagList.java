@@ -43,9 +43,9 @@ public class TagList {
 	}
 	
 	public void addTag(TagReadData trd){
-		System.out.println("TagList.addTag() with trd, epc="+trd.epcString()+", count="+trd.getReadCount()+", time="+new Date().toString()+", frequency="+trd.getFrequency());
+//		System.out.println("TagList.addTag() with trd, epc="+trd.epcString()+", count="+trd.getReadCount()+", time="+new Date().toString()+", frequency="+trd.getFrequency());
 		if (tagList == null){
-			System.out.println("No tag list, so create new one and add the tag data...");
+//			System.out.println("No tag list, so create new one and add the tag data...");
 			tagList = new ArrayList<TagUnit>();
 			TagUnit tag = new TagUnit(trd.epcString(), trd.getReadCount(), trd.getFrequency());
 			tag.setTime(new Date());
@@ -54,20 +54,20 @@ public class TagList {
 		} else {
 			TagUnit tag = this.checkList(trd.epcString());
 			if (tag == null){
-				System.out.println("No tag data with epc ["+trd.epcString()+"] was found in the list.");
+//				System.out.println("No tag data with epc ["+trd.epcString()+"] was found in the list.");
 				TagUnit newTag = new TagUnit(trd.epcString(), trd.getReadCount(), trd.getFrequency());
 				newTag.setTime(new Date());
 				newTag.setAntennaId(trd.getAntenna());
 				tagList.add(newTag);
 			} else {
-				System.out.println("Tag found! So add read count and set read frequency.");
+//				System.out.println("Tag found! So add read count and set read frequency.");
 				tag.addReadCount(trd.getReadCount());
 				tag.setReadFrequency(trd.getFrequency());
 				tag.setAntennaId(trd.getAntenna());
 				tag.setTime(new Date());
 			}
 		}
-		System.out.println();
+//		System.out.println();
 	}
 	
 	public void removeTag(String epc){

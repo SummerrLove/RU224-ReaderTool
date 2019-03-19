@@ -49,7 +49,7 @@ public class ReaderUtility implements ReadListener {
 //	private final static String URI_PORT = "4001";
 	
 	
-	private final static long INTERVAL = 500;
+	private final static long INTERVAL = 600;
 	private final static int TIMEOUT = 60000;
 	
 	public final static boolean USE_TIMER = true;

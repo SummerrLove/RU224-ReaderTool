@@ -15,7 +15,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import scannel.reader.DataUpdateListener;
+import scannel.reader.ReaderConfig;
 import scannel.reader.ReaderUtility;
 import scannel.reader.StringTool;
 import scannel.reader.TagList;
@@ -32,6 +34,7 @@ public class DataFrame extends AnchorPane implements DataUpdateListener, EventHa
 	private ObservableList<TagTableData> dataList = FXCollections.observableArrayList();
 	private int update_counter = 0;
 	private SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+	private Label total_inventory_time;
 	
 	
 	public DataFrame() {
@@ -84,6 +87,12 @@ public class DataFrame extends AnchorPane implements DataUpdateListener, EventHa
 		AnchorPane.setTopAnchor(icon, 10.0);
 		this.getChildren().add(icon);
 		
+		total_inventory_time = new Label();
+		total_inventory_time.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+		total_inventory_time.setAlignment(Pos.CENTER);
+		AnchorPane.setLeftAnchor(total_inventory_time, 50.0);
+		AnchorPane.setTopAnchor(total_inventory_time, 440.0);
+		this.getChildren().add(total_inventory_time);
 	}
 	
 	private void setDisplayNumber(int num) {
@@ -131,6 +140,12 @@ public class DataFrame extends AnchorPane implements DataUpdateListener, EventHa
 			setDisplayNumber(0);
 		}
 		
+		if (!ReaderConfig.getInstance().getDOTrigger()) {
+			total_inventory_time.setText(Float.toString(ReaderUtility.getInstance().getTotalInventoryTime()) + " sec");
+		} else {
+			total_inventory_time.setText("");
+		}
+		
 		table.setTableData(dataList);
 		update_counter = 0;
 		
@@ -139,9 +154,8 @@ public class DataFrame extends AnchorPane implements DataUpdateListener, EventHa
 	@Override
 	public void handle(ActionEvent event) {
 		if (event.getSource() == btn_reset) {
-			System.out.println("[DataFrame] press reset button");
-			this.setDisplayNumber(0);
-			this.clearTableData();
+//			System.out.println("[DataFrame] press reset button");
+			this.resetDisplayData();
 			ReaderUtility.getInstance().resetData();
 		} else if (event.getSource() == btn_save){
 			System.out.println("[DataFrame] press save button");
@@ -149,4 +163,17 @@ public class DataFrame extends AnchorPane implements DataUpdateListener, EventHa
 		}
 	}
 	
+	private void resetDisplayData() {
+		setDisplayNumber(0);
+		clearTableData();
+		total_inventory_time.setText("");
+	}
+	
+//	public void hideTotalInventoryTime(boolean hide) {
+//		if (hide) {
+//			this.getChildren().remove(total_inventory_time);
+//		} else {
+//			this.getChildren().add(total_inventory_time);
+//		}
+//	}
 }

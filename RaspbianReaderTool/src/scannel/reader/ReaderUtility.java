@@ -49,12 +49,17 @@ public class ReaderUtility implements ReadListener {
 //	private final static String URI_PORT = "4001";
 	
 	
-	private final static long INTERVAL = 600;
+	private final static long INTERVAL = 300;
 	private final static int TIMEOUT = 60000;
 	
-	public final static boolean USE_TIMER = true;
-	public final static int READ_TIME = 300;
+	public static boolean USE_TIMER = true;
+	public final static int READ_TIME = 100;
 	public final static String FILE_DIRECTORY = "./saveData/";
+	
+	private int counter = -1;
+	private int prev_tagNum = -1;
+	private long startTime;
+	private float total_inventory_time;
 	
 	
 	private ReaderUtility() {
@@ -266,6 +271,12 @@ public class ReaderUtility implements ReadListener {
 			return;
 		}
 		
+		if (ReaderConfig.getInstance().getDOTrigger()) {
+			USE_TIMER = true;
+		} else {
+			USE_TIMER = false;
+		}
+		
 		//============================================================
 //		myReader.paramSet(TMConstants.TMR_PARAM_GEN2_TAGENCODING, Gen2.TagEncoding.FM0);
 //		myReader.paramSet(TMConstants.TMR_PARAM_GEN2_BLF, Gen2.LinkFrequency.LINK640KHZ);
@@ -296,8 +307,12 @@ public class ReaderUtility implements ReadListener {
         	initiateTimer();
         	readTimer.schedule(task, 0, INTERVAL);
         } else {
+        	counter = 0;
+        	prev_tagNum = -1;
         	myReader.addReadListener(this);
         	myReader.startReading();
+        	startTime = System.currentTimeMillis();
+        	total_inventory_time = 0;
         }
         
 		isReading = true;
@@ -314,6 +329,7 @@ public class ReaderUtility implements ReadListener {
 			readTimer = null;
 		} else {
 			myReader.stopReading();
+			counter = -1;
 		}
 		isReading = false;
 		
@@ -399,6 +415,27 @@ public class ReaderUtility implements ReadListener {
 	@Override
 	public void tagRead(Reader r, TagReadData t) {
 		this.parseTagData(t);
+		counter++;
+		if (tagReadList.size() != prev_tagNum) {
+			prev_tagNum = tagReadList.size();
+			this.total_inventory_time = (float)(System.currentTimeMillis()-startTime)/1000;
+			System.out.println("Total tag = "+prev_tagNum+", Total inventory time = "+total_inventory_time);
+		}
+		
+		if (counter > 50) {
+			System.out.println("Update GUI, time = " + System.currentTimeMillis());
+			counter = 0;
+			Platform.runLater(new Runnable() {
+
+				@Override
+				public void run() {
+					if (updateListener != null) {
+						updateListener.dataUpdate();
+					}
+				}
+				
+			});
+		}
 	}
 	
 //	public void setFilter(String str) {
@@ -535,5 +572,9 @@ public class ReaderUtility implements ReadListener {
 		myReader.paramSet(TMConstants.TMR_PARAM_REGION_ID, ReaderConfig.getInstance().getRegion());
 		myReader.paramSet(TMConstants.TMR_PARAM_TAGOP_ANTENNA, ReaderConfig.getInstance().getAntennaList()[0]);
 		myReader.executeTagOp(new Gen2.WriteTag(data), target);
+	}
+	
+	public float getTotalInventoryTime() {
+		return total_inventory_time;
 	}
 }

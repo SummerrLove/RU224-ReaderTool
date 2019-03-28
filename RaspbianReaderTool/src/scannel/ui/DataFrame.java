@@ -28,11 +28,10 @@ public class DataFrame extends AnchorPane implements DataUpdateListener, EventHa
 
 	private Label tag_num;
 	private RFIDTable table;
-	private Button btn_reset;
-	private Button btn_save;
+//	private Button btn_reset;
+//	private Button btn_save;
 	private Label icon;
 	private ObservableList<TagTableData> dataList = FXCollections.observableArrayList();
-	private int update_counter = 0;
 	private SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 	private Label total_inventory_time;
 	
@@ -48,12 +47,12 @@ public class DataFrame extends AnchorPane implements DataUpdateListener, EventHa
 
 	private void initComponents() {
 		
-		btn_reset = new Button("Reset");
-		btn_reset.setOnAction(this);
-		btn_reset.setFont(new Font("Arial", 14));
-		AnchorPane.setLeftAnchor(btn_reset, 20.0);
-		AnchorPane.setTopAnchor(btn_reset, 30.0);
-		this.getChildren().add(btn_reset);
+//		btn_reset = new Button("Reset");
+//		btn_reset.setOnAction(this);
+//		btn_reset.setFont(new Font("Arial", 14));
+//		AnchorPane.setLeftAnchor(btn_reset, 20.0);
+//		AnchorPane.setTopAnchor(btn_reset, 30.0);
+//		this.getChildren().add(btn_reset);
 		
 //		btn_save = new Button("Save");
 //		btn_save.setOnAction(this);
@@ -107,11 +106,6 @@ public class DataFrame extends AnchorPane implements DataUpdateListener, EventHa
 
 	@Override
 	public void dataUpdate() {
-//		update_counter++;
-//		
-//		if (update_counter < 3) {
-//			return;
-//		}
 		
 		dataList.clear();
 		TagList tagList = ReaderUtility.getInstance().getTagData();
@@ -147,23 +141,20 @@ public class DataFrame extends AnchorPane implements DataUpdateListener, EventHa
 		}
 		
 		table.setTableData(dataList);
-		update_counter = 0;
 		
 	}
 
 	@Override
 	public void handle(ActionEvent event) {
-		if (event.getSource() == btn_reset) {
-//			System.out.println("[DataFrame] press reset button");
-			this.resetDisplayData();
-			ReaderUtility.getInstance().resetData();
-		} else if (event.getSource() == btn_save){
-			System.out.println("[DataFrame] press save button");
-			
-		}
+//		if (event.getSource() == btn_reset) {
+//			this.resetDisplayData();
+//			ReaderUtility.getInstance().resetData();
+//		} else if (event.getSource() == btn_save){
+//			
+//		}
 	}
 	
-	private void resetDisplayData() {
+	public void resetDisplayData() {
 		setDisplayNumber(0);
 		clearTableData();
 		total_inventory_time.setText("");

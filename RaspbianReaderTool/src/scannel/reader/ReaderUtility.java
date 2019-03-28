@@ -340,6 +340,10 @@ public class ReaderUtility implements ReadListener {
 		if (tagReadList != null) {
 			tagReadList.reset();
 		}
+		
+		if (updateListener != null) {
+			updateListener.dataUpdate();
+		}
 	}
 	
 	public boolean isConnected() {

@@ -73,10 +73,11 @@ public class EPCDecoder {
 			
 			MyLogger.printLog(str_GTIN14);
 			String str_serialNumber = binaryStr.substring(58, 96);
-			int serialNumber = Integer.parseInt(str_serialNumber, 2);
-			MyLogger.printLog(str_GTIN14+"."+String.format("%012d", serialNumber));
+//			int serialNumber = Integer.parseInt(str_serialNumber, 2);
+			String serialNumber =String.format("%12s", new BigInteger(str_serialNumber, 2).toString(10)).replace(" ", "0");
+			MyLogger.printLog(str_GTIN14+"." + serialNumber);
 			
-			return str_GTIN14+"."+String.format("%012d", serialNumber);
+			return str_GTIN14+"."+serialNumber;
 		}
 	}
 	

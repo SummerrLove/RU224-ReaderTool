@@ -57,6 +57,7 @@ public class MainWindow extends TabPane implements EventHandler<Event> {
 		decodeTab.setClosable(false);
 		decode_window = new DecodeSettingFrame();
 		decodeTab.setContent(decode_window);
+		decodeTab.setOnSelectionChanged(this);
 		
 		this.getTabs().addAll(readTab, writeTab, saveTab, ioTab, decodeTab);
 //		this.getTabs().addAll(readTab, writeTab);
@@ -66,17 +67,21 @@ public class MainWindow extends TabPane implements EventHandler<Event> {
 	@Override
 	public void handle(Event event) {
 		// when switch from ioTab to any other tab, save the io setting
-		if ((event.getSource()==ioTab) && !ioTab.isSelected()) {
+		if ((event.getSource() == ioTab) && !ioTab.isSelected()) {
 			io_window.applySetting();
 		}
 		
-		if ((event.getSource()==writeTab) && writeTab.isSelected()) {
+		if ((event.getSource() == writeTab) && writeTab.isSelected()) {
 			write_window.setDisable(!ReaderUtility.getInstance().isConnected());
 		}
 		
 		if (readTab.isSelected()) {
 			read_window.checkDITrigger();
 		} 
+		
+		if ((event.getSource() == decodeTab) && decodeTab.isSelected()) {
+			decode_window.disableReadFunction(!ReaderUtility.getInstance().isConnected());
+		}
 	}
 	
 }

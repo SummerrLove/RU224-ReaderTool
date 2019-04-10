@@ -30,7 +30,7 @@ public class MyLogger {
 	
 	public static void printErrorLog(Exception e) {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
-		String file_path = ReaderUtility.FILE_DIRECTORY+formatter.format("ErrorLog_"+new Date())+".txt";
+		String file_path = ReaderUtility.FILE_DIRECTORY+"ErrorLog_"+formatter.format(new Date())+".txt";
 		File f = new File(file_path);
 		if (!f.exists()) {
 			try {

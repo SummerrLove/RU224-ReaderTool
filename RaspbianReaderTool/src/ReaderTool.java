@@ -8,10 +8,15 @@ import scannel.ui.MainWindow;
 
 public class ReaderTool extends Application {
 
+	private final static String version = "v1.05_epc_decode";
 
 	@Override
 	public void start(Stage mainStage) throws Exception {
 		DigitalIOController.getInstance().start();
+		
+		System.out.println("RU-224 ReaderTool");
+		System.out.println("version: "+version);
+		
 		
 		MainWindow main = new MainWindow();
 		Scene scene = new Scene(main, 1000, 800);

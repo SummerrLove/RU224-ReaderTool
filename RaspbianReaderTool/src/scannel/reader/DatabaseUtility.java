@@ -6,6 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import scannel.reader.ReaderConfig.DBType;
 
 public class DatabaseUtility {
@@ -67,11 +70,18 @@ public class DatabaseUtility {
 	}
 	
 	public void insertTagData() {
-		if (myType == DBType.MYSQL) {
-			this.inserMySQL();
-		} else if (myType == DBType.MS_SQL_SERVER) {
-			this.insertSQLServer();
-		}
+		Platform.runLater(new Runnable() {
+
+			@Override
+			public void run() {
+				if (myType == DBType.MYSQL) {
+					inserMySQL();
+				} else if (myType == DBType.MS_SQL_SERVER) {
+					insertSQLServer();
+				}
+			}
+			
+		});
 		
 	}
 	
@@ -83,6 +93,7 @@ public class DatabaseUtility {
 		
 		try {
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+			DriverManager.setLoginTimeout(3);
 			
 			String url = "jdbc:sqlserver://"+db_url+";databaseName="+db_name+";user="+db_user+";password="+db_password;
 			myConn = DriverManager.getConnection(url);
@@ -115,6 +126,13 @@ public class DatabaseUtility {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			MyLogger.printErrorLog(e);
+			
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Error");
+			alert.setHeaderText(null);
+			alert.setResizable(true);
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
 		} finally {
 			if (myStmt != null) {
 				try {
@@ -176,6 +194,13 @@ public class DatabaseUtility {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			MyLogger.printErrorLog(e);
+			
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Error");
+			alert.setHeaderText(null);
+			alert.setResizable(true);
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
 		} finally {
 			if (myStmt != null) {
 				try {

@@ -8,14 +8,18 @@ import scannel.ui.MainWindow;
 
 public class ReaderTool extends Application {
 
-	private final static String version = "v1.03";
+	private final static String version = "v1.04";
 
 	@Override
 	public void start(Stage mainStage) throws Exception {
 		DigitalIOController.getInstance().start();
 		
+		System.out.println();
+		System.out.println("==========================");
 		System.out.println("RU-224 ReaderTool");
 		System.out.println("version: "+version);
+		System.out.println("==========================");
+		System.out.println();
 		
 		
 		MainWindow main = new MainWindow();

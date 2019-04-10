@@ -21,19 +21,20 @@ import javafx.scene.text.FontWeight;
 import scannel.reader.EPCDecoder;
 import scannel.reader.MyLogger;
 import scannel.reader.ReaderUtility;
-import scannel.reader.StringTool;
 
 public class DecodeSettingFrame extends AnchorPane implements EventHandler<ActionEvent> {
 	
 	private static boolean[] setting = new boolean[4];
 	private RadioButton[] rb_setting = new RadioButton[4]; 
-	private ChoiceBox cb_eanType;
-	private Button btn_apply;
+	private static boolean[] setting_schema = new boolean[17];
+	private RadioButton[] rb_schema = new RadioButton[17];
+//	private Button btn_apply;
 	private Button btn_read;
 	private TextField tf_epc;
-	private static EAN_TYPE eanType;
 	
 	private static String[] str_setting = {"UDC", "EAN / UPC", "EAN / UPC + EAS", "EPC Raw Data"};
+	private static String[] str_schema = {"SGTIN", "SSCC", "SGLN", "GRAI", 
+			"GIAI", "GSRN", "GSRNP", "GDTI", "CPI", "SGCN", "GINC", "GSIN", "ITIP", "GID", "USDOD", "ADI", "BIC"};
 	
 	
 	public static int UDC 			= 0;
@@ -66,20 +67,20 @@ public class DecodeSettingFrame extends AnchorPane implements EventHandler<Actio
 	}
 
 	private void initComponents() {
-		Rectangle rect = new Rectangle(40, 80, 920, 400);
-		rect.setArcHeight(15);
-		rect.setArcWidth(15);
+		Rectangle rect1 = new Rectangle(40, 80, 360, 400);
+		rect1.setArcHeight(15);
+		rect1.setArcWidth(15);
 //		rect.setFill(Color.TRANSPARENT);
-		rect.setFill(Color.WHITE);
-		rect.setStroke(Color.BLACK);
-		this.getChildren().add(rect);
+		rect1.setFill(Color.WHITE);
+		rect1.setStroke(Color.BLACK);
+		this.getChildren().add(rect1);
 		
-		Label title = new Label("EPC Decode Format");
-		title.setFont(Font.font("Arial", FontWeight.BOLD, 24));
-		title.setStyle("-fx-background-color: #F0F0F0;");
-		AnchorPane.setLeftAnchor(title, 50.0);
-		AnchorPane.setTopAnchor(title, 30.0);
-		this.getChildren().add(title);
+		Label decode_title = new Label("EPC Decode Format");
+		decode_title.setFont(Font.font("Arial", FontWeight.BOLD, 24));
+		decode_title.setStyle("-fx-background-color: #F0F0F0;");
+		AnchorPane.setLeftAnchor(decode_title, 50.0);
+		AnchorPane.setTopAnchor(decode_title, 30.0);
+		this.getChildren().add(decode_title);
 		
 		for (int i=0; i<rb_setting.length; i++) {
 			rb_setting[i] = new RadioButton(str_setting[i]);
@@ -93,6 +94,40 @@ public class DecodeSettingFrame extends AnchorPane implements EventHandler<Actio
 		rb_setting[UDC].setDisable(true);
 		rb_setting[EANUPC_EAS].setDisable(true);
 
+		
+		Rectangle rect2 = new Rectangle(450, 80, 450, 400);
+		rect2.setArcHeight(15);
+		rect2.setArcWidth(15);
+		rect2.setFill(Color.WHITE);
+		rect2.setStroke(Color.BLACK);
+		this.getChildren().add(rect2);
+		
+		Label schema_title = new Label("EPC Schema");
+		schema_title.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+		AnchorPane.setLeftAnchor(schema_title, 500.0);
+		AnchorPane.setTopAnchor(schema_title, 100.0);
+		this.getChildren().add(schema_title);
+		
+		
+		int x, y;
+		for (int i=0; i<rb_schema.length; i++) {
+			rb_schema[i] = new RadioButton(str_schema[i]);
+			rb_schema[i].setFont(Font.font("Arial", FontWeight.BOLD, 14));
+			
+			x = i%2;
+			y = i/2;
+			AnchorPane.setLeftAnchor(rb_schema[i], 500+x*200.0);
+			AnchorPane.setTopAnchor(rb_schema[i], 150+y*30.0);
+			this.getChildren().add(rb_schema[i]);
+			rb_schema[i].setDisable(true);
+		}
+		
+//		cb_schema = new ChoiceBox<String>(FXCollections.observableArrayList("sgtin", "sscc", "sgln", "grai", 
+//				"giai", "gsrn", "gsrnp", "gdti", "cpi", "sgcn", "ginc", "gsin", "itip", "gid", "usdod", "adi", "bic"));
+//		AnchorPane.setLeftAnchor(cb_schema, 650.0);
+//		AnchorPane.setTopAnchor(cb_schema, 120.0);
+//		cb_schema.setDisable(true);
+//		this.getChildren().add(cb_schema);
 		
 		Separator separator = new Separator();
 		separator.setOrientation(Orientation.HORIZONTAL);
@@ -124,17 +159,22 @@ public class DecodeSettingFrame extends AnchorPane implements EventHandler<Actio
 
 	@Override
 	public void handle(ActionEvent event) {
-//		if (event.getSource() == rb_sgtin) {
-//			setting[SGTIN] = rb_sgtin.isSelected();
-//		}
-		
-		if (event.getSource() == btn_apply) {
-			for (int i=0; i<setting.length; i++) {
-				setting[i] = rb_setting[i].isSelected();
+		if (event.getSource() == rb_setting[EANUPC]) {
+			for (int i=0; i<rb_schema.length; i++) {
+				rb_schema[i].setDisable(!rb_setting[EANUPC].isSelected());
 			}
+//			cb_schema.setDisable(!rb_setting[EANUPC].isSelected());
 		}
 		
 		if (event.getSource() == btn_read) {
+			for (int i=0; i<setting.length; i++) {
+				setting[i] = rb_setting[i].isSelected();
+			}
+			
+			for (int i=0; i<rb_schema.length; i++) {
+				setting_schema[i] = rb_schema[i].isSelected();
+			}
+			
 			try {
 				TagReadData trd = ReaderUtility.getInstance().readTag();
 				if (trd == null) {
@@ -143,9 +183,7 @@ public class DecodeSettingFrame extends AnchorPane implements EventHandler<Actio
 				} else {
 					MyLogger.printLog("Tag read: "+trd.epcString());
 					String epc = trd.epcString();
-					if (setting[EANUPC]) {
-						String decode_epc = EPCDecoder.parseEPCString(epc, ENCODE_TYPE.EAN_UPC);
-					}
+					tf_epc.setText(this.parseEPC(epc));
 				}
 			} catch (ReaderException e) {
 				e.printStackTrace();
@@ -162,12 +200,30 @@ public class DecodeSettingFrame extends AnchorPane implements EventHandler<Actio
 		return setting[format];
 	}
 	
-	public static EAN_TYPE getEANType() {
-		return eanType;
-	}
-	
 	private String parseEPC(String hexString) {
 		String result = null;
+		
+		if (setting[UDC]) {
+			result = EPCDecoder.parseEPCString(hexString, ENCODE_TYPE.UDC, null);
+		}
+		
+		if (setting[EANUPC] && (result == null)) {
+			result = EPCDecoder.parseEPCString(hexString, ENCODE_TYPE.EAN_UPC, setting_schema);
+		}
+		
+		if (setting[EANUPC_EAS]) {
+			result = EPCDecoder.parseEPCString(hexString, ENCODE_TYPE.EAN_UPC_EAS, null);
+		}
+		
+		if (setting[RAWDATA] && (result == null)) {
+			result = hexString;
+		}
+		
 		return result;
+	}
+	
+	public void disableReadFunction(boolean disable) {
+		btn_read.setDisable(disable);
+		tf_epc.setDisable(disable);
 	}
 }

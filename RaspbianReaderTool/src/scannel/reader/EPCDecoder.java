@@ -6,14 +6,56 @@ import scannel.ui.DecodeSettingFrame.ENCODE_TYPE;
 
 public class EPCDecoder {
 
+	public static enum EPC_SCHEMA{
+		SGTIN(0),
+		SSCC(1),
+		SGLN(2),
+		GRAI(3),
+		GIAI(4),
+		GSRN(5),
+		GSRNP(6),
+		GDTI(7),
+		CPI(8),
+		SGCN(9),
+		GINC(10),
+		GSIN(11),
+		ITIP(12),
+		GID(13),
+		USDOD(14),
+		ADI(15),
+		BIC(16);
+		
+		private final int value;
+		
+		private EPC_SCHEMA(int value) {
+			this.value = value;
+		}
+		
+		public int getValue() {
+			return value;
+		}
+	}
 	
 	public EPCDecoder() {
 		
 	}
 
-	public static String parseEPCString(String hexString, ENCODE_TYPE type) {
-		if (type == ENCODE_TYPE.EAN_UPC) {
-			return parseSGTIN96HexString(hexString);
+	public static String parseEPCString(String hexString, ENCODE_TYPE type, boolean[] schemaSetting) {
+		if (type == ENCODE_TYPE.UDC) {
+			MyLogger.printLog("Currently we only support EAN/UPC.");
+			return null;
+		} else if (type == ENCODE_TYPE.EAN_UPC) {
+			if ((schemaSetting != null) && (schemaSetting[EPC_SCHEMA.SGTIN.getValue()])) {
+				return parseSGTIN96HexString(hexString);
+			} else {
+				MyLogger.printLog("Currently we only support EPC schema 'sgtin-96' ");
+				return null;
+			}
+		} else if (type == ENCODE_TYPE.EAN_UPC_EAS) {
+			MyLogger.printLog("Currently we only support EAN/UPC.");
+			return null;
+		} else if (type == ENCODE_TYPE.RAWDATA){
+			return hexString;
 		} else {
 			MyLogger.printLog("Currently we only support EAN/UPC.");
 			return null;

@@ -15,7 +15,7 @@ public class DigitalIOController implements GpioPinListenerDigital{
 
 	private static DigitalIOController ioController;
 	
-	final GpioController gpio = GpioFactory.getInstance();
+	private static GpioController gpio;
 //	final GpioPinDigitalInput DI_1 = gpio.provisionDigitalInputPin(Constants.GPIO_INPUT_1);
 //	final GpioPinDigitalInput DI_2 = gpio.provisionDigitalInputPin(Constants.GPIO_INPUT_2);
 //	final GpioPinDigitalInput DI_3 = gpio.provisionDigitalInputPin(Constants.GPIO_INPUT_3);
@@ -33,10 +33,21 @@ public class DigitalIOController implements GpioPinListenerDigital{
 	private boolean isDOActivated = false;
 	private DigitalInputListener diListener;
 	
-	public static boolean STOP_RUNNING = false;
+	
+	// This variable is used to avoid invoking platform native method while testing the ReaderTool software on
+	// the reader without RPi board.
+	public static boolean DISABLE_CONTROLLER = false;
 	
 	
 	private DigitalIOController() {
+		if (DISABLE_CONTROLLER) {
+			return;
+		}
+		
+		if (gpio == null) {
+			gpio = GpioFactory.getInstance();
+		}
+		
 		DI_list[0] = gpio.provisionDigitalInputPin(Constants.GPIO_INPUT_1);
 		DI_list[1] = gpio.provisionDigitalInputPin(Constants.GPIO_INPUT_2);
 		DI_list[2] = gpio.provisionDigitalInputPin(Constants.GPIO_INPUT_3);
@@ -92,12 +103,20 @@ public class DigitalIOController implements GpioPinListenerDigital{
 	}
 	
 	public void destroy() {
-		gpio.shutdown();
+		if (DISABLE_CONTROLLER) {
+			return;
+		}
 		
+		gpio.shutdown();
+		gpio = null;
 		ioController = null;
 	}
 	
 	public void start() {
+		if (DISABLE_CONTROLLER) {
+			return;
+		}
+		
 		System.out.println("[DigitalIOController] start()");
 //		DI_list[0].addListener(this);
 //		DI_list[1].addListener(this);
@@ -107,6 +126,10 @@ public class DigitalIOController implements GpioPinListenerDigital{
 	}
 	
 	public void stop() {
+		if (DISABLE_CONTROLLER) {
+			return;
+		}
+		
 		System.out.println("[DigitalIOController] stop()");
 		DI_list[0].removeAllListeners();
 		DI_list[1].removeAllListeners();
@@ -115,6 +138,10 @@ public class DigitalIOController implements GpioPinListenerDigital{
 	}
 	
 	public void removeDigitalInputListener() {
+		if (DISABLE_CONTROLLER) {
+			return;
+		}
+		
 		DI_list[0].removeAllListeners();
 		DI_list[1].removeAllListeners();
 		DI_list[2].removeAllListeners();
@@ -122,6 +149,10 @@ public class DigitalIOController implements GpioPinListenerDigital{
 	}
 	
 	public void removeDigitalOutputListener() {
+		if (DISABLE_CONTROLLER) {
+			return;
+		}
+		
 		DO_list[0].removeAllListeners();
 		DO_list[1].removeAllListeners();
 		DO_list[2].removeAllListeners();
@@ -130,6 +161,10 @@ public class DigitalIOController implements GpioPinListenerDigital{
 	
 	@Override
 	public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
+		if (DISABLE_CONTROLLER) {
+			return;
+		}
+		
 		System.out.println("[DigitalIOController] handleGpioPinDigitalStateChangeEvent()");
 		System.out.println("[DigitalIOController] "+event.getPin()+"="+event.getState());
 		
@@ -172,6 +207,10 @@ public class DigitalIOController implements GpioPinListenerDigital{
 	}
 	
 	public void enableDI(boolean[] setting) {
+		if (DISABLE_CONTROLLER) {
+			return;
+		}
+		
 		if (setting.length != di_activate.length) {
 			MyLogger.printLog("DI port number not match...");
 			return;
@@ -199,6 +238,10 @@ public class DigitalIOController implements GpioPinListenerDigital{
 	}
 	
 	public void turnOnOutput() {
+		if (DISABLE_CONTROLLER) {
+			return;
+		}
+		
 		if (isDOActivated) {
 			for (int i=0; i<do_activate.length; i++) {
 				if (do_activate[i]) {
@@ -209,6 +252,10 @@ public class DigitalIOController implements GpioPinListenerDigital{
 	}
 	
 	public void turnOffOutput() {
+		if (DISABLE_CONTROLLER) {
+			return;
+		}
+		
 		if (isDOActivated) {
 			for (int i=0; i<do_activate.length; i++) {
 				if (do_activate[i]) {

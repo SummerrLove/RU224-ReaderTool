@@ -341,6 +341,11 @@ public class ReaderUtility implements ReadListener {
 			tagReadList.reset();
 		}
 		
+		counter = 0;
+    	prev_tagNum = -1;
+    	startTime = System.currentTimeMillis();
+    	total_inventory_time = 0;
+		
 		if (updateListener != null) {
 			updateListener.dataUpdate();
 		}

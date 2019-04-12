@@ -100,14 +100,15 @@ public class ReaderUtility implements ReadListener {
 
 			@Override
 			public void run() {
+				if (stopReading) {
+					return;
+				}
+				readData();
+				
+				
 				Platform.runLater(new Runnable() {
-
 					@Override
 					public void run() {
-						if (stopReading) {
-							return;
-						}
-						readData();
 						if (updateListener != null) {
 							updateListener.dataUpdate();
 						}

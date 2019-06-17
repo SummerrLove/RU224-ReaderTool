@@ -8,7 +8,7 @@ import scannel.ui.MainWindow;
 
 public class ReaderTool extends Application {
 
-	private final static String version = "v1.06_epc_decode";
+	private final static String version = "v1.07_epc_decode";
 
 	@Override
 	public void start(Stage mainStage) throws Exception {

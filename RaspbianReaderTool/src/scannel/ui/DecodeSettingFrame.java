@@ -7,18 +7,20 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import scannel.reader.EPCDecoder;
+import scannel.decoder.GS1Decoder;
+import scannel.decoder.GS1Decoder.EPC_SCHEMA;
 import scannel.reader.MyLogger;
 import scannel.reader.ReaderUtility;
 
@@ -28,13 +30,11 @@ public class DecodeSettingFrame extends AnchorPane implements EventHandler<Actio
 	private RadioButton[] rb_setting = new RadioButton[4]; 
 	private static boolean[] setting_schema = new boolean[17];
 	private RadioButton[] rb_schema = new RadioButton[17];
-//	private Button btn_apply;
 	private Button btn_read;
 	private TextField tf_epc;
+	private EPC_SCHEMA[] schemas;
 	
 	private static String[] str_setting = {"UDC", "EAN / UPC", "EAN / UPC + EAS", "EPC Raw Data"};
-	private static String[] str_schema = {"SGTIN", "SSCC", "SGLN", "GRAI", 
-			"GIAI", "GSRN", "GSRNP", "GDTI", "CPI", "SGCN", "GINC", "GSIN", "ITIP", "GID", "USDOD", "ADI", "BIC"};
 	
 	
 	public static int UDC 			= 0;
@@ -48,14 +48,6 @@ public class DecodeSettingFrame extends AnchorPane implements EventHandler<Actio
 		EAN_UPC_EAS,
 		RAWDATA;
 	}
-	
-	public static enum EAN_TYPE{
-		GTIN_14,
-		GTIN_13,
-		GTIN_12,
-		GTIN_8;
-	}
-	
 	
 	public DecodeSettingFrame() {
 		this.initComponents();
@@ -91,6 +83,7 @@ public class DecodeSettingFrame extends AnchorPane implements EventHandler<Actio
 			this.getChildren().add(rb_setting[i]);
 		}
 		
+		// Currently not implemented, so disable the RadioButtons
 		rb_setting[UDC].setDisable(true);
 		rb_setting[EANUPC_EAS].setDisable(true);
 
@@ -108,26 +101,23 @@ public class DecodeSettingFrame extends AnchorPane implements EventHandler<Actio
 		AnchorPane.setTopAnchor(schema_title, 100.0);
 		this.getChildren().add(schema_title);
 		
+		schemas = EPC_SCHEMA.values();
+		setting_schema = new boolean[schemas.length];
+		rb_schema = new RadioButton[schemas.length];
 		
 		int x, y;
 		for (int i=0; i<rb_schema.length; i++) {
-			rb_schema[i] = new RadioButton(str_schema[i]);
+			rb_schema[i] = new RadioButton(schemas[i].name());
+			rb_schema[i].setMnemonicParsing(false);
 			rb_schema[i].setFont(Font.font("Arial", FontWeight.BOLD, 14));
 			
 			x = i%2;
 			y = i/2;
 			AnchorPane.setLeftAnchor(rb_schema[i], 500+x*200.0);
-			AnchorPane.setTopAnchor(rb_schema[i], 150+y*30.0);
+			AnchorPane.setTopAnchor(rb_schema[i], 140+y*30.0);
 			this.getChildren().add(rb_schema[i]);
 			rb_schema[i].setDisable(true);
 		}
-		
-//		cb_schema = new ChoiceBox<String>(FXCollections.observableArrayList("sgtin", "sscc", "sgln", "grai", 
-//				"giai", "gsrn", "gsrnp", "gdti", "cpi", "sgcn", "ginc", "gsin", "itip", "gid", "usdod", "adi", "bic"));
-//		AnchorPane.setLeftAnchor(cb_schema, 650.0);
-//		AnchorPane.setTopAnchor(cb_schema, 120.0);
-//		cb_schema.setDisable(true);
-//		this.getChildren().add(cb_schema);
 		
 		Separator separator = new Separator();
 		separator.setOrientation(Orientation.HORIZONTAL);
@@ -135,12 +125,6 @@ public class DecodeSettingFrame extends AnchorPane implements EventHandler<Actio
 		AnchorPane.setRightAnchor(separator, 20.0);
 		AnchorPane.setTopAnchor(separator, 520.0);
 		this.getChildren().add(separator);
-		
-//		btn_apply = new Button("Apply Setting");
-//		btn_apply.setOnAction(this);
-//		AnchorPane.setLeftAnchor(btn_apply, 50.0);
-//		AnchorPane.setTopAnchor(btn_apply, 600.0);
-//		this.getChildren().add(btn_apply);
 		
 		tf_epc = new TextField();
 		tf_epc.setPrefWidth(500);
@@ -161,14 +145,36 @@ public class DecodeSettingFrame extends AnchorPane implements EventHandler<Actio
 	public void handle(ActionEvent event) {
 		if (event.getSource() == rb_setting[EANUPC]) {
 			for (int i=0; i<rb_schema.length; i++) {
+				
+				// Currently these schemas are not supported
+				if (i==EPC_SCHEMA.CPI_var.getValue() || 
+						i==EPC_SCHEMA.GIAI_202.getValue() || 
+						i==EPC_SCHEMA.USDoD_96.getValue() || 
+						i==EPC_SCHEMA.ADI_var.getValue()) {
+					continue;
+				}
+				
 				rb_schema[i].setDisable(!rb_setting[EANUPC].isSelected());
 			}
-//			cb_schema.setDisable(!rb_setting[EANUPC].isSelected());
 		}
 		
 		if (event.getSource() == btn_read) {
+			// Use a variable to check if any epc decode format is selected.
+			boolean check = false;
 			for (int i=0; i<setting.length; i++) {
 				setting[i] = rb_setting[i].isSelected();
+				check = check || rb_setting[i].isSelected();
+			}
+			
+			// If non of the format is selected, show pop-up with warning message.
+			if (check == false) {
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("Error");
+				alert.setHeaderText(null);
+				alert.setResizable(true);
+				alert.setContentText("Please select a deocde format!");
+				alert.showAndWait();
+				return;
 			}
 			
 			for (int i=0; i<rb_schema.length; i++) {
@@ -201,18 +207,23 @@ public class DecodeSettingFrame extends AnchorPane implements EventHandler<Actio
 	}
 	
 	private String parseEPC(String hexString) {
+		if (hexString == null) {
+			return null;
+		}
+		
 		String result = null;
 		
 		if (setting[UDC]) {
-			result = EPCDecoder.parseEPCString(hexString, ENCODE_TYPE.UDC, null);
+//			result = EPCDecoder.parseEPCString(hexString, ENCODE_TYPE.UDC, null);
 		}
 		
 		if (setting[EANUPC] && (result == null)) {
-			result = EPCDecoder.parseEPCString(hexString, ENCODE_TYPE.EAN_UPC, setting_schema);
+			GS1Decoder decoder = new GS1Decoder(hexString);
+			result = decoder.parseString(setting_schema);
 		}
 		
 		if (setting[EANUPC_EAS]) {
-			result = EPCDecoder.parseEPCString(hexString, ENCODE_TYPE.EAN_UPC_EAS, null);
+//			result = EPCDecoder.parseEPCString(hexString, ENCODE_TYPE.EAN_UPC_EAS, null);
 		}
 		
 		if (setting[RAWDATA] && (result == null)) {

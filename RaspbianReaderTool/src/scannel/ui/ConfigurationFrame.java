@@ -44,6 +44,7 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 	private ChoiceBox<Target> cb_target;
 	private ChoiceBox<Region> cb_region;
 	private Button btn_start;
+	private Button btn_reset;
 	private RadioButton rb_hoptable;
 	private TextArea hoptable;
 	private static ObservableList<Region> SUPPORT_REGIONS = FXCollections.observableArrayList();
@@ -128,37 +129,48 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 		
 		btn_start = new Button("Start");
 		btn_start.setOnAction(this);
-		btn_start.setFont(new Font("Arial", 14));
+//		btn_start.setFont(new Font("Arial", 14));
+		btn_start.setFont(Font.font("Arial", FontWeight.BOLD, 24));
+		btn_start.setPrefSize(150, 50);
 		AnchorPane.setLeftAnchor(btn_start, 30.0);
 		AnchorPane.setTopAnchor(btn_start, 350.0);
 		this.getChildren().add(btn_start);
 		
+		btn_reset = new Button("Reset");
+		btn_reset.setOnAction(this);
+//		btn_start.setFont(new Font("Arial", 14));
+		btn_reset.setFont(Font.font("Arial", FontWeight.BOLD, 24));
+		btn_reset.setPrefSize(150, 50);
+		AnchorPane.setLeftAnchor(btn_reset, 30.0);
+		AnchorPane.setTopAnchor(btn_reset, 420.0);
+		this.getChildren().add(btn_reset);
 		
-		Separator separator = new Separator();
-		separator.setOrientation(Orientation.HORIZONTAL);
-		AnchorPane.setLeftAnchor(separator, 20.0);
-		AnchorPane.setRightAnchor(separator, 20.0);
-		AnchorPane.setTopAnchor(separator, 390.0);
-		this.getChildren().add(separator);
 		
-		
-		if (ACTIVATE_HOPTABLE) {
-			rb_hoptable = new RadioButton("Hop Table");
-			rb_hoptable.setOnAction(this);
-			AnchorPane.setLeftAnchor(rb_hoptable, 30.0);
-			AnchorPane.setTopAnchor(rb_hoptable, 410.0);
-			this.getChildren().add(rb_hoptable);
-			
-			hoptable = new TextArea();
-			hoptable.setWrapText(true);
-			hoptable.setPromptText("Frequency value in kHz");
-			AnchorPane.setLeftAnchor(hoptable, 30.0);
-			AnchorPane.setTopAnchor(hoptable, 440.0);
-			AnchorPane.setRightAnchor(hoptable, 30.0);
-			AnchorPane.setBottomAnchor(hoptable, 30.0);
-			this.getChildren().add(hoptable);
-			hoptable.setDisable(true);
-		}
+//		Separator separator = new Separator();
+//		separator.setOrientation(Orientation.HORIZONTAL);
+//		AnchorPane.setLeftAnchor(separator, 20.0);
+//		AnchorPane.setRightAnchor(separator, 20.0);
+//		AnchorPane.setTopAnchor(separator, 390.0);
+//		this.getChildren().add(separator);
+//		
+//		
+//		if (ACTIVATE_HOPTABLE) {
+//			rb_hoptable = new RadioButton("Hop Table");
+//			rb_hoptable.setOnAction(this);
+//			AnchorPane.setLeftAnchor(rb_hoptable, 30.0);
+//			AnchorPane.setTopAnchor(rb_hoptable, 410.0);
+//			this.getChildren().add(rb_hoptable);
+//			
+//			hoptable = new TextArea();
+//			hoptable.setWrapText(true);
+//			hoptable.setPromptText("Frequency value in kHz");
+//			AnchorPane.setLeftAnchor(hoptable, 30.0);
+//			AnchorPane.setTopAnchor(hoptable, 440.0);
+//			AnchorPane.setRightAnchor(hoptable, 30.0);
+//			AnchorPane.setBottomAnchor(hoptable, 30.0);
+//			this.getChildren().add(hoptable);
+//			hoptable.setDisable(true);
+//		}
 	}
 
 	@Override
@@ -180,6 +192,9 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 			}
 		}
 		
+		if (event.getSource() == btn_reset) {
+			ReaderUtility.getInstance().resetData();
+		}
 		
 		if (ACTIVATE_HOPTABLE && (event.getSource() == rb_hoptable)) {
 			if (rb_hoptable.isSelected()) {

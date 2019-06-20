@@ -2,11 +2,18 @@ package scannel.reader;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -61,6 +68,10 @@ public class ReaderUtility implements ReadListener {
 	private long startTime;
 	private float total_inventory_time;
 	
+	private static long Inventory_Time = 3000;
+	private final static String FILE_TAGLIST = "taglist.tmp";
+	private static TagList prevList;
+	
 	
 	private ReaderUtility() {
 		// TODO Auto-generated constructor stub
@@ -89,6 +100,11 @@ public class ReaderUtility implements ReadListener {
 			tagReadList = null;
 		}
 		
+		if (prevList != null) {
+			prevList.reset();
+			prevList = null;
+		}
+		
 		if (ru != null) {
 			ru = null;
 		}
@@ -100,20 +116,32 @@ public class ReaderUtility implements ReadListener {
 
 			@Override
 			public void run() {
-				Platform.runLater(new Runnable() {
-
-					@Override
-					public void run() {
-						if (stopReading) {
-							return;
-						}
-						readData();
-						if (updateListener != null) {
-							updateListener.dataUpdate();
-						}
-					}
+				if (stopReading) {
+					return;
+				}
+				readData();
+				
+				if ((System.currentTimeMillis() - startTime) >= Inventory_Time) {
+					stopReading();
 					
-				});
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							if (updateListener != null) {
+								updateListener.dataUpdate();
+							}
+							
+							try {
+								saveTagList();
+								checkTagRemoval();
+								prevList = new TagList(tagReadList.clone());
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						}
+						
+					});
+				}
 			}
 			
 		};
@@ -148,6 +176,7 @@ public class ReaderUtility implements ReadListener {
 		myReader.connect();
 		tagReadList = new TagList();
 		isConnected = true;
+		loadTagList();
 		System.out.println("connect reader!");
 		
 	}
@@ -165,6 +194,7 @@ public class ReaderUtility implements ReadListener {
 		myReader.connect();
 		tagReadList = new TagList();
 		isConnected = true;
+		loadTagList();
 		System.out.println("connect reader!");
 	}
 	
@@ -271,11 +301,11 @@ public class ReaderUtility implements ReadListener {
 			return;
 		}
 		
-		if (ReaderConfig.getInstance().getDOTrigger()) {
-			USE_TIMER = true;
-		} else {
-			USE_TIMER = false;
-		}
+//		if (ReaderConfig.getInstance().getDOTrigger()) {
+//			USE_TIMER = true;
+//		} else {
+//			USE_TIMER = false;
+//		}
 		
 		//============================================================
 //		myReader.paramSet(TMConstants.TMR_PARAM_GEN2_TAGENCODING, Gen2.TagEncoding.FM0);
@@ -306,6 +336,7 @@ public class ReaderUtility implements ReadListener {
         if (USE_TIMER) {
         	initiateTimer();
         	readTimer.schedule(task, 0, INTERVAL);
+        	startTime = System.currentTimeMillis();
         } else {
         	counter = 0;
         	prev_tagNum = -1;
@@ -403,7 +434,8 @@ public class ReaderUtility implements ReadListener {
 	private void readData() {
 		TagReadData[] trd;
 		try {
-			trd = myReader.read(READ_TIME);
+//			trd = myReader.read(READ_TIME);
+			trd = myReader.read(Inventory_Time);
 			
 			if (trd.length > 0) {
 				DigitalIOController.getInstance().turnOffOutput();
@@ -585,5 +617,96 @@ public class ReaderUtility implements ReadListener {
 	
 	public float getTotalInventoryTime() {
 		return total_inventory_time;
+	}
+	
+	public void setInventoryTime(int time) {
+		if (time > 0) {
+			Inventory_Time = time;
+		}
+	}
+	
+	private void saveTagList() throws IOException {
+		File dir = new File(FILE_DIRECTORY);
+		if (!dir.isDirectory()) {
+			MyLogger.printLog("create directory: "+FILE_DIRECTORY);
+			dir.mkdir();
+		}
+		
+		String file_path = FILE_DIRECTORY+FILE_TAGLIST;
+		System.out.println(file_path);
+		
+		File save_file = new File(file_path);
+		if (!save_file.exists()) {
+			save_file.createNewFile();
+		}
+		
+		FileOutputStream fos = new FileOutputStream(save_file);
+		ObjectOutput out = null;
+		try {
+			out = new ObjectOutputStream(fos);
+			out.writeObject(tagReadList);
+			out.close();
+			fos.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			MyLogger.printErrorLog(e);
+		} catch (IOException e) {
+			e.printStackTrace();
+			MyLogger.printErrorLog(e);
+		}
+	}
+	
+	private void loadTagList() {
+		File dir = new File(FILE_DIRECTORY);
+		if (!dir.isDirectory()) {
+			MyLogger.printLog("create directory: "+FILE_DIRECTORY);
+			dir.mkdir();
+		}
+		
+		String file_path = FILE_DIRECTORY+FILE_TAGLIST;
+		System.out.println(file_path);
+		
+		File save_file = new File(file_path);
+		if (save_file.exists()) {
+			try {
+				FileInputStream fis = new FileInputStream(save_file);
+				ObjectInputStream ois = new ObjectInputStream(fis);
+				prevList = (TagList) ois.readObject();
+				ois.close();
+				fis.close();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+		} else {
+			prevList = new TagList();
+			MyLogger.printLog("No previous tag data...");
+		}
+	}
+	
+	private void checkTagRemoval() {
+		ArrayList<TagUnit> removeList = prevList.clone();
+		ArrayList<TagUnit> addList = tagReadList.clone();
+		
+		Iterator<TagUnit> it_prev = prevList.iterator();
+		while (it_prev.hasNext()) {
+			TagUnit tu1 = it_prev.next();
+			TagUnit tu2;
+			Iterator<TagUnit> it_current = tagReadList.iterator();
+			while (it_current.hasNext()) {
+				tu2 = it_current.next();
+				if (tu2.getEPC().equals(tu1.getEPC())) {
+					removeList.remove(tu1);
+					addList.remove(tu2);
+					break;
+				}
+			}
+		}
+		
+		MyLogger.printLog("Tag Removed: "+removeList.size());
+		MyLogger.printLog("Tag added: "+addList.size());
 	}
 }

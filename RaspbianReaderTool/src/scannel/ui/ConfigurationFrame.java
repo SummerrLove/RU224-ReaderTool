@@ -49,6 +49,7 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 	private TextArea hoptable;
 	private static ObservableList<Region> SUPPORT_REGIONS = FXCollections.observableArrayList();
 //			FXCollections.observableArrayList("NA", "IN", "PRC", "EU3", "KR2", "AU", "NZ", "MY", "ID", "PH", "TW", "MO", "RU", "SG");
+	private TextField inv_time;
 	
 	private final static boolean ACTIVATE_HOPTABLE = false;
 	
@@ -171,6 +172,19 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 //			this.getChildren().add(hoptable);
 //			hoptable.setDisable(true);
 //		}
+		
+		Label inventory_title = new Label("Inventory Time(ms):");
+		inventory_title.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+		AnchorPane.setLeftAnchor(inventory_title, 30.0);
+		AnchorPane.setTopAnchor(inventory_title, 500.0);
+		this.getChildren().add(inventory_title);
+		
+		inv_time = new TextField();
+		inv_time.setPrefWidth(60);
+		AnchorPane.setLeftAnchor(inv_time, 30.0);
+		AnchorPane.setTopAnchor(inv_time, 530.0);
+		this.getChildren().add(inv_time);
+		inv_time.setText("3000");
 	}
 
 	@Override
@@ -183,8 +197,8 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 		if (event.getSource() == btn_start) {
 			if (ReaderUtility.getInstance().isReading()) {
 				// stop reading tag
-				System.out.println("[ConfigurationFrame] press stop button");
-				this.stopReading();
+//				System.out.println("[ConfigurationFrame] press stop button");
+//				this.stopReading();
 			} else {
 				// start reading tag
 				System.out.println("[ConfigurationFrame] press start button");
@@ -228,6 +242,7 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 			this.setSession(cb_session.getSelectionModel().getSelectedItem());
 			this.setTargetFlag(cb_target.getSelectionModel().getSelectedItem());
 			this.setRegion(cb_region.getSelectionModel().getSelectedItem());
+			ReaderUtility.getInstance().setInventoryTime(Integer.parseInt(inv_time.getText()));
 			
 			if (ACTIVATE_HOPTABLE && rb_hoptable.isSelected()) {
 				// Use user-defined frequency list
@@ -242,7 +257,7 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 			ReaderConfig.getInstance().setAntennaList(ant_setting);
 			ReaderUtility.getInstance().resetData();
 			ReaderUtility.getInstance().startReading(ant_setting);
-			btn_start.setText("Stop");
+//			btn_start.setText("Stop");
 		} catch (ReaderException e) {
 			e.printStackTrace();
 		}
@@ -435,7 +450,6 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 
 	@Override
 	public void digitalInputOn() {
-		// TODO Auto-generated method stub
 		Platform.runLater(new Runnable() {
 
 			@Override
@@ -449,14 +463,13 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 
 	@Override
 	public void digitalInputOff() {
-		// TODO Auto-generated method stub
-		Platform.runLater(new Runnable() {
-
-			@Override
-			public void run() {
-				stopReading();
-			}
-			
-		});
+//		Platform.runLater(new Runnable() {
+//
+//			@Override
+//			public void run() {
+//				stopReading();
+//			}
+//			
+//		});
 	}
 }

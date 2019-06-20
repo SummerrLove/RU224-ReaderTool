@@ -1,11 +1,13 @@
 package scannel.reader;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 
 import com.thingmagic.TagReadData;
 
-public class TagList {
+public class TagList implements Serializable{
 
 	ArrayList<TagUnit> tagList;
 	
@@ -13,6 +15,10 @@ public class TagList {
 		tagList = new ArrayList<TagUnit>();
 	}
 
+	public TagList(ArrayList list) {
+		tagList = new ArrayList(list);
+	}
+	
 	public void addTag(TagUnit tu) {
 		if (tagList  == null) {
 			tagList = new ArrayList<TagUnit>();
@@ -122,5 +128,14 @@ public class TagList {
 				System.out.println("epc=" + tag.getEPC() +", readCount=" + tag.getReadCount());
 			}
 		}
+	}
+	
+	public Iterator<TagUnit> iterator() {
+		return tagList.iterator();
+	}
+	
+	public ArrayList<TagUnit> clone() {
+		return new ArrayList<TagUnit>(tagList);
+		
 	}
 }

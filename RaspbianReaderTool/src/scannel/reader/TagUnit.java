@@ -1,8 +1,9 @@
 package scannel.reader;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class TagUnit {
+public class TagUnit implements Serializable{
 
 	private String epc;
 	private int readCount;

@@ -8,7 +8,7 @@ import scannel.ui.MainWindow;
 
 public class ReaderTool extends Application {
 
-	private final static String version = "v1.04";
+	private final static String version = "v1.08 - smart cabinet demo";
 
 	@Override
 	public void start(Stage mainStage) throws Exception {

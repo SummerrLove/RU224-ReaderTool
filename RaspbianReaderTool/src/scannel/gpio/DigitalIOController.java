@@ -168,25 +168,32 @@ public class DigitalIOController implements GpioPinListenerDigital{
 		System.out.println("[DigitalIOController] handleGpioPinDigitalStateChangeEvent()");
 		System.out.println("[DigitalIOController] "+event.getPin()+"="+event.getState());
 		
-		if (event.getPin() == DI_list[0]) {
-			MyLogger.printLog("DI_1:"+event.getState());
-		} else if (event.getPin() == DI_list[1]) {
-			MyLogger.printLog("DI_2:"+event.getState());
-		} else if (event.getPin() == DI_list[2]) {
-			MyLogger.printLog("DI_3:"+event.getState());
-		} else if (event.getPin() == DI_list[3]) {
-			MyLogger.printLog("DI_4:"+event.getState());
-		}
-		
-		if (isDIActivated) {
-			if (this.allDigitalInputOff()) {
-				diListener.digitalInputOff();
-			} else {
+		for (int i=0; i<DI_list.length; i++) {
+			if (event.getPin() == DI_list[i]
+					&&event.getState() == PinState.LOW
+					&& di_activate[i]) {
 				diListener.digitalInputOn();
+				break;
 			}
 		}
-			
 		
+//		if (event.getPin() == DI_list[0]) {
+//			MyLogger.printLog("DI_1:"+event.getState());
+//		} else if (event.getPin() == DI_list[1]) {
+//			MyLogger.printLog("DI_2:"+event.getState());
+//		} else if (event.getPin() == DI_list[2]) {
+//			MyLogger.printLog("DI_3:"+event.getState());
+//		} else if (event.getPin() == DI_list[3]) {
+//			MyLogger.printLog("DI_4:"+event.getState());
+//		}
+//		
+//		if (isDIActivated) {
+//			if (this.allDigitalInputOff()) {
+//				diListener.digitalInputOff();
+//			} else {
+//				diListener.digitalInputOn();
+//			}
+//		}
 			
 	}
 	

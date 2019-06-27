@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import com.pi4j.io.gpio.PinState;
 import com.thingmagic.Gen2.Session;
 import com.thingmagic.Gen2.Target;
 import com.thingmagic.Reader.Region;
@@ -47,6 +48,14 @@ public class ReaderConfig {
 	private final static String KEY_DI_2 = "DI_2";
 	private final static String KEY_DI_3 = "DI_3";
 	private final static String KEY_DI_4 = "DI_4";
+	private final static String KEY_DI_1_START = "DI_1_START";
+	private final static String KEY_DI_2_START = "DI_2_START";
+	private final static String KEY_DI_3_START = "DI_3_START";
+	private final static String KEY_DI_4_START = "DI_4_START";
+	private final static String KEY_DI_1_STOP = "DI_1_STOP";
+	private final static String KEY_DI_2_STOP = "DI_2_STOP";
+	private final static String KEY_DI_3_STOP = "DI_3_STOP";
+	private final static String KEY_DI_4_STOP = "DI_4_STOP";
 	private final static String KEY_DO_1 = "DO_1";
 	private final static String KEY_DO_2 = "DO_2";
 	private final static String KEY_DO_3 = "DO_3";
@@ -774,6 +783,286 @@ public class ReaderConfig {
 			} else {
 				this.setDO4(false);
 				return false;
+			}
+		}
+	}
+
+	public void setDIStart(int port, PinState state) {
+		switch (port) {
+		case 1:
+			this.setDI1Start(state);
+			break;
+		case 2:
+			this.setDI2Start(state);
+			break;
+		case 3:
+			this.setDI3Start(state);
+			break;
+		case 4:
+			this.setDI4Start(state);
+			break;
+		}
+	}
+	
+	public PinState getDIStart(int port) {
+		switch (port) {
+		case 1:
+			return getDI1Start();
+		case 2:
+			return getDI2Start();
+		case 3:
+			return getDI3Start();
+		case 4:
+			return getDI4Start();
+		default:
+			return null;
+		}
+	}
+	
+	public void setDIStop(int port, PinState state) {
+		switch (port) {
+		case 1:
+			this.setDI1Stop(state);
+			break;
+		case 2:
+			this.setDI2Stop(state);
+			break;
+		case 3:
+			this.setDI3Stop(state);
+			break;
+		case 4:
+			this.setDI4Stop(state);
+			break;
+		}
+	}
+	
+	public PinState getDIStop(int port) {
+		switch (port) {
+		case 1:
+			return getDI1Stop();
+		case 2:
+			return getDI2Stop();
+		case 3:
+			return getDI3Stop();
+		case 4:
+			return getDI4Stop();
+		default:
+			return null;
+		}
+	}
+	
+	private void setDI1Start(PinState state) {
+		if (state == null) {
+			config_properties.setProperty(KEY_DI_1_START, "none");
+		} else {
+			config_properties.setProperty(KEY_DI_1_START, state.name());
+		} 
+	}
+	
+	private PinState getDI1Start() {
+		String value = config_properties.getProperty(KEY_DI_1_START);
+		
+		if (value == null) {
+			return null;
+		} else {
+			if (value.equals("HIGH")) {
+				return PinState.HIGH;
+			} else if (value.equals("LOW")) {
+				return PinState.LOW;
+			} else if (value.equals("none")) {
+				return null;
+			} else {
+				MyLogger.printLog("This block should never be executed...");
+				return null;
+			}
+		}
+	}
+	
+	private void setDI2Start(PinState state) {
+		if (state == null) {
+			config_properties.setProperty(KEY_DI_2_START, "none");
+		} else {
+			config_properties.setProperty(KEY_DI_2_START, state.name());
+		} 
+	}
+	
+	private PinState getDI2Start() {
+		String value = config_properties.getProperty(KEY_DI_2_START);
+		
+		if (value == null) {
+			return null;
+		} else {
+			if (value.equals("HIGH")) {
+				return PinState.HIGH;
+			} else if (value.equals("LOW")) {
+				return PinState.LOW;
+			} else if (value.equals("none")) {
+				return null;
+			} else {
+				MyLogger.printLog("This block should never be executed...");
+				return null;
+			}
+		}
+	}
+	
+	private void setDI3Start(PinState state) {
+		if (state == null) {
+			config_properties.setProperty(KEY_DI_3_START, "none");
+		} else {
+			config_properties.setProperty(KEY_DI_3_START, state.name());
+		} 
+	}
+	
+	private PinState getDI3Start() {
+		String value = config_properties.getProperty(KEY_DI_3_START);
+		
+		if (value == null) {
+			return null;
+		} else {
+			if (value.equals("HIGH")) {
+				return PinState.HIGH;
+			} else if (value.equals("LOW")) {
+				return PinState.LOW;
+			} else if (value.equals("none")) {
+				return null;
+			} else {
+				MyLogger.printLog("This block should never be executed...");
+				return null;
+			}
+		}
+	}
+	
+	private void setDI4Start(PinState state) {
+		if (state == null) {
+			config_properties.setProperty(KEY_DI_4_START, "none");
+		} else {
+			config_properties.setProperty(KEY_DI_4_START, state.name());
+		} 
+	}
+	
+	private PinState getDI4Start() {
+		String value = config_properties.getProperty(KEY_DI_4_START);
+		
+		if (value == null) {
+			return null;
+		} else {
+			if (value.equals("HIGH")) {
+				return PinState.HIGH;
+			} else if (value.equals("LOW")) {
+				return PinState.LOW;
+			} else if (value.equals("none")) {
+				return null;
+			} else {
+				MyLogger.printLog("This block should never be executed...");
+				return null;
+			}
+		}
+	}
+	
+	private void setDI1Stop(PinState state) {
+		if (state == null) {
+			config_properties.setProperty(KEY_DI_1_STOP, "none");
+		} else {
+			config_properties.setProperty(KEY_DI_1_STOP, state.name());
+		} 
+	}
+	
+	private PinState getDI1Stop() {
+		String value = config_properties.getProperty(KEY_DI_1_STOP);
+		
+		if (value == null) {
+			return null;
+		} else {
+			if (value.equals("HIGH")) {
+				return PinState.HIGH;
+			} else if (value.equals("LOW")) {
+				return PinState.LOW;
+			} else if (value.equals("none")) {
+				return null;
+			} else {
+				MyLogger.printLog("This block should never be executed...");
+				return null;
+			}
+		}
+	}
+	
+	private void setDI2Stop(PinState state) {
+		if (state == null) {
+			config_properties.setProperty(KEY_DI_2_STOP, "none");
+		} else {
+			config_properties.setProperty(KEY_DI_2_STOP, state.name());
+		} 
+	}
+	
+	private PinState getDI2Stop() {
+		String value = config_properties.getProperty(KEY_DI_2_STOP);
+		
+		if (value == null) {
+			return null;
+		} else {
+			if (value.equals("HIGH")) {
+				return PinState.HIGH;
+			} else if (value.equals("LOW")) {
+				return PinState.LOW;
+			} else if (value.equals("none")) {
+				return null;
+			} else {
+				MyLogger.printLog("This block should never be executed...");
+				return null;
+			}
+		}
+	}
+	
+	private void setDI3Stop(PinState state) {
+		if (state == null) {
+			config_properties.setProperty(KEY_DI_3_STOP, "none");
+		} else {
+			config_properties.setProperty(KEY_DI_3_STOP, state.name());
+		} 
+	}
+	
+	private PinState getDI3Stop() {
+		String value = config_properties.getProperty(KEY_DI_3_STOP);
+		
+		if (value == null) {
+			return null;
+		} else {
+			if (value.equals("HIGH")) {
+				return PinState.HIGH;
+			} else if (value.equals("LOW")) {
+				return PinState.LOW;
+			} else if (value.equals("none")) {
+				return null;
+			} else {
+				MyLogger.printLog("This block should never be executed...");
+				return null;
+			}
+		}
+	}
+	
+	private void setDI4Stop(PinState state) {
+		if (state == null) {
+			config_properties.setProperty(KEY_DI_4_STOP, "none");
+		} else {
+			config_properties.setProperty(KEY_DI_4_STOP, state.name());
+		} 
+	}
+	
+	private PinState getDI4Stop() {
+		String value = config_properties.getProperty(KEY_DI_4_STOP);
+		
+		if (value == null) {
+			return null;
+		} else {
+			if (value.equals("HIGH")) {
+				return PinState.HIGH;
+			} else if (value.equals("LOW")) {
+				return PinState.LOW;
+			} else if (value.equals("none")) {
+				return null;
+			} else {
+				MyLogger.printLog("This block should never be executed...");
+				return null;
 			}
 		}
 	}

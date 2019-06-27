@@ -16,13 +16,11 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.Separator;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
@@ -45,12 +43,13 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 	private ChoiceBox<Region> cb_region;
 	private Button btn_start;
 	private Button btn_reset;
-	private RadioButton rb_hoptable;
-	private TextArea hoptable;
+	private RadioButton rb_volume;
+//	private RadioButton rb_hoptable;
+//	private TextArea hoptable;
 	private static ObservableList<Region> SUPPORT_REGIONS = FXCollections.observableArrayList();
 //			FXCollections.observableArrayList("NA", "IN", "PRC", "EU3", "KR2", "AU", "NZ", "MY", "ID", "PH", "TW", "MO", "RU", "SG");
 	
-	private final static boolean ACTIVATE_HOPTABLE = false;
+//	private final static boolean ACTIVATE_HOPTABLE = false;
 	
 	
 	public ConfigurationFrame() {
@@ -146,6 +145,12 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 		this.getChildren().add(btn_reset);
 		
 		
+		rb_volume = new RadioButton("High Tag Volume");
+		rb_volume.setOnAction(this);
+		AnchorPane.setLeftAnchor(rb_volume, 30.0);
+		AnchorPane.setTopAnchor(rb_volume, 500.0);
+		this.getChildren().add(rb_volume);
+		
 //		Separator separator = new Separator();
 //		separator.setOrientation(Orientation.HORIZONTAL);
 //		AnchorPane.setLeftAnchor(separator, 20.0);
@@ -196,21 +201,28 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 			ReaderUtility.getInstance().resetData();
 		}
 		
-		if (ACTIVATE_HOPTABLE && (event.getSource() == rb_hoptable)) {
-			if (rb_hoptable.isSelected()) {
-				System.out.println("RadioButon selected.");
-				try {
-					this.setHopTableText(ReaderUtility.getInstance().getHopTable());
-				} catch (ReaderException e) {
-					e.printStackTrace();
-				}
-				hoptable.setDisable(false);
+		if (event.getSource() == rb_volume) {
+			if (rb_volume.isSelected()) {
+				ReaderUtility.getInstance().setRefreshRate(30);
 			} else {
-				System.out.println("RadioButon un-selected.");
-//				this.parseHopTable(hoptable.getText());
-				hoptable.setDisable(true);
+				ReaderUtility.getInstance().setRefreshRate(5);
 			}
 		}
+		
+//		if (ACTIVATE_HOPTABLE && (event.getSource() == rb_hoptable)) {
+//			if (rb_hoptable.isSelected()) {
+//				System.out.println("RadioButon selected.");
+//				try {
+//					this.setHopTableText(ReaderUtility.getInstance().getHopTable());
+//				} catch (ReaderException e) {
+//					e.printStackTrace();
+//				}
+//				hoptable.setDisable(false);
+//			} else {
+//				System.out.println("RadioButon un-selected.");
+//				hoptable.setDisable(true);
+//			}
+//		}
 	}
 	
 	private void startReading() {
@@ -228,15 +240,20 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 			this.setSession(cb_session.getSelectionModel().getSelectedItem());
 			this.setTargetFlag(cb_target.getSelectionModel().getSelectedItem());
 			this.setRegion(cb_region.getSelectionModel().getSelectedItem());
-			
-			if (ACTIVATE_HOPTABLE && rb_hoptable.isSelected()) {
-				// Use user-defined frequency list
-				ReaderUtility.getInstance().setHopTable(this.parseHopTable(hoptable.getText()));
+			if (rb_volume.isSelected()) {
+				ReaderUtility.getInstance().setRefreshRate(30);
 			} else {
-				// Use default hop table for selected region. 
-				// However, if the reader hop table has been modified, 
-				// the region parameter of the reader must be set again to reset the hop table to default value.   
+				ReaderUtility.getInstance().setRefreshRate(5);
 			}
+			
+//			if (ACTIVATE_HOPTABLE && rb_hoptable.isSelected()) {
+//				// Use user-defined frequency list
+//				ReaderUtility.getInstance().setHopTable(this.parseHopTable(hoptable.getText()));
+//			} else {
+//				// Use default hop table for selected region. 
+//				// However, if the reader hop table has been modified, 
+//				// the region parameter of the reader must be set again to reset the hop table to default value.   
+//			}
 			
 			int[] ant_setting = antenna_list.getAntennaList();
 			ReaderConfig.getInstance().setAntennaList(ant_setting);
@@ -366,19 +383,19 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 		return frequencyList;
 	}
 	
-	private void setHopTableText(int[] frequencyList) {
-		String text = "";
-		
-		for (int i=0; i<frequencyList.length; i++) {
-			if (i == 0) {
-				text = Integer.toString(frequencyList[i]);
-			} else {
-				text += ","+Integer.toString(frequencyList[i]);
-			}
-		}
-		
-		hoptable.setText(text);
-	}
+//	private void setHopTableText(int[] frequencyList) {
+//		String text = "";
+//		
+//		for (int i=0; i<frequencyList.length; i++) {
+//			if (i == 0) {
+//				text = Integer.toString(frequencyList[i]);
+//			} else {
+//				text += ","+Integer.toString(frequencyList[i]);
+//			}
+//		}
+//		
+//		hoptable.setText(text);
+//	}
 	
 	public void resetStartButton() {
 		btn_start.setText("Start");

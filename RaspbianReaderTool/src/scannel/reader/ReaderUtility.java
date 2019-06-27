@@ -60,6 +60,7 @@ public class ReaderUtility implements ReadListener {
 	private int prev_tagNum = -1;
 	private long startTime;
 	private float total_inventory_time;
+	private int refresh_rate = 5;
 	
 	
 	private ReaderUtility() {
@@ -432,7 +433,7 @@ public class ReaderUtility implements ReadListener {
 			System.out.println("Total tag = "+prev_tagNum+", Total inventory time = "+total_inventory_time);
 		}
 		
-		if (counter > 50) {
+		if (counter > refresh_rate) {
 			System.out.println("Update GUI, time = " + System.currentTimeMillis());
 			counter = 0;
 			Platform.runLater(new Runnable() {
@@ -586,5 +587,11 @@ public class ReaderUtility implements ReadListener {
 	
 	public float getTotalInventoryTime() {
 		return total_inventory_time;
+	}
+	
+	public void setRefreshRate(int value) {
+		if (value > 0) {
+			refresh_rate = value;
+		}
 	}
 }

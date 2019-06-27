@@ -1,15 +1,17 @@
 package scannel.ui;
 
+import com.pi4j.io.gpio.PinState;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import scannel.gpio.DigitalIOController;
@@ -20,7 +22,10 @@ public class DigitalIOSettingFrame extends AnchorPane implements EventHandler<Ac
 	private RadioButton rb_activate_DI;
 	private RadioButton rb_activate_DO;
 	
-	private IOFrame di_frame;
+	private DISettingFrame start_di;
+	private DISettingFrame stop_di;
+	
+//	private IOFrame di_frame;
 	private IOFrame do_frame;
 	
 
@@ -39,18 +44,20 @@ public class DigitalIOSettingFrame extends AnchorPane implements EventHandler<Ac
 		rb_activate_DI.setFont(Font.font("Arial", FontWeight.BOLD, 20));
 		rb_activate_DI.setOnAction(this);
 		AnchorPane.setLeftAnchor(rb_activate_DI, 50.0);
-		AnchorPane.setTopAnchor(rb_activate_DI, 50.0);
+		AnchorPane.setTopAnchor(rb_activate_DI, 40.0);
 		this.getChildren().add(rb_activate_DI);
 
-		di_frame = new IOFrame("Digital Input");
-		di_frame.setPrefSize(900, 200);
-		di_frame.setVgap(40);
-		di_frame.setHgap(250);
-//		di_frame.setPadding(new Insets(20, 30, 20, 30));
-		di_frame.setAlignment(Pos.TOP_CENTER);
-		AnchorPane.setLeftAnchor(di_frame, 50.0);
-		AnchorPane.setTopAnchor(di_frame, 100.0);
-		this.getChildren().add(di_frame);
+		createDISetting();
+		
+//		di_frame = new IOFrame("Digital Input");
+//		di_frame.setPrefSize(900, 200);
+//		di_frame.setVgap(40);
+//		di_frame.setHgap(250);
+////		di_frame.setPadding(new Insets(20, 30, 20, 30));
+//		di_frame.setAlignment(Pos.TOP_CENTER);
+//		AnchorPane.setLeftAnchor(di_frame, 50.0);
+//		AnchorPane.setTopAnchor(di_frame, 100.0);
+//		this.getChildren().add(di_frame);
 		
 		
 		
@@ -87,10 +94,78 @@ public class DigitalIOSettingFrame extends AnchorPane implements EventHandler<Ac
 //		this.getChildren().add(btn_apply);
 	}
 
+	private void createDISetting() {
+		Rectangle rect1 = new Rectangle(40, 90, 410, 200);
+		rect1.setArcHeight(15);
+		rect1.setArcWidth(15);
+		rect1.setFill(Color.WHITE);
+		rect1.setStroke(Color.BLACK);
+		this.getChildren().add(rect1);
+		
+		start_di = new DISettingFrame("Start inventory:");
+		start_di.setPrefSize(410, 200);
+		AnchorPane.setLeftAnchor(start_di, 40.0);
+		AnchorPane.setTopAnchor(start_di, 90.0);
+		this.getChildren().add(start_di);
+//		Label start_label = new Label("Start inventory:");
+//		start_label.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+//		AnchorPane.setLeftAnchor(start_label, 60.0);
+//		AnchorPane.setTopAnchor(start_label, 110.0);
+//		this.getChildren().add(start_label);
+//		
+//		start_di = new DIRadioButtonSet[4];
+//		for (int i=0; i<start_di.length; i++) {
+//			Label label = new Label("DI #"+(i+1));
+//			label.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+//			AnchorPane.setLeftAnchor(label, 60.0);
+//			AnchorPane.setTopAnchor(label, 150.0 + i*30);
+//			this.getChildren().add(label);
+//			
+//			start_di[i] = new DIRadioButtonSet();
+//			AnchorPane.setLeftAnchor(start_di[i], 120.0);
+//			AnchorPane.setTopAnchor(start_di[i], 150.0 + i*30);
+//			this.getChildren().add(start_di[i]);
+//		}
+		
+		Rectangle rect2 = new Rectangle(500, 90, 410, 200);
+		rect2.setArcHeight(15);
+		rect2.setArcWidth(15);
+		rect2.setFill(Color.WHITE);
+		rect2.setStroke(Color.BLACK);
+		this.getChildren().add(rect2);
+		
+		stop_di = new DISettingFrame("Stop inventory:");
+		stop_di.setPrefSize(410, 200);
+		AnchorPane.setLeftAnchor(stop_di, 500.0);
+		AnchorPane.setTopAnchor(stop_di, 90.0);
+		this.getChildren().add(stop_di);
+//		Label stop_label = new Label("Stop inventory:");
+//		stop_label.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+//		AnchorPane.setLeftAnchor(stop_label, 520.0);
+//		AnchorPane.setTopAnchor(stop_label, 110.0);
+//		this.getChildren().add(stop_label);
+//		
+//		stop_di = new DIRadioButtonSet[4];
+//		for (int i=0; i<stop_di.length; i++) {
+//			Label label = new Label("DI #"+(i+1));
+//			label.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+//			AnchorPane.setLeftAnchor(label, 520.0);
+//			AnchorPane.setTopAnchor(label, 150.0 + i*30);
+//			this.getChildren().add(label);
+//			
+//			stop_di[i] = new DIRadioButtonSet();
+//			AnchorPane.setLeftAnchor(stop_di[i], 580.0);
+//			AnchorPane.setTopAnchor(stop_di[i], 150.0 + i*30);
+//			this.getChildren().add(stop_di[i]);
+//		}
+	}
+	
 	@Override
 	public void handle(ActionEvent event) {
 		if (event.getSource() == rb_activate_DI) {
-			di_frame.setDisable(!rb_activate_DI.isSelected());
+//			di_frame.setDisable(!rb_activate_DI.isSelected());
+			start_di.setDisable(!rb_activate_DI.isSelected());
+			stop_di.setDisable(!rb_activate_DI.isSelected());
 		} else if (event.getSource() == rb_activate_DO) {
 			do_frame.setDisable(!rb_activate_DO.isSelected());
 		} 
@@ -99,15 +174,19 @@ public class DigitalIOSettingFrame extends AnchorPane implements EventHandler<Ac
 	private void loadSetting() {
 		rb_activate_DI.setSelected(ReaderConfig.getInstance().getDITrigger());
 		if (rb_activate_DI.isSelected()) {
-			boolean[] setting = new boolean[4];
-			setting[0] = ReaderConfig.getInstance().getDI1();
-			setting[1] = ReaderConfig.getInstance().getDI2();
-			setting[2] = ReaderConfig.getInstance().getDI3();
-			setting[3] = ReaderConfig.getInstance().getDI4();
+			PinState[] input_start = new PinState[4];
+			PinState[] input_stop = new PinState[4];
+
+			for (int i=0; i<input_start.length; i++) {
+				input_start[i] = ReaderConfig.getInstance().getDIStart(i+1);
+				input_stop[i] = ReaderConfig.getInstance().getDIStop(i+1);
+			}
 			
-			di_frame.setIOSettingList(setting);
+			start_di.setSetting(input_start);
+			stop_di.setSetting(input_stop);
 		}
-		di_frame.setDisable(!rb_activate_DI.isSelected());
+		start_di.setDisable(!rb_activate_DI.isSelected());
+		stop_di.setDisable(!rb_activate_DI.isSelected());
 		
 		rb_activate_DO.setSelected(ReaderConfig.getInstance().getDOTrigger());
 		if (rb_activate_DO.isSelected()) {
@@ -131,12 +210,16 @@ public class DigitalIOSettingFrame extends AnchorPane implements EventHandler<Ac
 		DigitalIOController.getInstance().removeDigitalOutputListener();
 		
 		if (rb_activate_DI.isSelected()) {
-			boolean[] di_setting = di_frame.getIOSettingList();
-			ReaderConfig.getInstance().setDI1(di_setting[0]);
-			ReaderConfig.getInstance().setDI2(di_setting[1]);
-			ReaderConfig.getInstance().setDI3(di_setting[2]);
-			ReaderConfig.getInstance().setDI4(di_setting[3]);
-			DigitalIOController.getInstance().enableDI(di_setting);
+			PinState[] di_start_setting = start_di.getSetting();
+			for (int i=0; i<di_start_setting.length; i++) {
+				ReaderConfig.getInstance().setDIStart((i+1), di_start_setting[i]);
+			}
+			
+			PinState[] di_stop_setting = stop_di.getSetting();
+			for (int i=0; i<di_stop_setting.length; i++) {
+				ReaderConfig.getInstance().setDIStop((i+1), di_stop_setting[i]);
+			}
+			DigitalIOController.getInstance().enableDI(di_start_setting, di_stop_setting);
 		}
 		
 		ReaderConfig.getInstance().setDOTrigger(rb_activate_DO.isSelected());

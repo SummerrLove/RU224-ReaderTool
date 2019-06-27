@@ -27,12 +27,14 @@ public class DigitalIOController implements GpioPinListenerDigital{
 	private GpioPinDigitalInput[] DI_list = new GpioPinDigitalInput[4];
 	private GpioPinDigitalOutput[] DO_list = new GpioPinDigitalOutput[4]; 
 	
-	private boolean[] di_activate = new boolean[4];
+//	private boolean[] di_activate = new boolean[4];
 	private boolean[] do_activate = new boolean[4];
 	private boolean isDIActivated = false;
 	private boolean isDOActivated = false;
 	private DigitalInputListener diListener;
 	
+	private PinState[] di_start = new PinState[4];
+	private PinState[] di_stop = new PinState[4];
 	
 	// This variable is used to avoid invoking platform native method while testing the ReaderTool software on
 	// the reader without RPi board.
@@ -61,14 +63,11 @@ public class DigitalIOController implements GpioPinListenerDigital{
 		isDIActivated = ReaderConfig.getInstance().getDITrigger();
 		isDOActivated = ReaderConfig.getInstance().getDOTrigger();
 		
-		di_activate[0] = ReaderConfig.getInstance().getDI1();
-		di_activate[1] = ReaderConfig.getInstance().getDI2();
-		di_activate[2] = ReaderConfig.getInstance().getDI3();
-		di_activate[3] = ReaderConfig.getInstance().getDI4();
-		
-		for (int i=0; i<di_activate.length; i++) {
+		for (int i=0; i<di_start.length; i++) {
 			DI_list[i].removeAllListeners();
-			if (di_activate[i]) {
+			di_start[i] = ReaderConfig.getInstance().getDIStart(i+1);
+			di_stop[i] = ReaderConfig.getInstance().getDIStop(i+1);
+			if ((di_start[i] != null) || (di_stop[i] != null)) {
 				DI_list[i].addListener(this);
 			}
 		}
@@ -179,10 +178,12 @@ public class DigitalIOController implements GpioPinListenerDigital{
 		}
 		
 		if (isDIActivated) {
-			if (this.allDigitalInputOff()) {
+			if (this.startReading(event)){
+				diListener.digitalInputOn();
+			} else if (this.stopReading(event)) {
 				diListener.digitalInputOff();
 			} else {
-				diListener.digitalInputOn();
+				// do nothing
 			}
 		}
 			
@@ -206,25 +207,46 @@ public class DigitalIOController implements GpioPinListenerDigital{
 		return isDOActivated;
 	}
 	
-	public void enableDI(boolean[] setting) {
+//	public void enableDI(boolean[] setting) {
+//		if (DISABLE_CONTROLLER) {
+//			return;
+//		}
+//		
+//		if (setting.length != di_activate.length) {
+//			MyLogger.printLog("DI port number not match...");
+//			return;
+//		}
+//		
+//		di_activate = setting;
+//		
+//		for (int i=0; i<setting.length; i++) {
+//			DI_list[i].removeAllListeners();
+//			if (setting[i]) {
+//				DI_list[i].addListener(this);
+//			}
+//		}
+//		
+//	}
+	
+	public void enableDI(PinState[] start, PinState[] stop) {
 		if (DISABLE_CONTROLLER) {
 			return;
 		}
 		
-		if (setting.length != di_activate.length) {
+		if ((start.length != di_start.length) || (stop.length != di_stop.length)){
 			MyLogger.printLog("DI port number not match...");
 			return;
 		}
 		
-		di_activate = setting;
+		di_start = start;
+		di_stop = stop;
 		
-		for (int i=0; i<setting.length; i++) {
+		for (int i=0; i<di_start.length; i++) {
 			DI_list[i].removeAllListeners();
-			if (setting[i]) {
+			if ((di_start[i] != null) || (di_stop[i] != null)) {
 				DI_list[i].addListener(this);
 			}
 		}
-		
 	}
 	
 	public void enableDO(boolean[] setting) {
@@ -269,24 +291,37 @@ public class DigitalIOController implements GpioPinListenerDigital{
 		diListener = listener;
 	}
 	
-	private boolean allDigitalInputOff() {
-		boolean temp = true;
-		
-		for (int i=0; i<di_activate.length; i++) {
-			if (di_activate[i]) {
-				temp = temp && DI_list[i].isHigh();
+//	private boolean allDigitalInputOff() {
+//		boolean temp = true;
+//		
+//		for (int i=0; i<di_activate.length; i++) {
+//			if (di_activate[i]) {
+//				temp = temp && DI_list[i].isHigh();
+//			}
+//		}
+//		
+//		return temp;
+//	}
+	
+	private boolean startReading(GpioPinDigitalStateChangeEvent event) {
+		for (int i=0; i<di_start.length; i++) {
+			if (event.getPin() == DI_list[i]
+					&& event.getState() == di_start[i]) {
+				return true;
 			}
 		}
 		
-		return temp;
+		return false;
+	}
+	
+	private boolean stopReading(GpioPinDigitalStateChangeEvent event) {
+		for (int i=0; i<di_stop.length; i++) {
+			if (event.getPin() == DI_list[i]
+					&& event.getState() == di_stop[i]) {
+				return true;
+			}
+		}
 		
-//		if ((di_activate[0] && DI_1.isHigh())
-//				&& (di_activate[1] && DI_2.isHigh())
-//				&& (di_activate[2] && DI_3.isHigh())
-//				&& (di_activate[3] && DI_4.isHigh())){
-//			return true;
-//		} else {
-//			return false;
-//		}
+		return false;
 	}
 }

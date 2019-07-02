@@ -95,7 +95,7 @@ public class DigitalIOSettingFrame extends AnchorPane implements EventHandler<Ac
 	}
 
 	private void createDISetting() {
-		Rectangle rect1 = new Rectangle(40, 90, 410, 200);
+		Rectangle rect1 = new Rectangle(40, 90, 440, 200);
 		rect1.setArcHeight(15);
 		rect1.setArcWidth(15);
 		rect1.setFill(Color.WHITE);
@@ -103,7 +103,7 @@ public class DigitalIOSettingFrame extends AnchorPane implements EventHandler<Ac
 		this.getChildren().add(rect1);
 		
 		start_di = new DISettingFrame("Start inventory:");
-		start_di.setPrefSize(410, 200);
+		start_di.setPrefSize(440, 200);
 		AnchorPane.setLeftAnchor(start_di, 40.0);
 		AnchorPane.setTopAnchor(start_di, 90.0);
 		this.getChildren().add(start_di);
@@ -127,7 +127,7 @@ public class DigitalIOSettingFrame extends AnchorPane implements EventHandler<Ac
 //			this.getChildren().add(start_di[i]);
 //		}
 		
-		Rectangle rect2 = new Rectangle(500, 90, 410, 200);
+		Rectangle rect2 = new Rectangle(520, 90, 440, 200);
 		rect2.setArcHeight(15);
 		rect2.setArcWidth(15);
 		rect2.setFill(Color.WHITE);
@@ -135,8 +135,8 @@ public class DigitalIOSettingFrame extends AnchorPane implements EventHandler<Ac
 		this.getChildren().add(rect2);
 		
 		stop_di = new DISettingFrame("Stop inventory:");
-		stop_di.setPrefSize(410, 200);
-		AnchorPane.setLeftAnchor(stop_di, 500.0);
+		stop_di.setPrefSize(440, 200);
+		AnchorPane.setLeftAnchor(stop_di, 520.0);
 		AnchorPane.setTopAnchor(stop_di, 90.0);
 		this.getChildren().add(stop_di);
 //		Label stop_label = new Label("Stop inventory:");
@@ -220,6 +220,9 @@ public class DigitalIOSettingFrame extends AnchorPane implements EventHandler<Ac
 				ReaderConfig.getInstance().setDIStop((i+1), di_stop_setting[i]);
 			}
 			DigitalIOController.getInstance().enableDI(di_start_setting, di_stop_setting);
+			
+			DigitalIOController.getInstance().setStartDelay(start_di.getDelaySetting());
+			DigitalIOController.getInstance().setStopDelay(stop_di.getDelaySetting());
 		}
 		
 		ReaderConfig.getInstance().setDOTrigger(rb_activate_DO.isSelected());

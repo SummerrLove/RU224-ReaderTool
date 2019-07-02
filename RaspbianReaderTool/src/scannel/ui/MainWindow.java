@@ -16,8 +16,8 @@ public class MainWindow extends TabPane implements EventHandler<Event> {
 	private SaveDataFrame save_window;
 	private Tab ioTab;
 	private DigitalIOSettingFrame io_window;
-	private Tab decodeTab;
-	private DecodeSettingFrame decode_window;
+//	private Tab decodeTab;
+//	private DecodeSettingFrame decode_window;
 	
 	
 	public MainWindow() {
@@ -53,13 +53,13 @@ public class MainWindow extends TabPane implements EventHandler<Event> {
 		ioTab.setContent(io_window);
 		ioTab.setOnSelectionChanged(this);
 		
-		decodeTab = new Tab("EPC Decode Setting");
-		decodeTab.setClosable(false);
-		decode_window = new DecodeSettingFrame();
-		decodeTab.setContent(decode_window);
-		decodeTab.setOnSelectionChanged(this);
+//		decodeTab = new Tab("EPC Decode Setting");
+//		decodeTab.setClosable(false);
+//		decode_window = new DecodeSettingFrame();
+//		decodeTab.setContent(decode_window);
+//		decodeTab.setOnSelectionChanged(this);
 		
-		this.getTabs().addAll(readTab, writeTab, saveTab, ioTab, decodeTab);
+		this.getTabs().addAll(readTab, writeTab, saveTab, ioTab);
 //		this.getTabs().addAll(readTab, writeTab);
 //		this.setStyle("-fx-background-color: #F0F0F0;");
 	}
@@ -79,9 +79,9 @@ public class MainWindow extends TabPane implements EventHandler<Event> {
 			read_window.checkDITrigger();
 		} 
 		
-		if ((event.getSource() == decodeTab) && decodeTab.isSelected()) {
-			decode_window.disableReadFunction(!ReaderUtility.getInstance().isConnected());
-		}
+//		if ((event.getSource() == decodeTab) && decodeTab.isSelected()) {
+//			decode_window.disableReadFunction(!ReaderUtility.getInstance().isConnected());
+//		}
 	}
 	
 }

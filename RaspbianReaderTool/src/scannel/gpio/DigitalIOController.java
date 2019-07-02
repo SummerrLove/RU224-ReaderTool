@@ -1,5 +1,8 @@
 package scannel.gpio;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.gpio.GpioPinDigitalInput;
@@ -16,29 +19,27 @@ public class DigitalIOController implements GpioPinListenerDigital{
 	private static DigitalIOController ioController;
 	
 	private static GpioController gpio;
-//	final GpioPinDigitalInput DI_1 = gpio.provisionDigitalInputPin(Constants.GPIO_INPUT_1);
-//	final GpioPinDigitalInput DI_2 = gpio.provisionDigitalInputPin(Constants.GPIO_INPUT_2);
-//	final GpioPinDigitalInput DI_3 = gpio.provisionDigitalInputPin(Constants.GPIO_INPUT_3);
-//	final GpioPinDigitalInput DI_4 = gpio.provisionDigitalInputPin(Constants.GPIO_INPUT_4);
-//	final GpioPinDigitalOutput DO_1 = gpio.provisionDigitalOutputPin(Constants.GPIO_OUTPUT_1);
-//	final GpioPinDigitalOutput DO_2 = gpio.provisionDigitalOutputPin(Constants.GPIO_OUTPUT_2);
-//	final GpioPinDigitalOutput DO_3 = gpio.provisionDigitalOutputPin(Constants.GPIO_OUTPUT_3);
-//	final GpioPinDigitalOutput DO_4 = gpio.provisionDigitalOutputPin(Constants.GPIO_OUTPUT_4);
-	private GpioPinDigitalInput[] DI_list = new GpioPinDigitalInput[4];
-	private GpioPinDigitalOutput[] DO_list = new GpioPinDigitalOutput[4]; 
+	private GpioPinDigitalInput[] DI_list = new GpioPinDigitalInput[IO_SIZE];
+	private GpioPinDigitalOutput[] DO_list = new GpioPinDigitalOutput[IO_SIZE]; 
 	
 //	private boolean[] di_activate = new boolean[4];
-	private boolean[] do_activate = new boolean[4];
+	private boolean[] do_activate = new boolean[IO_SIZE];
 	private boolean isDIActivated = false;
 	private boolean isDOActivated = false;
 	private DigitalInputListener diListener;
 	
-	private PinState[] di_start = new PinState[4];
-	private PinState[] di_stop = new PinState[4];
+	private PinState[] di_start = new PinState[IO_SIZE];
+	private PinState[] di_stop = new PinState[IO_SIZE];
+	
+	private int[] delay_start, delay_stop;
+	private Timer startTimer, stopTimer;
+	private TimerTask startTask, stopTask;
 	
 	// This variable is used to avoid invoking platform native method while testing the ReaderTool software on
 	// the reader without RPi board.
 	public static boolean DISABLE_CONTROLLER = false;
+	
+	private final static int IO_SIZE = 4;
 	
 	
 	private DigitalIOController() {
@@ -84,6 +85,35 @@ public class DigitalIOController implements GpioPinListenerDigital{
 			}
 		}
 		
+		startTask = new TimerTask() {
+
+			@Override
+			public void run() {
+				if (diListener != null) {
+					diListener.digitalInputOn();
+				}
+			}
+			
+		};
+		
+		stopTask = new TimerTask() {
+
+			@Override
+			public void run() {
+				if (diListener != null) {
+					diListener.digitalInputOff();
+				}
+			}
+			
+		};
+		
+		startTimer = new Timer();
+		stopTimer = new Timer();
+		
+		delay_start = new int[IO_SIZE];
+		delay_stop = new int[IO_SIZE];
+		
+		
 //		System.out.println("================");
 //		System.out.println(DI_list[0].getPin().getAddress());
 //		System.out.println(DI_list[1].getPin().getAddress());
@@ -105,6 +135,11 @@ public class DigitalIOController implements GpioPinListenerDigital{
 		if (DISABLE_CONTROLLER) {
 			return;
 		}
+
+		startTimer.cancel();
+		startTimer = null;
+		stopTimer.cancel();
+		stopTimer = null;
 		
 		gpio.shutdown();
 		gpio = null;
@@ -178,13 +213,15 @@ public class DigitalIOController implements GpioPinListenerDigital{
 		}
 		
 		if (isDIActivated) {
-			if (this.startReading(event)){
-				diListener.digitalInputOn();
-			} else if (this.stopReading(event)) {
-				diListener.digitalInputOff();
-			} else {
-				// do nothing
-			}
+//			if (this.startReading(event)){
+//				diListener.digitalInputOn();
+//			} else if (this.stopReading(event)) {
+//				diListener.digitalInputOff();
+//			} else {
+//				// do nothing
+//			}
+			this.checkDIStart(event);
+			this.checkDIStop(event);
 		}
 			
 		
@@ -323,5 +360,49 @@ public class DigitalIOController implements GpioPinListenerDigital{
 		}
 		
 		return false;
+	}
+	
+	private void checkDIStart(GpioPinDigitalStateChangeEvent event) {
+		for (int i=0; i<di_stop.length; i++) {
+			if (event.getPin() == DI_list[i] && event.getState() == di_start[i]) {
+				
+				int delayTime = delay_start[i];
+				if (delayTime > 0) {
+					startTimer.cancel();
+					startTimer.schedule(startTask, delayTime);
+					MyLogger.printLog("Start inventory in "+delayTime+" milliseconds...");
+				} else {
+					diListener.digitalInputOn();
+				}
+				
+				break;
+			}
+		}
+	}
+	
+	private void checkDIStop(GpioPinDigitalStateChangeEvent event) {
+		for (int i=0; i<di_stop.length; i++) {
+			if (event.getPin() == DI_list[i] && event.getState() == di_stop[i]) {
+				
+				int delayTime = delay_stop[i];
+				if (delayTime > 0) {
+					stopTimer.cancel();
+					stopTimer.schedule(stopTask, delayTime);
+					MyLogger.printLog("Stop inventory in "+delayTime+" milliseconds...");
+				} else {
+					diListener.digitalInputOff();
+				}
+				
+				break;
+			}
+		}
+	}
+	
+	public void setStartDelay(int[] time) {
+		delay_start = time;
+	}
+	
+	public void setStopDelay(int[] time) {
+		delay_stop = time;
 	}
 }

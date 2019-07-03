@@ -33,7 +33,6 @@ public class ReaderUtility implements ReadListener {
 	private static TagList tagReadList;
 	private static Timer readTimer;
 	private static TimerTask task;
-//	private String reader_id;
 	
 	private static boolean isConnected;
 	private static boolean isReading;
@@ -127,11 +126,6 @@ public class ReaderUtility implements ReadListener {
 		System.out.println("TCP reader created!");
 	}
 	
-//	public void createTCPReader(String readerURI) throws ReaderException{
-//		Reader.setSerialTransport("tcp", new SerialTransportTCP.Factory());
-//		myReader = Reader.create(readerURI);
-//	}
-	
 	private void createSerialReader(String port) throws ReaderException{
 		myReader = Reader.create(port);
 		System.out.println("Serial Reader created!");
@@ -195,7 +189,6 @@ public class ReaderUtility implements ReadListener {
 			return;
 		}
 		
-//		System.out.println("set Session:"+session.toString());
 		myReader.paramSet(TMConstants.TMR_PARAM_GEN2_SESSION, session);
 	}
 	
@@ -205,7 +198,6 @@ public class ReaderUtility implements ReadListener {
 			return;
 		}
 		
-//		System.out.println("set target:"+target.toString());
 		myReader.paramSet(TMConstants.TMR_PARAM_GEN2_TARGET, target);
 	}
 	
@@ -215,7 +207,6 @@ public class ReaderUtility implements ReadListener {
 			return;
 		}
 		
-//		System.out.println("set RF power:"+power);
 		myReader.paramSet(TMConstants.TMR_PARAM_RADIO_READPOWER, new Integer(power*100));
 	}
 	
@@ -235,7 +226,6 @@ public class ReaderUtility implements ReadListener {
 			return;
 		}
 		
-//		System.out.println("set Region: "+region.toString());
 		myReader.paramSet(TMConstants.TMR_PARAM_REGION_ID, region);
 	}
 	
@@ -258,14 +248,6 @@ public class ReaderUtility implements ReadListener {
 		Region[] regionArray = (Region[]) myReader.paramGet(TMConstants.TMR_PARAM_REGION_SUPPORTEDREGIONS);
 		return regionArray;
 	}
-	
-//	public void setReaderId(String id) {
-//		reader_id = id;
-//	}
-//	
-//	public String getReaderId() {
-//		return reader_id;
-//	}
 	
 	public void startReading(int[] antenna) throws ReaderException {
 		if (myReader == null) {
@@ -366,17 +348,6 @@ public class ReaderUtility implements ReadListener {
 	}
 	
 	public TagList getTagData() {
-//		if (tagReadList != null) {
-//			TagUnit[] tags = new TagUnit[tagReadList.size()];
-//			for (int i=0; i<tagReadList.size(); i++) {
-//				TagUnit tmp = tagReadList.get(i);
-//				tags[i] = new TagUnit(tmp.getEPC(), tmp.getReadCount());
-//			}
-//			
-//			return tags;
-//		} else {
-//			return null;
-//		}
 		return tagReadList;
 	}
 	
@@ -448,14 +419,6 @@ public class ReaderUtility implements ReadListener {
 			});
 		}
 	}
-	
-//	public void setFilter(String str) {
-//		filter_str = str;
-//	}
-//	
-//	private void removeFilter() {
-//		filter_str = null;
-//	}
 	
 	public void printSupportRegeion() throws ReaderException {
 		if (myReader != null) {
@@ -540,18 +503,6 @@ public class ReaderUtility implements ReadListener {
 		bw.close();
 		fos.close();
 	}
-	
-//	public void createTestTagData() {
-//		tagReadList = new TagList();
-//		
-//		for (int i=0; i<5; i++) {
-//			TagUnit tu = new TagUnit("EPC-"+(i+1));
-//			tu.setTime(new Date());
-//			tagReadList.addTag(tu);
-//		}
-//		
-//		
-//	}
 	
 	public TagReadData readTag() throws ReaderException {
 		if (myReader == null) {

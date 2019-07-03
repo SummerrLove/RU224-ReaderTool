@@ -62,7 +62,6 @@ public class DecodeSettingFrame extends AnchorPane implements EventHandler<Actio
 		Rectangle rect1 = new Rectangle(40, 80, 360, 400);
 		rect1.setArcHeight(15);
 		rect1.setArcWidth(15);
-//		rect.setFill(Color.TRANSPARENT);
 		rect1.setFill(Color.WHITE);
 		rect1.setStroke(Color.BLACK);
 		this.getChildren().add(rect1);
@@ -214,7 +213,7 @@ public class DecodeSettingFrame extends AnchorPane implements EventHandler<Actio
 		String result = null;
 		
 		if (setting[UDC]) {
-//			result = EPCDecoder.parseEPCString(hexString, ENCODE_TYPE.UDC, null);
+			
 		}
 		
 		if (setting[EANUPC] && (result == null)) {
@@ -223,7 +222,7 @@ public class DecodeSettingFrame extends AnchorPane implements EventHandler<Actio
 		}
 		
 		if (setting[EANUPC_EAS]) {
-//			result = EPCDecoder.parseEPCString(hexString, ENCODE_TYPE.EAN_UPC_EAS, null);
+			
 		}
 		
 		if (setting[RAWDATA] && (result == null)) {

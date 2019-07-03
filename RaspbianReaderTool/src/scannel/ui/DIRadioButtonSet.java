@@ -9,12 +9,6 @@ import javafx.scene.layout.GridPane;
 
 public class DIRadioButtonSet extends GridPane implements EventHandler<ActionEvent> {
 
-//	public enum IO_EVENT{
-//		LOW_TO_HIGH,
-//		HIGH_TO_LOW,
-//		NONE
-//	}
-	
 	private RadioButton rb_high;
 	private RadioButton rb_low;
 	

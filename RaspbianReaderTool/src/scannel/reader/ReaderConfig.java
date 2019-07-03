@@ -19,12 +19,6 @@ public class ReaderConfig {
 
 	private static ReaderConfig config;
 	private static Properties config_properties;
-//	private int power;
-//	private int[] antList;
-//	private String session;
-//	private String target;
-//	private String region;
-//	private int hoptable;
 	private final static String KEY_RFPOWER = "RFPower";
 	private final static String KEY_ANTENNA = "Antenna";
 	private final static String KEY_SESSION = "Session";
@@ -74,7 +68,6 @@ public class ReaderConfig {
 	}
 	
 	private ReaderConfig() {
-		// TODO Auto-generated constructor stub
 		System.out.println("ReaderConfig constructor...");
 		
 		File f = new File(CONFIG_PATH);
@@ -83,7 +76,6 @@ public class ReaderConfig {
 			try {
 				f.createNewFile();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				System.out.println("Cannot create configuration tile!");
 				return;

@@ -1,7 +1,5 @@
 package scannel.ui;
 
-import java.util.ArrayList;
-
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;

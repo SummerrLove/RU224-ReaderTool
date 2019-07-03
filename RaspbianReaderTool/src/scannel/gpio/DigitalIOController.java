@@ -118,10 +118,6 @@ public class DigitalIOController implements GpioPinListenerDigital{
 		}
 		
 		System.out.println("[DigitalIOController] start()");
-//		DI_list[0].addListener(this);
-//		DI_list[1].addListener(this);
-//		DI_list[2].addListener(this);
-//		DI_list[3].addListener(this);
 		
 	}
 	
@@ -270,6 +266,8 @@ public class DigitalIOController implements GpioPinListenerDigital{
 	}
 	
 	private boolean allDigitalInputOff() {
+		// TODO This function needs to be modified when digital input issue is fixed. 
+		
 		boolean temp = true;
 		
 		for (int i=0; i<di_activate.length; i++) {
@@ -279,14 +277,5 @@ public class DigitalIOController implements GpioPinListenerDigital{
 		}
 		
 		return temp;
-		
-//		if ((di_activate[0] && DI_1.isHigh())
-//				&& (di_activate[1] && DI_2.isHigh())
-//				&& (di_activate[2] && DI_3.isHigh())
-//				&& (di_activate[3] && DI_4.isHigh())){
-//			return true;
-//		} else {
-//			return false;
-//		}
 	}
 }

@@ -26,7 +26,6 @@ public class ReadFrame extends AnchorPane {
 		control = new ControlFrame();
 		AnchorPane.setLeftAnchor(control, 0.0);
 		AnchorPane.setTopAnchor(control, 0.0);
-//		AnchorPane.setRightAnchor(control, 550.0);
 		AnchorPane.setBottomAnchor(control, 0.0);
 		control.setPrefWidth(250);
 

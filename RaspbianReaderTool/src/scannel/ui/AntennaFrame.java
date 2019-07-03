@@ -32,7 +32,6 @@ public class AntennaFrame extends GridPane {
 			int index_y = 1 + i/2;
 			this.add(antenna[i], index_x, index_y);
 		}
-//		antenna[0].setSelected(true);
 	}
 	
 	public int[] getAntennaList() {

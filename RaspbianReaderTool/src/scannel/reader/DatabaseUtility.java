@@ -109,7 +109,6 @@ public class DatabaseUtility {
 				tu = tagList.get(i);
 				myStmt.setString(1, tu.getEPC());
 				myStmt.setString(2, readerId);
-//				myStmt.setDate(3, new Date(tu.getTime().getTime()));
 				myStmt.setTimestamp(3, new Timestamp(tu.getTime().getTime()));
 				myStmt.addBatch();
 			}
@@ -169,7 +168,6 @@ public class DatabaseUtility {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			
-//			String url = "jdbc:mysql://"+db_url+"/"+db_name+"?serverTimezone=Asia/Taipei";
 			String url = "jdbc:mysql://"+db_url+"/"+db_name+"?serverTimezone=UTC";
 			myConn = DriverManager.getConnection(url, db_user, db_password);
 			
@@ -185,7 +183,6 @@ public class DatabaseUtility {
 				tu = tagList.get(i);
 				myStmt.setString(1, tu.getEPC());
 				myStmt.setString(2, readerId);
-//				myStmt.setDate(3, new Date(tu.getTime().getTime()));
 				myStmt.setTimestamp(3, new Timestamp(tu.getTime().getTime()));
 				myStmt.addBatch();
 			}

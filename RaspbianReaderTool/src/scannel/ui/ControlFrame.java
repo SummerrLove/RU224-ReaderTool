@@ -54,7 +54,6 @@ public class ControlFrame extends AnchorPane implements EventHandler<ActionEvent
 		status_light = new Circle(60, 100, 10);
 		status_light.setFill(Color.RED);
 		status_light.setStroke(Color.BLACK);
-//		status_light.setStrokeWidth(5);
 		this.getChildren().add(status_light);
 		
 		status = new Label("Disconnected");
@@ -87,14 +86,7 @@ public class ControlFrame extends AnchorPane implements EventHandler<ActionEvent
 				disconnectReader();
 			} else {
 				System.out.println("[ControlFrame] pressed connect button...");
-//				ReaderUtility.getInstance().createTestTagData();
-//				DatabaseUtility.getInstance().insertTagData();
 				connectReader();
-//				try {
-//					ReaderUtility.getInstance().printSupportRegeion();
-//				} catch (ReaderException e) {
-//					e.printStackTrace();
-//				}
 			}
 			
 		} else {

@@ -5,7 +5,7 @@ import javax.xml.bind.DatatypeConverter;
 public class StringTool {
 
 	public StringTool() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public static String hexToAsciiString(String hexString) {

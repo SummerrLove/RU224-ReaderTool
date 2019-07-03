@@ -78,13 +78,6 @@ public class DigitalIOSettingFrame extends AnchorPane implements EventHandler<Ac
 		AnchorPane.setTopAnchor(do_frame, 460.0);
 		this.getChildren().add(do_frame);
 		
-		
-//		btn_apply = new Button("Apply");
-//		btn_apply.setPrefWidth(70);
-//		btn_apply.setOnAction(this);
-//		AnchorPane.setLeftAnchor(btn_apply, 60.0);
-//		AnchorPane.setTopAnchor(btn_apply, 700.0);
-//		this.getChildren().add(btn_apply);
 	}
 
 	@Override

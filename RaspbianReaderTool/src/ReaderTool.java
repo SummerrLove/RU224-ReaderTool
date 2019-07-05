@@ -8,7 +8,8 @@ import scannel.ui.MainWindow;
 
 public class ReaderTool extends Application {
 
-	private final static String version = "v1.08 - smart cabinet demo";
+	private final static String version = "v1.08.01";
+	private final static String subject = "smart cabinet";
 
 	@Override
 	public void start(Stage mainStage) throws Exception {
@@ -18,6 +19,7 @@ public class ReaderTool extends Application {
 		System.out.println("==========================");
 		System.out.println("RU-224 ReaderTool");
 		System.out.println("version: "+version);
+		System.out.println("subject: "+subject);
 		System.out.println("==========================");
 		System.out.println();
 		

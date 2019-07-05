@@ -438,7 +438,9 @@ public class ReaderUtility implements ReadListener {
 			trd = myReader.read(Inventory_Time);
 			
 			if (trd.length > 0) {
-				DigitalIOController.getInstance().turnOffOutput();
+				if (!stopReading) {
+					DigitalIOController.getInstance().turnOffOutput();
+				}
 			} else {
 				DigitalIOController.getInstance().turnOnOutput();
 			}

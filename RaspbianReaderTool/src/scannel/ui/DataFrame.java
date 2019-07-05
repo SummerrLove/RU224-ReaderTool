@@ -46,10 +46,10 @@ public class DataFrame extends AnchorPane implements DataUpdateListener, EventHa
 	private void initComponents() {
 		
 		tag_num = new Label(String.format("%03d", 0));
-		tag_num.setFont(new Font("Arial", 300));
+		tag_num.setFont(new Font("Arial", 200));
 		tag_num.setStyle("-fx-border-color: black; -fx-background-color: lightgray;");
 		tag_num.setAlignment(Pos.CENTER);
-		tag_num.setPrefSize(480, 400);
+		tag_num.setPrefSize(480, 240);
 		AnchorPane.setLeftAnchor(tag_num, 20.0);
 		AnchorPane.setRightAnchor(tag_num, 10.0);
 		AnchorPane.setTopAnchor(tag_num, 70.0);
@@ -57,7 +57,7 @@ public class DataFrame extends AnchorPane implements DataUpdateListener, EventHa
 		
 		table = new RFIDTable();
 		AnchorPane.setLeftAnchor(table, 10.0);
-		AnchorPane.setTopAnchor(table, 500.0);
+		AnchorPane.setTopAnchor(table, 320.0);
 		AnchorPane.setBottomAnchor(table, 10.0);
 		AnchorPane.setRightAnchor(table, 0.0);
 		this.getChildren().add(table);
@@ -70,10 +70,10 @@ public class DataFrame extends AnchorPane implements DataUpdateListener, EventHa
 		this.getChildren().add(icon);
 		
 		total_inventory_time = new Label();
-		total_inventory_time.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+		total_inventory_time.setFont(Font.font("Arial", FontWeight.BOLD, 16));
 		total_inventory_time.setAlignment(Pos.CENTER);
-		AnchorPane.setLeftAnchor(total_inventory_time, 50.0);
-		AnchorPane.setTopAnchor(total_inventory_time, 440.0);
+		AnchorPane.setLeftAnchor(total_inventory_time, 40.0);
+		AnchorPane.setTopAnchor(total_inventory_time, 260.0);
 		this.getChildren().add(total_inventory_time);
 	}
 	

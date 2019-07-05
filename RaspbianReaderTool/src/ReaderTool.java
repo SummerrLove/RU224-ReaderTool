@@ -8,8 +8,8 @@ import scannel.ui.MainWindow;
 
 public class ReaderTool extends Application {
 
-	private final static String version = "v1.11.01";
-	private final static String subject = "baseic function";
+	private final static String version = "v2.11.01";
+	private final static String subject = "basic function for handheld";
 
 	@Override
 	public void start(Stage mainStage) throws Exception {
@@ -25,7 +25,7 @@ public class ReaderTool extends Application {
 		
 		
 		MainWindow main = new MainWindow();
-		Scene scene = new Scene(main, 1000, 800);
+		Scene scene = new Scene(main, 800, 480);
 		mainStage.setScene(scene);
 		mainStage.setTitle("Scannel ReaderTool");
 		mainStage.show();

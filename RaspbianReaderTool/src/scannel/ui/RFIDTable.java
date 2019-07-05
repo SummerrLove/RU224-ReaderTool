@@ -28,11 +28,11 @@ public class RFIDTable extends AnchorPane {
 	private void initComponents() {
 		
 		epcCol = new TableColumn<TagTableData, String>("EPC");
-		epcCol.setPrefWidth(200.0);
+		epcCol.setPrefWidth(150.0);
 		epcCol.setCellValueFactory(new PropertyValueFactory("epc"));
 		
 		asciiCol = new TableColumn<TagTableData, String>("ASCII Code");
-		asciiCol.setPrefWidth(200.0);
+		asciiCol.setPrefWidth(100.0);
 		asciiCol.setCellValueFactory(new PropertyValueFactory("ascii"));
 		
 		countCol = new TableColumn<TagTableData, Integer>("Read Count");
@@ -44,7 +44,7 @@ public class RFIDTable extends AnchorPane {
 		antIdCol.setCellValueFactory(new PropertyValueFactory("antennaId"));
 		
 		timeCol = new TableColumn<TagTableData, String>("Time");
-		timeCol.setPrefWidth(200.0);
+		timeCol.setPrefWidth(150.0);
 		timeCol.setCellValueFactory(new PropertyValueFactory("time"));
 		
 		frequencyCol = new TableColumn<TagTableData, Integer>("Frequency");

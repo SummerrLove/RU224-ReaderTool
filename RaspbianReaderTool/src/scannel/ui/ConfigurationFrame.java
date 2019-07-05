@@ -63,84 +63,88 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 	private void initComponents() {
 		
 		Label power_title = new Label("RF Power (dbm):");
-		power_title.setFont(Font.font("Arial", FontWeight.BOLD, 16));
-		AnchorPane.setLeftAnchor(power_title, 30.0);
-		AnchorPane.setTopAnchor(power_title, 10.0);
+		power_title.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+		AnchorPane.setLeftAnchor(power_title, 24.0);
+		AnchorPane.setTopAnchor(power_title, 6.0);
 		this.getChildren().add(power_title);
 		
 		power = new TextField();
-		power.setPrefWidth(60);
-		AnchorPane.setLeftAnchor(power, 30.0);
-		AnchorPane.setTopAnchor(power, 40.0);
+		power.setPrefWidth(48);
+		AnchorPane.setLeftAnchor(power, 24.0);
+		AnchorPane.setTopAnchor(power, 24.0);
 		this.getChildren().add(power);
 		
 		antenna_list = new AntennaFrame();
-		antenna_list.setVgap(15);
-		antenna_list.setHgap(15);
-		antenna_list.setPadding(new Insets(20, 10, 20, 10));
-		AnchorPane.setLeftAnchor(antenna_list, 20.0);
-		AnchorPane.setTopAnchor(antenna_list, 70.0);
+		antenna_list.setVgap(10);
+		antenna_list.setHgap(10);
+		antenna_list.setPadding(new Insets(16, 6, 16, 6));
+		AnchorPane.setLeftAnchor(antenna_list, 12.0);
+		AnchorPane.setTopAnchor(antenna_list, 42.0);
 		this.getChildren().add(antenna_list);
 		
 		
 		Label session_title = new Label("Session: ");
-		session_title.setFont(Font.font("Arial", FontWeight.BOLD, 16));
-		AnchorPane.setLeftAnchor(session_title, 30.0);
-		AnchorPane.setTopAnchor(session_title, 210.0);
+		session_title.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+		AnchorPane.setLeftAnchor(session_title, 20.0);
+		AnchorPane.setTopAnchor(session_title, 140.0);
 		this.getChildren().add(session_title);
 		
 		cb_session = new ChoiceBox<Session>(FXCollections.observableArrayList(Session.S0, Session.S1, Session.S2, Session.S3));
 		cb_session.setTooltip(new Tooltip("Select a session value"));
-		AnchorPane.setLeftAnchor(cb_session, 110.0);
-		AnchorPane.setTopAnchor(cb_session, 210.0);
+		cb_session.setStyle("-fx-font: 10px \"Arial\";");
+		AnchorPane.setLeftAnchor(cb_session, 90.0);
+		AnchorPane.setTopAnchor(cb_session, 140.0);
 		this.getChildren().add(cb_session);
 		
 		
 		Label target_title = new Label("Target: ");
-		target_title.setFont(Font.font("Arial", FontWeight.BOLD, 16));
-		AnchorPane.setLeftAnchor(target_title, 30.0);
-		AnchorPane.setTopAnchor(target_title, 260.0);
+		target_title.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+		AnchorPane.setLeftAnchor(target_title, 20.0);
+		AnchorPane.setTopAnchor(target_title, 170.0);
 		this.getChildren().add(target_title);
 		
 		cb_target = new ChoiceBox<Target>(FXCollections.observableArrayList(Target.A, Target.B, Target.AB, Target.BA));
-		AnchorPane.setLeftAnchor(cb_target, 95.0);
-		AnchorPane.setTopAnchor(cb_target, 260.0);
+		cb_target.setStyle("-fx-font: 10px \"Arial\";");
+		AnchorPane.setLeftAnchor(cb_target, 90.0);
+		AnchorPane.setTopAnchor(cb_target, 170.0);
 		this.getChildren().add(cb_target);
 		
 		
 		Label region_title = new Label("Region: ");
-		region_title.setFont(Font.font("Arial", FontWeight.BOLD, 16));
-		AnchorPane.setLeftAnchor(region_title, 30.0);
-		AnchorPane.setTopAnchor(region_title, 310.0);
+		region_title.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+		AnchorPane.setLeftAnchor(region_title, 20.0);
+		AnchorPane.setTopAnchor(region_title, 200.0);
 		this.getChildren().add(region_title);
 		
 		cb_region = new ChoiceBox<Region>();
-		AnchorPane.setLeftAnchor(cb_region, 100.0);
-		AnchorPane.setTopAnchor(cb_region, 310.0);
+		cb_region.setStyle("-fx-font: 10px \"Arial\";");
+		AnchorPane.setLeftAnchor(cb_region, 90.0);
+		AnchorPane.setTopAnchor(cb_region, 200.0);
 		this.getChildren().add(cb_region);
 		
 		
 		btn_start = new Button("Start");
 		btn_start.setOnAction(this);
-		btn_start.setFont(Font.font("Arial", FontWeight.BOLD, 24));
-		btn_start.setPrefSize(150, 50);
+		btn_start.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+		btn_start.setPrefSize(120, 30);
 		AnchorPane.setLeftAnchor(btn_start, 30.0);
-		AnchorPane.setTopAnchor(btn_start, 350.0);
+		AnchorPane.setTopAnchor(btn_start, 235.0);
 		this.getChildren().add(btn_start);
 		
 		btn_reset = new Button("Reset");
 		btn_reset.setOnAction(this);
-		btn_reset.setFont(Font.font("Arial", FontWeight.BOLD, 24));
-		btn_reset.setPrefSize(150, 50);
+		btn_reset.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+		btn_reset.setPrefSize(120, 30);
 		AnchorPane.setLeftAnchor(btn_reset, 30.0);
-		AnchorPane.setTopAnchor(btn_reset, 420.0);
+		AnchorPane.setTopAnchor(btn_reset, 280.0);
 		this.getChildren().add(btn_reset);
 		
 		
 		rb_volume = new RadioButton("High Tag Volume");
+		rb_volume.setFont(Font.font(12));
 		rb_volume.setOnAction(this);
-		AnchorPane.setLeftAnchor(rb_volume, 30.0);
-		AnchorPane.setTopAnchor(rb_volume, 500.0);
+		AnchorPane.setLeftAnchor(rb_volume, 24.0);
+		AnchorPane.setTopAnchor(rb_volume, 330.0);
 		this.getChildren().add(rb_volume);
 		
 //		Separator separator = new Separator();

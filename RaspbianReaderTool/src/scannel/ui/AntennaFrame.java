@@ -22,12 +22,13 @@ public class AntennaFrame extends GridPane {
 
 	private void initComponents() {
 		Label ant_title = new Label("Antenna");
-		ant_title.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+		ant_title.setFont(Font.font("Arial", FontWeight.BOLD, 12));
 		this.add(ant_title, 0, 0, 2, 1);
 		
 		antenna = new CheckBox[4];
 		for (int i=0; i<4; i++) {
 			antenna[i] = new CheckBox("Antenna "+(i+1));
+			antenna[i].setFont(Font.font("Arial", FontWeight.NORMAL, 10));
 			int index_x = i%2;
 			int index_y = 1 + i/2;
 			this.add(antenna[i], index_x, index_y);

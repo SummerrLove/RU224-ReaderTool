@@ -35,23 +35,23 @@ public class MainWindow extends TabPane implements EventHandler<Event> {
 		readTab.setContent(read_window);
 		readTab.setOnSelectionChanged(this);
 		
-		writeTab = new Tab("Write");
-		writeTab.setClosable(false);
-		write_window = new WriteFrame();
-		writeTab.setContent(write_window);
-		writeTab.setOnSelectionChanged(this);
-		
-		saveTab = new Tab("Save Data");
-		saveTab.setClosable(false);
-		save_window = new SaveDataFrame();
-		saveTab.setContent(save_window);
-		saveTab.setOnSelectionChanged(this);
-		
-		ioTab = new Tab("Digital I/O");
-		ioTab.setClosable(false);
-		io_window = new DigitalIOSettingFrame();
-		ioTab.setContent(io_window);
-		ioTab.setOnSelectionChanged(this);
+//		writeTab = new Tab("Write");
+//		writeTab.setClosable(false);
+//		write_window = new WriteFrame();
+//		writeTab.setContent(write_window);
+//		writeTab.setOnSelectionChanged(this);
+//		
+//		saveTab = new Tab("Save Data");
+//		saveTab.setClosable(false);
+//		save_window = new SaveDataFrame();
+//		saveTab.setContent(save_window);
+//		saveTab.setOnSelectionChanged(this);
+//		
+//		ioTab = new Tab("Digital I/O");
+//		ioTab.setClosable(false);
+//		io_window = new DigitalIOSettingFrame();
+//		ioTab.setContent(io_window);
+//		ioTab.setOnSelectionChanged(this);
 		
 //		decodeTab = new Tab("EPC Decode Setting");
 //		decodeTab.setClosable(false);
@@ -59,8 +59,8 @@ public class MainWindow extends TabPane implements EventHandler<Event> {
 //		decodeTab.setContent(decode_window);
 //		decodeTab.setOnSelectionChanged(this);
 		
-		this.getTabs().addAll(readTab, writeTab, saveTab, ioTab);
-//		this.getTabs().addAll(readTab, writeTab);
+//		this.getTabs().addAll(readTab, writeTab, saveTab, ioTab);
+		this.getTabs().addAll(readTab);
 //		this.setStyle("-fx-background-color: #F0F0F0;");
 	}
 

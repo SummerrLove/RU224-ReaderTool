@@ -45,33 +45,33 @@ public class ControlFrame extends AnchorPane implements EventHandler<ActionEvent
 	private void initComponents() {
 		btn_connect = new Button("Connect");
 		btn_connect.setOnAction(this);
-		btn_connect.setFont(new Font("Arial", 20));
-		AnchorPane.setLeftAnchor(btn_connect, 50.0);
-		AnchorPane.setTopAnchor(btn_connect, 30.0);
-		btn_connect.setPrefWidth(150);
+		btn_connect.setFont(new Font("Arial", 16));
+		AnchorPane.setLeftAnchor(btn_connect, 40.0);
+		AnchorPane.setTopAnchor(btn_connect, 15.0);
+		btn_connect.setPrefWidth(120);
 		this.getChildren().add(btn_connect);
 		
-		status_light = new Circle(60, 100, 10);
+		status_light = new Circle(48, 60, 8);
 		status_light.setFill(Color.RED);
 		status_light.setStroke(Color.BLACK);
 		this.getChildren().add(status_light);
 		
 		status = new Label("Disconnected");
-		status.setFont(Font.font("Arial", 16));
-		AnchorPane.setLeftAnchor(status, 80.0);
-		AnchorPane.setTopAnchor(status, 90.0);
+		status.setFont(Font.font("Arial", 12));
+		AnchorPane.setLeftAnchor(status, 64.0);
+		AnchorPane.setTopAnchor(status, 54.0);
 		this.getChildren().add(status);
 		
 		Separator separator = new Separator();
 		separator.setOrientation(Orientation.HORIZONTAL);
-		AnchorPane.setLeftAnchor(separator, 20.0);
-		AnchorPane.setRightAnchor(separator, 20.0);
-		AnchorPane.setTopAnchor(separator, 120.0);
+		AnchorPane.setLeftAnchor(separator, 16.0);
+		AnchorPane.setRightAnchor(separator, 56.0);
+		AnchorPane.setTopAnchor(separator, 72.0);
 		this.getChildren().add(separator);
 		
 		config = new ConfigurationFrame();
 		AnchorPane.setLeftAnchor(config, 0.0);
-		AnchorPane.setTopAnchor(config, 130.0);
+		AnchorPane.setTopAnchor(config, 78.0);
 		AnchorPane.setBottomAnchor(config, 0.0);
 		config.setPrefWidth(250);
 		this.getChildren().add(config);

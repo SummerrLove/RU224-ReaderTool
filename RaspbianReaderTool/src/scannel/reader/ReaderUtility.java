@@ -407,11 +407,19 @@ public class ReaderUtility implements ReadListener {
 		try {
 			trd = myReader.read(READ_TIME);
 			
+			//=====================================================
+			// TODO After the issue of DO signal is fixed, the following part needs to be changed.
 			if (trd.length > 0) {
-				DigitalIOController.getInstance().turnOffOutput();
+				if (!stopReading) {
+					// When there is any tag detected within the reading range, switch the DO signal to low.
+					// However, due to the DO uart hardware issue, the signal will be reversed, so here we need to output 
+					// high signal to be able to actually set DO to low. 
+					DigitalIOController.getInstance().turnOffOutput();
+				}
 			} else {
 				DigitalIOController.getInstance().turnOnOutput();
 			}
+			//=====================================================
 			
 			System.out.println("tag number = "+trd.length);
 			this.parseTagData(trd);

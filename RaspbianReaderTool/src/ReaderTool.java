@@ -8,7 +8,7 @@ import scannel.ui.MainWindow;
 
 public class ReaderTool extends Application {
 
-	private final static String version = "v1.10";
+	private final static String version = "v1.10.01";
 	private final static String subject = "IO setting update";
 
 	@Override

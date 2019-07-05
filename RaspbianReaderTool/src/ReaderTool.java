@@ -8,7 +8,7 @@ import scannel.ui.MainWindow;
 
 public class ReaderTool extends Application {
 
-	private final static String version = "v1.11";
+	private final static String version = "v1.11.01";
 	private final static String subject = "baseic function";
 
 	@Override

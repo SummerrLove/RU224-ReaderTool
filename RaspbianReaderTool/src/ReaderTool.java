@@ -9,7 +9,7 @@ import scannel.ui.MainWindow;
 public class ReaderTool extends Application {
 
 	private final static String version = "v1.11.01";
-	private final static String subject = "baseic function";
+	private final static String subject = "basic function";
 
 	@Override
 	public void start(Stage mainStage) throws Exception {

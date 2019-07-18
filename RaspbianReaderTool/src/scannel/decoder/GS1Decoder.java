@@ -143,7 +143,23 @@ public class GS1Decoder {
 		}
 	}
 	
-	public String parseString(boolean[] support_setting) {
+	public String parseAsciiString(String binaryStr) {
+		if (binaryStr.length()%8 != 0) {
+			MyLogger.printLog("Format error: The length of binary string must be a muliple of 8.");
+			return null;
+		}
+		
+		int word_count = binaryStr.length()/8;
+		String returnStr = "";
+		for (int i=0; i<word_count; i++) {
+			String temp = binaryStr.substring(i*8, (i+1)*8);
+			returnStr += new Character((char) Integer.parseInt(temp, 2)).toString();
+		}
+		
+		return returnStr;
+	}
+	
+	public String parseEPCString(boolean[] support_setting) {
 		if (header.equals("2C") && support_setting[EPC_SCHEMA.GDTI_96.getValue()]) {
 			// GDTI-96
 			schema = EPC_SCHEMA.GDTI_96;
@@ -167,9 +183,7 @@ public class GS1Decoder {
 			schema = EPC_SCHEMA.USDoD_96;
 			MyLogger.printLog(schema.name());
 			encode_length = 96;
-			// TODO
-			
-			return null;
+			return this.parseUSDOD96HexString(hexString);
 		} else if (header.equals("30") && support_setting[EPC_SCHEMA.SGTIN_96.getValue()]) {
 			// SGTIN-96
 			schema = EPC_SCHEMA.SGTIN_96;
@@ -1775,5 +1789,33 @@ public class GS1Decoder {
 		MyLogger.printLog(M + "." + C + "." + S);
 		return M + "." + C + "." + S;
 		
+	}
+	
+	private String parseUSDOD96HexString(String epcString) {
+		if (epcString.length() != 24) {
+			MyLogger.printLog("Incorrect data length for GID-96 hexString.");
+			return null;
+		}
+		
+		
+		String binaryStr =String.format("%96s", new BigInteger(epcString,16).toString(2)).replace(" ", "0");
+		MyLogger.printLog(binaryStr);
+		
+		String str_header = binaryStr.substring(0, 8);
+		String str_filter = binaryStr.substring(8, 12);
+		MyLogger.printLog("filter: "+str_filter);
+		String str_cageCode = binaryStr.substring(12, 60);
+		MyLogger.printLog("cage code: "+str_cageCode);
+		String str_serialNumber = binaryStr.substring(60);
+		MyLogger.printLog("serial number: "+str_serialNumber);
+		
+		String F = String.valueOf(Integer.parseInt(str_filter, 2));
+		MyLogger.printLog(F);
+		
+		String C = parseAsciiString(str_cageCode);
+		
+		String S = new BigInteger(str_serialNumber, 2).toString();
+		
+		return F+"."+C+"."+S;
 	}
 }

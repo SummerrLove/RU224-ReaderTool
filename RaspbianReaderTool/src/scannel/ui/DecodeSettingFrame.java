@@ -219,7 +219,7 @@ public class DecodeSettingFrame extends AnchorPane implements EventHandler<Actio
 		
 		if (setting[EANUPC] && (result == null)) {
 			GS1Decoder decoder = new GS1Decoder(hexString);
-			result = decoder.parseString(setting_schema);
+			result = decoder.parseEPCString(setting_schema);
 		}
 		
 		if (setting[EANUPC_EAS]) {

@@ -102,7 +102,7 @@ public class GS1Decoder {
 		header = epcString.substring(0, 2);
 	}
 
-	public String decodeString(String binaryStr) {
+	public static String parse7bitString(String binaryStr) {
 		if (binaryStr.length()%7 != 0) {
 			MyLogger.printLog("Incorrect string length...");
 			return null;
@@ -129,7 +129,7 @@ public class GS1Decoder {
 		return returnStr;
 	}
 	
-	public String decodeNumericString(String binaryStr) {
+	public static String parseNumericString(String binaryStr) {
 		String intValue = new BigInteger(binaryStr, 2).toString();
 		
 		if (intValue.length() == 1) {
@@ -143,7 +143,7 @@ public class GS1Decoder {
 		}
 	}
 	
-	public String parseAsciiString(String binaryStr) {
+	public static String parseAsciiString(String binaryStr) {
 		if (binaryStr.length()%8 != 0) {
 			MyLogger.printLog("Format error: The length of binary string must be a muliple of 8.");
 			return null;
@@ -157,6 +157,29 @@ public class GS1Decoder {
 		}
 		
 		return returnStr;
+	}
+	
+	public static String parse6bitAsciiStr(String str) {
+		if (str == null || str.length() != 6) {
+			MyLogger.printLog("Cannot translate incorrect 6-bit ascii string...");
+			return null;
+		}
+		
+		if(str.equals("000000")) {
+			return null;
+		}
+		
+		String binary;
+		if (str.startsWith("0")) {
+			binary = "01"+str;
+		} else if (str.startsWith("1")) {
+			binary = "00"+str;
+		} else {
+			MyLogger.printLog("Unknown string...");
+			return null;
+		}
+		
+		return new Character((char) Integer.parseInt(binary, 2)).toString();
 	}
 	
 	public String parseEPCString(boolean[] support_setting) {
@@ -256,9 +279,7 @@ public class GS1Decoder {
 			// ADI-var
 			schema = EPC_SCHEMA.ADI_var;
 			MyLogger.printLog(schema.name());
-			// TODO
-			
-			return null;
+			return this.parseADIvarHexString(hexString);
 		} else if (header.equals("3C") && support_setting[EPC_SCHEMA.CPI_96.getValue()]) {
 			// CPI-96
 			schema = EPC_SCHEMA.CPI_96;
@@ -625,35 +646,35 @@ public class GS1Decoder {
 		}
 	}
 	
-	private void parseCPIvarPartition(int partition) {
+	private void parseCPIvarPartition(int partition, int totalBits) {
 		switch (partition) {
 		case 0:
 			company_prefix_length = 40;
-			reference_length = 114;
+			reference_length = totalBits - 54 - company_prefix_length;
 			break;
 		case 1:
 			company_prefix_length = 37;
-			reference_length = 120;
+			reference_length = totalBits - 54 - company_prefix_length;
 			break;
 		case 2:
 			company_prefix_length = 34;
-			reference_length = 126;
+			reference_length = totalBits - 54 - company_prefix_length;
 			break;
 		case 3:
 			company_prefix_length = 30;
-			reference_length = 132;
+			reference_length = totalBits - 54 - company_prefix_length;
 			break;
 		case 4:
 			company_prefix_length = 27;
-			reference_length = 138;
+			reference_length = totalBits - 54 - company_prefix_length;
 			break;
 		case 5:
 			company_prefix_length = 24;
-			reference_length = 144;
+			reference_length = totalBits - 54 - company_prefix_length;
 			break;
 		case 6:
 			company_prefix_length = 20;
-			reference_length = 150;
+			reference_length = totalBits - 54 - company_prefix_length;
 			break;
  		default:
  			MyLogger.printLog("Unknown partition value for CPI-var: "+ partition);
@@ -858,7 +879,7 @@ public class GS1Decoder {
 			
 			MyLogger.printLog(str_GTIN);
 			String str_serialNumber = binaryStr.substring(58);
-			String serialNumber = decodeString(str_serialNumber);
+			String serialNumber = parse7bitString(str_serialNumber);
 			MyLogger.printLog(str_GTIN+"." + serialNumber);
 			
 			return str_GTIN+"."+serialNumber;
@@ -1053,7 +1074,7 @@ public class GS1Decoder {
 			
 			// 140-bit extension
 			String str_extension = binaryStr.substring(55);
-			String extension = this.decodeString(str_extension);
+			String extension = parse7bitString(str_extension);
 			MyLogger.printLog(str_SGLN+"." + extension);
 			
 			return str_SGLN+"."+extension;
@@ -1182,7 +1203,7 @@ public class GS1Decoder {
 			
 			// 112-bit serial number
 			String str_serial = binaryStr.substring(58);
-			String serial = this.decodeString(str_serial);
+			String serial = parse7bitString(str_serial);
 			MyLogger.printLog(str_GRAI+"." + serial);
 			
 			return str_GRAI+"."+serial;
@@ -1439,7 +1460,7 @@ public class GS1Decoder {
 			
 			// 58-bit serial
 			String str_serial = binaryStr.substring(55);
-			String serial = this.decodeNumericString(str_serial);
+			String serial = parseNumericString(str_serial);
 			MyLogger.printLog(str_GDTI+"." + serial);
 			
 			return str_GDTI+"."+serial;
@@ -1504,7 +1525,7 @@ public class GS1Decoder {
 			
 			// 119-bit serial
 			String str_serial = binaryStr.substring(55);
-			String serial = this.decodeString(str_serial);
+			String serial = parse7bitString(str_serial);
 			MyLogger.printLog(str_GDTI+"." + serial);
 			
 			return str_GDTI+"."+serial;
@@ -1551,6 +1572,49 @@ public class GS1Decoder {
 		MyLogger.printLog(cpi_temp+"." + serial);
 			
 		return cpi_temp+"."+serial;
+	}
+	
+	private String parseCPIvarHexString(String epcString) {
+		int l = epcString.length()*4;
+		String binaryStr =String.format("%"+l+"s", new BigInteger(epcString,16).toString(2)).replace(" ", "0");
+		MyLogger.printLog("binary string length: "+l);
+		
+		String str_header = binaryStr.substring(0, 8);
+		String str_filterValue = binaryStr.substring(8, 11);
+		filter = Integer.parseInt(str_filterValue, 2);
+		String str_partitionValue = binaryStr.substring(11, 14);
+		partition = Integer.parseInt(str_partitionValue, 2);
+		this.parseCPIvarPartition(partition, l);
+
+		String temp = binaryStr.substring(14, l-40);
+		String str_companyPrefix = temp.substring(0, company_prefix_length);
+		MyLogger.printLog("binary company prefix: "+str_companyPrefix);
+		String C = new BigInteger(str_companyPrefix, 2).toString();
+		MyLogger.printLog("company prefix: "+C);
+		
+		String P = "";
+		String str_partReference = temp.substring(company_prefix_length);
+		MyLogger.printLog("binary part reference: "+str_partReference);
+		for (int counter=0; counter<(str_partReference.length()/6); counter++) {
+			String str = str_partReference.substring(counter*6, (counter+1)*6);
+			if (str.equals("000000")) {
+				break;
+			} else {
+				P += parse6bitAsciiStr(str);
+			}
+		}
+		MyLogger.printLog("part reference: "+P);
+		
+		
+		// TODO
+		// From GS1 web site, the serial number is calculated with the first 38-bits of the 40-bits string.
+		// Therefore, the serial number is different.
+		String str_serial = binaryStr.substring(l-40);
+		MyLogger.printLog("binary serial number: "+str_serial);
+		String S = new BigInteger(str_serial, 2).toString();
+		MyLogger.printLog("serial number: "+S);
+		
+		return null;
 	}
 	
 	private String parseSGCN96HexString(String epcString) {
@@ -1611,7 +1675,7 @@ public class GS1Decoder {
 			
 			// 41-bit serial
 			String str_serial = binaryStr.substring(55, 96);
-			String serial = decodeNumericString(str_serial);
+			String serial = parseNumericString(str_serial);
 			MyLogger.printLog(str_SGCN+"." + serial);
 			
 			return str_SGCN+"."+serial;
@@ -1676,8 +1740,8 @@ public class GS1Decoder {
 			String str_ITIP = itip_temp+check_bit;
 			MyLogger.printLog(str_ITIP);
 			
-			String piece = this.decodeString(binaryStr.substring(58, 65));
-			String total = this.decodeString(binaryStr.substring(65, 72));
+			String piece = parse7bitString(binaryStr.substring(58, 65));
+			String total = parse7bitString(binaryStr.substring(65, 72));
 			MyLogger.printLog(str_ITIP+"."+piece+total);
 			
 			
@@ -1748,14 +1812,14 @@ public class GS1Decoder {
 			String str_ITIP = itip_temp+check_bit;
 			MyLogger.printLog(str_ITIP);
 			
-			String piece = this.decodeString(binaryStr.substring(58, 65));
-			String total = this.decodeString(binaryStr.substring(65, 72));
+			String piece = this.parse7bitString(binaryStr.substring(58, 65));
+			String total = parse7bitString(binaryStr.substring(65, 72));
 			MyLogger.printLog(str_ITIP+"."+piece+total);
 			
 			
 			// 140-bit serial
 			String str_serial = binaryStr.substring(72);
-			String serial = this.decodeString(str_serial);
+			String serial = parse7bitString(str_serial);
 			MyLogger.printLog(str_ITIP+"."+piece+total+"."+serial);
 			
 			return str_ITIP+"."+piece+total+"."+serial;
@@ -1803,14 +1867,10 @@ public class GS1Decoder {
 		
 		String str_header = binaryStr.substring(0, 8);
 		String str_filter = binaryStr.substring(8, 12);
-		MyLogger.printLog("filter: "+str_filter);
 		String str_cageCode = binaryStr.substring(12, 60);
-		MyLogger.printLog("cage code: "+str_cageCode);
 		String str_serialNumber = binaryStr.substring(60);
-		MyLogger.printLog("serial number: "+str_serialNumber);
 		
 		String F = String.valueOf(Integer.parseInt(str_filter, 2));
-		MyLogger.printLog(F);
 		
 		String C = parseAsciiString(str_cageCode);
 		
@@ -1818,4 +1878,51 @@ public class GS1Decoder {
 		
 		return F+"."+C+"."+S;
 	}
+	
+	private String parseADIvarHexString(String epcString) {
+		int l = epcString.length()*4;
+		String binaryStr =String.format("%"+l+"s", new BigInteger(epcString,16).toString(2)).replace(" ", "0");
+		MyLogger.printLog("binary string length: "+l);
+		
+		String str_header = binaryStr.substring(0, 8);
+		String str_filter = binaryStr.substring(8, 14);
+		String str_cageCode = binaryStr.substring(14, 50);
+		String str_part = binaryStr.substring(50);
+		
+		String filter = String.valueOf(Integer.parseInt(str_filter, 2));
+		MyLogger.printLog("filter: "+filter);
+		
+		String cage="", part="", serial="";
+		
+		for (int counter=0; counter<6; counter++) {
+			String temp = str_cageCode.substring(counter*6, (counter+1)*6);
+			cage += parse6bitAsciiStr(temp);
+		}
+		MyLogger.printLog("cage code: "+cage);
+		
+		for (int counter=0; counter<(str_part.length()/6); counter++) {
+			String temp = str_part.substring(counter*6, (counter+1)*6);
+			if (temp.equals("000000")) {
+				str_part = str_part.substring((counter+1)*6);
+				break;
+			} else {
+				part += parse6bitAsciiStr(temp);
+			}
+		}
+		MyLogger.printLog("part number: "+part);
+		
+		for (int counter=0; counter<(str_part.length()/6); counter++) {
+			String temp = str_part.substring(counter*6, (counter+1)*6);
+			if (temp.equals("000000")) {
+				str_part = str_part.substring((counter+1)*6);
+				break;
+			} else {
+				serial += parse6bitAsciiStr(temp);
+			}
+		}
+		MyLogger.printLog("serial number: "+serial);
+		
+		return filter+"."+cage+"."+part+"."+serial;
+	}
+	
 }

@@ -147,12 +147,12 @@ public class DecodeSettingFrame extends AnchorPane implements EventHandler<Actio
 			for (int i=0; i<rb_schema.length; i++) {
 				
 				// Currently these schemas are not supported
-				if (i==EPC_SCHEMA.CPI_var.getValue() || 
-						i==EPC_SCHEMA.GIAI_202.getValue() || 
-						i==EPC_SCHEMA.USDoD_96.getValue() || 
-						i==EPC_SCHEMA.ADI_var.getValue()) {
-					continue;
-				}
+//				if (i==EPC_SCHEMA.CPI_var.getValue() || 
+//						i==EPC_SCHEMA.GIAI_202.getValue() || 
+//						i==EPC_SCHEMA.USDoD_96.getValue() || 
+//						i==EPC_SCHEMA.ADI_var.getValue()) {
+//					continue;
+//				}
 				
 				rb_schema[i].setDisable(!rb_setting[EANUPC].isSelected());
 			}

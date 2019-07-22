@@ -45,48 +45,48 @@ public class GS1Decoder {
 		}
 	}
 	
-	public final static HashMap charMap = new HashMap<String, String>();
-	static {
-		charMap.put("100011", "#");
-		charMap.put("101101", "-");
-		charMap.put("101111", "/");
-		charMap.put("110000", "0");
-		charMap.put("110001", "1");
-		charMap.put("110010", "2");
-		charMap.put("110011", "3");
-		charMap.put("110100", "4");
-		charMap.put("110101", "5");
-		charMap.put("110110", "6");
-		charMap.put("110111", "7");
-		charMap.put("111000", "8");
-		charMap.put("111001", "9");
-		charMap.put("000001", "A");
-		charMap.put("000010", "B");
-		charMap.put("000011", "C");
-		charMap.put("000100", "D");
-		charMap.put("000101", "E");
-		charMap.put("000110", "F");
-		charMap.put("000111", "G");
-		charMap.put("001000", "H");
-		charMap.put("001001", "I");
-		charMap.put("001010", "J");
-		charMap.put("001011", "K");
-		charMap.put("001100", "L");
-		charMap.put("001101", "M");
-		charMap.put("001110", "N");
-		charMap.put("001111", "O");
-		charMap.put("010000", "P");
-		charMap.put("010001", "Q");
-		charMap.put("010010", "R");
-		charMap.put("010011", "S");
-		charMap.put("010100", "T");
-		charMap.put("010101", "U");
-		charMap.put("010110", "V");
-		charMap.put("010111", "W");
-		charMap.put("011000", "X");
-		charMap.put("011001", "Y");
-		charMap.put("011010", "Z");
-	}
+//	public final static HashMap charMap = new HashMap<String, String>();
+//	static {
+//		charMap.put("100011", "#");
+//		charMap.put("101101", "-");
+//		charMap.put("101111", "/");
+//		charMap.put("110000", "0");
+//		charMap.put("110001", "1");
+//		charMap.put("110010", "2");
+//		charMap.put("110011", "3");
+//		charMap.put("110100", "4");
+//		charMap.put("110101", "5");
+//		charMap.put("110110", "6");
+//		charMap.put("110111", "7");
+//		charMap.put("111000", "8");
+//		charMap.put("111001", "9");
+//		charMap.put("000001", "A");
+//		charMap.put("000010", "B");
+//		charMap.put("000011", "C");
+//		charMap.put("000100", "D");
+//		charMap.put("000101", "E");
+//		charMap.put("000110", "F");
+//		charMap.put("000111", "G");
+//		charMap.put("001000", "H");
+//		charMap.put("001001", "I");
+//		charMap.put("001010", "J");
+//		charMap.put("001011", "K");
+//		charMap.put("001100", "L");
+//		charMap.put("001101", "M");
+//		charMap.put("001110", "N");
+//		charMap.put("001111", "O");
+//		charMap.put("010000", "P");
+//		charMap.put("010001", "Q");
+//		charMap.put("010010", "R");
+//		charMap.put("010011", "S");
+//		charMap.put("010100", "T");
+//		charMap.put("010101", "U");
+//		charMap.put("010110", "V");
+//		charMap.put("010111", "W");
+//		charMap.put("011000", "X");
+//		charMap.put("011001", "Y");
+//		charMap.put("011010", "Z");
+//	}
 	
 	private String hexString;
 	private EPC_SCHEMA schema;
@@ -95,7 +95,7 @@ public class GS1Decoder {
 	private int partition;
 	private int encode_length;
 	private int company_prefix_length;
-	private int reference_length;
+//	private int reference_length;
 	
 	public GS1Decoder(String epcString) {
 		hexString = epcString;
@@ -260,9 +260,7 @@ public class GS1Decoder {
 			schema = EPC_SCHEMA.GIAI_202;
 			MyLogger.printLog(schema.name());
 			encode_length = 202;
-			// TODO
-			
-			return null;
+			return this.parseGIAI202HexString(hexString);
 		} else if (header.equals("39") && support_setting[EPC_SCHEMA.SGLN_195.getValue()]) {
 			// SGLN-195
 			schema = EPC_SCHEMA.SGLN_195;
@@ -290,9 +288,7 @@ public class GS1Decoder {
 			// CPI-var
 			schema = EPC_SCHEMA.CPI_var;
 			MyLogger.printLog(schema.name());
-			// TODO
-			
-			return null;
+			return this.parseCPIvarHexString(hexString);
 		} else if (header.equals("3E") && support_setting[EPC_SCHEMA.GDTI_174.getValue()]) {
 			// GDTI-174
 			schema = EPC_SCHEMA.GDTI_174;
@@ -326,31 +322,31 @@ public class GS1Decoder {
 		switch (partition) {
 		case 0:
 			company_prefix_length = 40;
-			reference_length = 4;
+//			reference_length = 4;
 			break;
 		case 1:
 			company_prefix_length = 37;
-			reference_length = 7;
+//			reference_length = 7;
 			break;
 		case 2:
 			company_prefix_length = 34;
-			reference_length = 10;
+//			reference_length = 10;
 			break;
 		case 3:
 			company_prefix_length = 30;
-			reference_length = 14;
+//			reference_length = 14;
 			break;
 		case 4:
 			company_prefix_length = 27;
-			reference_length = 17;
+//			reference_length = 17;
 			break;
 		case 5:
 			company_prefix_length = 24;
-			reference_length = 20;
+//			reference_length = 20;
 			break;
 		case 6:
 			company_prefix_length = 20;
-			reference_length = 24;
+//			reference_length = 24;
 			break;
  		default:
  			MyLogger.printLog("Unknown partition value for SGTIN: "+ partition);
@@ -362,31 +358,31 @@ public class GS1Decoder {
 		switch (partition) {
 		case 0:
 			company_prefix_length = 40;
-			reference_length = 18;
+//			reference_length = 18;
 			break;
 		case 1:
 			company_prefix_length = 37;
-			reference_length = 21;
+//			reference_length = 21;
 			break;
 		case 2:
 			company_prefix_length = 34;
-			reference_length = 24;
+//			reference_length = 24;
 			break;
 		case 3:
 			company_prefix_length = 30;
-			reference_length = 28;
+//			reference_length = 28;
 			break;
 		case 4:
 			company_prefix_length = 27;
-			reference_length = 31;
+//			reference_length = 31;
 			break;
 		case 5:
 			company_prefix_length = 24;
-			reference_length = 34;
+//			reference_length = 34;
 			break;
 		case 6:
 			company_prefix_length = 20;
-			reference_length = 38;
+//			reference_length = 38;
 			break;
  		default:
  			MyLogger.printLog("Unknown partition value for SSCC: "+ partition);
@@ -398,31 +394,31 @@ public class GS1Decoder {
 		switch (partition) {
 		case 0:
 			company_prefix_length = 40;
-			reference_length = 1;
+//			reference_length = 1;
 			break;
 		case 1:
 			company_prefix_length = 37;
-			reference_length = 4;
+//			reference_length = 4;
 			break;
 		case 2:
 			company_prefix_length = 34;
-			reference_length = 7;
+//			reference_length = 7;
 			break;
 		case 3:
 			company_prefix_length = 30;
-			reference_length = 11;
+//			reference_length = 11;
 			break;
 		case 4:
 			company_prefix_length = 27;
-			reference_length = 14;
+//			reference_length = 14;
 			break;
 		case 5:
 			company_prefix_length = 24;
-			reference_length = 17;
+//			reference_length = 17;
 			break;
 		case 6:
 			company_prefix_length = 20;
-			reference_length = 21;
+//			reference_length = 21;
 			break;
  		default:
  			MyLogger.printLog("Unknown partition value for SGLN: "+ partition);
@@ -434,31 +430,31 @@ public class GS1Decoder {
 		switch (partition) {
 		case 0:
 			company_prefix_length = 40;
-			reference_length = 4;
+//			reference_length = 4;
 			break;
 		case 1:
 			company_prefix_length = 37;
-			reference_length = 7;
+//			reference_length = 7;
 			break;
 		case 2:
 			company_prefix_length = 34;
-			reference_length = 10;
+//			reference_length = 10;
 			break;
 		case 3:
 			company_prefix_length = 30;
-			reference_length = 14;
+//			reference_length = 14;
 			break;
 		case 4:
 			company_prefix_length = 27;
-			reference_length = 17;
+//			reference_length = 17;
 			break;
 		case 5:
 			company_prefix_length = 24;
-			reference_length = 20;
+//			reference_length = 20;
 			break;
 		case 6:
 			company_prefix_length = 20;
-			reference_length = 24;
+//			reference_length = 24;
 			break;
  		default:
  			MyLogger.printLog("Unknown partition value for GRAI: "+ partition);
@@ -470,31 +466,31 @@ public class GS1Decoder {
 		switch (partition) {
 		case 0:
 			company_prefix_length = 40;
-			reference_length = 42;
+//			reference_length = 42;
 			break;
 		case 1:
 			company_prefix_length = 37;
-			reference_length = 45;
+//			reference_length = 45;
 			break;
 		case 2:
 			company_prefix_length = 34;
-			reference_length = 48;
+//			reference_length = 48;
 			break;
 		case 3:
 			company_prefix_length = 30;
-			reference_length = 52;
+//			reference_length = 52;
 			break;
 		case 4:
 			company_prefix_length = 27;
-			reference_length = 55;
+//			reference_length = 55;
 			break;
 		case 5:
 			company_prefix_length = 24;
-			reference_length = 58;
+//			reference_length = 58;
 			break;
 		case 6:
 			company_prefix_length = 20;
-			reference_length = 62;
+//			reference_length = 62;
 			break;
  		default:
  			MyLogger.printLog("Unknown partition value for GIAI: "+ partition);
@@ -506,31 +502,31 @@ public class GS1Decoder {
 		switch (partition) {
 		case 0:
 			company_prefix_length = 40;
-			reference_length = 148;
+//			reference_length = 148;
 			break;
 		case 1:
 			company_prefix_length = 37;
-			reference_length = 151;
+//			reference_length = 151;
 			break;
 		case 2:
 			company_prefix_length = 34;
-			reference_length = 154;
+//			reference_length = 154;
 			break;
 		case 3:
 			company_prefix_length = 30;
-			reference_length = 158;
+//			reference_length = 158;
 			break;
 		case 4:
 			company_prefix_length = 27;
-			reference_length = 161;
+//			reference_length = 161;
 			break;
 		case 5:
 			company_prefix_length = 24;
-			reference_length = 164;
+//			reference_length = 164;
 			break;
 		case 6:
 			company_prefix_length = 20;
-			reference_length = 168;
+//			reference_length = 168;
 			break;
  		default:
  			MyLogger.printLog("Unknown partition value for GIAI: "+ partition);
@@ -542,31 +538,31 @@ public class GS1Decoder {
 		switch (partition) {
 		case 0:
 			company_prefix_length = 40;
-			reference_length = 18;
+//			reference_length = 18;
 			break;
 		case 1:
 			company_prefix_length = 37;
-			reference_length = 21;
+//			reference_length = 21;
 			break;
 		case 2:
 			company_prefix_length = 34;
-			reference_length = 24;
+//			reference_length = 24;
 			break;
 		case 3:
 			company_prefix_length = 30;
-			reference_length = 28;
+//			reference_length = 28;
 			break;
 		case 4:
 			company_prefix_length = 27;
-			reference_length = 31;
+//			reference_length = 31;
 			break;
 		case 5:
 			company_prefix_length = 24;
-			reference_length = 34;
+//			reference_length = 34;
 			break;
 		case 6:
 			company_prefix_length = 20;
-			reference_length = 38;
+//			reference_length = 38;
 			break;
  		default:
  			MyLogger.printLog("Unknown partition value for GSRN: "+ partition);
@@ -578,31 +574,31 @@ public class GS1Decoder {
 		switch (partition) {
 		case 0:
 			company_prefix_length = 40;
-			reference_length = 1;
+//			reference_length = 1;
 			break;
 		case 1:
 			company_prefix_length = 37;
-			reference_length = 4;
+//			reference_length = 4;
 			break;
 		case 2:
 			company_prefix_length = 34;
-			reference_length = 7;
+//			reference_length = 7;
 			break;
 		case 3:
 			company_prefix_length = 30;
-			reference_length = 11;
+//			reference_length = 11;
 			break;
 		case 4:
 			company_prefix_length = 27;
-			reference_length = 14;
+//			reference_length = 14;
 			break;
 		case 5:
 			company_prefix_length = 24;
-			reference_length = 17;
+//			reference_length = 17;
 			break;
 		case 6:
 			company_prefix_length = 20;
-			reference_length = 21;
+//			reference_length = 21;
 			break;
  		default:
  			MyLogger.printLog("Unknown partition value for GDTI: "+ partition);
@@ -614,31 +610,31 @@ public class GS1Decoder {
 		switch (partition) {
 		case 0:
 			company_prefix_length = 40;
-			reference_length = 11;
+//			reference_length = 11;
 			break;
 		case 1:
 			company_prefix_length = 37;
-			reference_length = 14;
+//			reference_length = 14;
 			break;
 		case 2:
 			company_prefix_length = 34;
-			reference_length = 17;
+//			reference_length = 17;
 			break;
 		case 3:
 			company_prefix_length = 30;
-			reference_length = 21;
+//			reference_length = 21;
 			break;
 		case 4:
 			company_prefix_length = 27;
-			reference_length = 24;
+//			reference_length = 24;
 			break;
 		case 5:
 			company_prefix_length = 24;
-			reference_length = 27;
+//			reference_length = 27;
 			break;
 		case 6:
 			company_prefix_length = 20;
-			reference_length = 31;
+//			reference_length = 31;
 			break;
  		default:
  			MyLogger.printLog("Unknown partition value for CPI: "+ partition);
@@ -646,35 +642,28 @@ public class GS1Decoder {
 		}
 	}
 	
-	private void parseCPIvarPartition(int partition, int totalBits) {
+	private void parseCPIvarPartition(int partition) {
 		switch (partition) {
 		case 0:
 			company_prefix_length = 40;
-			reference_length = totalBits - 54 - company_prefix_length;
 			break;
 		case 1:
 			company_prefix_length = 37;
-			reference_length = totalBits - 54 - company_prefix_length;
 			break;
 		case 2:
 			company_prefix_length = 34;
-			reference_length = totalBits - 54 - company_prefix_length;
 			break;
 		case 3:
 			company_prefix_length = 30;
-			reference_length = totalBits - 54 - company_prefix_length;
 			break;
 		case 4:
 			company_prefix_length = 27;
-			reference_length = totalBits - 54 - company_prefix_length;
 			break;
 		case 5:
 			company_prefix_length = 24;
-			reference_length = totalBits - 54 - company_prefix_length;
 			break;
 		case 6:
 			company_prefix_length = 20;
-			reference_length = totalBits - 54 - company_prefix_length;
 			break;
  		default:
  			MyLogger.printLog("Unknown partition value for CPI-var: "+ partition);
@@ -686,31 +675,31 @@ public class GS1Decoder {
 		switch (partition) {
 		case 0:
 			company_prefix_length = 40;
-			reference_length = 1;
+//			reference_length = 1;
 			break;
 		case 1:
 			company_prefix_length = 37;
-			reference_length = 4;
+//			reference_length = 4;
 			break;
 		case 2:
 			company_prefix_length = 34;
-			reference_length = 7;
+//			reference_length = 7;
 			break;
 		case 3:
 			company_prefix_length = 30;
-			reference_length = 11;
+//			reference_length = 11;
 			break;
 		case 4:
 			company_prefix_length = 27;
-			reference_length = 14;
+//			reference_length = 14;
 			break;
 		case 5:
 			company_prefix_length = 24;
-			reference_length = 17;
+//			reference_length = 17;
 			break;
 		case 6:
 			company_prefix_length = 20;
-			reference_length = 21;
+//			reference_length = 21;
 			break;
  		default:
  			MyLogger.printLog("Unknown partition value for SGCN: "+ partition);
@@ -722,31 +711,31 @@ public class GS1Decoder {
 		switch (partition) {
 		case 0:
 			company_prefix_length = 40;
-			reference_length = 4;
+//			reference_length = 4;
 			break;
 		case 1:
 			company_prefix_length = 37;
-			reference_length = 7;
+//			reference_length = 7;
 			break;
 		case 2:
 			company_prefix_length = 34;
-			reference_length = 10;
+//			reference_length = 10;
 			break;
 		case 3:
 			company_prefix_length = 30;
-			reference_length = 14;
+//			reference_length = 14;
 			break;
 		case 4:
 			company_prefix_length = 27;
-			reference_length = 17;
+//			reference_length = 17;
 			break;
 		case 5:
 			company_prefix_length = 24;
-			reference_length = 20;
+//			reference_length = 20;
 			break;
 		case 6:
 			company_prefix_length = 20;
-			reference_length = 24;
+//			reference_length = 24;
 			break;
  		default:
  			MyLogger.printLog("Unknown partition value for ITIP: "+ partition);
@@ -1229,20 +1218,20 @@ public class GS1Decoder {
 		
 		// digit length for company prefix
 		int cp_digit_length = 12 - partition;
-		// max digit length for asset type
-		int at_digit_length_max = partition + 13;
+		// max digit length for asset reference
+		int ar_digit_length_max = partition + 13;
 		
 		String temp = binaryStr.substring(14, 96);
 		String str_companyPrefix = String.format("%"+cp_digit_length+"s", new BigInteger(temp.substring(0, company_prefix_length), 2).toString()).replace(" ", "0");
 		MyLogger.printLog("company prefix: "+str_companyPrefix);
-		String str_assetType = new BigInteger(temp.substring(company_prefix_length), 2).toString();
-		MyLogger.printLog("asset type: "+str_assetType);
-		if (str_assetType.length() > at_digit_length_max) {
-			MyLogger.printLog("length of asset type exceed the max digit limit...");
+		String str_assetReference = new BigInteger(temp.substring(company_prefix_length), 2).toString();
+		MyLogger.printLog("asset reference: "+str_assetReference);
+		if (str_assetReference.length() > ar_digit_length_max) {
+			MyLogger.printLog("length of asset reference exceed the max digit limit...");
 			return null;
 		}
 		
-		String giai_temp = str_companyPrefix + str_assetType;
+		String giai_temp = str_companyPrefix + str_assetReference;
 		
 		char[] chars = giai_temp.toCharArray();
 		if (chars.length > 25) {
@@ -1274,6 +1263,40 @@ public class GS1Decoder {
 			
 			return str_GIAI96;
 		}
+	}
+	
+	private String parseGIAI202HexString(String epcString) {
+		if (epcString.length() != 51) {
+			MyLogger.printLog("Incorrect data length for GIAI-202 hexString.");
+			return null;
+		}
+		
+		String binaryStr =String.format("%204s", new BigInteger(epcString,16).toString(2)).replace(" ", "0").substring(0, 202);
+		MyLogger.printLog(binaryStr);
+		
+		String str_header = binaryStr.substring(0, 8);
+		String str_filterValue = binaryStr.substring(8, 11);
+		filter = Integer.parseInt(str_filterValue, 2);
+		String str_partitionValue = binaryStr.substring(11, 14);
+		partition = Integer.parseInt(str_partitionValue, 2);
+		this.parseGIAI202Partition(partition);
+		
+		// digit length for company prefix
+		int cp_digit_length = 12 - partition;
+		// max digit length for asset type
+		int at_digit_length_max = partition + 18;
+		
+		String temp = binaryStr.substring(14);
+		String str_companyPrefix = String.format("%"+cp_digit_length+"s", new BigInteger(temp.substring(0, company_prefix_length), 2).toString()).replace(" ", "0");
+		MyLogger.printLog("company prefix: "+str_companyPrefix);
+		String str_assetReference = parse7bitString(temp.substring(company_prefix_length));
+		MyLogger.printLog("asset reference: "+str_assetReference);
+		if (str_assetReference.length() > at_digit_length_max) {
+			MyLogger.printLog("length of asset reference exceed the max digit limit...");
+			return null;
+		}
+		
+		return str_companyPrefix + str_assetReference;
 	}
 	
 	private String parseGSRNHexString(String epcString) {
@@ -1584,9 +1607,9 @@ public class GS1Decoder {
 		filter = Integer.parseInt(str_filterValue, 2);
 		String str_partitionValue = binaryStr.substring(11, 14);
 		partition = Integer.parseInt(str_partitionValue, 2);
-		this.parseCPIvarPartition(partition, l);
+		this.parseCPIvarPartition(partition);
 
-		String temp = binaryStr.substring(14, l-40);
+		String temp = binaryStr.substring(14);
 		String str_companyPrefix = temp.substring(0, company_prefix_length);
 		MyLogger.printLog("binary company prefix: "+str_companyPrefix);
 		String C = new BigInteger(str_companyPrefix, 2).toString();
@@ -1594,10 +1617,13 @@ public class GS1Decoder {
 		
 		String P = "";
 		String str_partReference = temp.substring(company_prefix_length);
+		String str_serial = "";
 		MyLogger.printLog("binary part reference: "+str_partReference);
 		for (int counter=0; counter<(str_partReference.length()/6); counter++) {
 			String str = str_partReference.substring(counter*6, (counter+1)*6);
 			if (str.equals("000000")) {
+				int index = (counter+1)*6;
+				str_serial = str_partReference.substring(index, index+40);
 				break;
 			} else {
 				P += parse6bitAsciiStr(str);
@@ -1606,15 +1632,13 @@ public class GS1Decoder {
 		MyLogger.printLog("part reference: "+P);
 		
 		
-		// TODO
 		// From GS1 web site, the serial number is calculated with the first 38-bits of the 40-bits string.
 		// Therefore, the serial number is different.
-		String str_serial = binaryStr.substring(l-40);
 		MyLogger.printLog("binary serial number: "+str_serial);
 		String S = new BigInteger(str_serial, 2).toString();
 		MyLogger.printLog("serial number: "+S);
 		
-		return null;
+		return C+"."+P+"."+S;
 	}
 	
 	private String parseSGCN96HexString(String epcString) {
@@ -1889,7 +1913,7 @@ public class GS1Decoder {
 		String str_cageCode = binaryStr.substring(14, 50);
 		String str_part = binaryStr.substring(50);
 		
-		String filter = String.valueOf(Integer.parseInt(str_filter, 2));
+		filter = Integer.parseInt(str_filter, 2);
 		MyLogger.printLog("filter: "+filter);
 		
 		String cage="", part="", serial="";

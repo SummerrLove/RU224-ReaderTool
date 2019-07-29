@@ -558,6 +558,14 @@ public class ReaderUtility implements ReadListener {
 			refresh_rate = value;
 		}
 	}
+	public void writeEPC(String hexString, TagFilter target) throws ReaderException {
+		short[] data = StringTool.toShortArray(hexString);
+		if (data == null) {
+			return;
+		} else {
+			writeEPC(data, target);
+		}
+	}
 	
 	public void writeEPC(short[] data, TagFilter target) throws ReaderException {
 		if (myReader == null) {
@@ -569,6 +577,15 @@ public class ReaderUtility implements ReadListener {
 		myReader.executeTagOp(write, target);
 	}
 	
+	public void writeTID(String hexString, TagFilter target) throws ReaderException {
+		short[] data = StringTool.toShortArray(hexString);
+		if (data == null) {
+			return;
+		} else {
+			writeTID(data, target);
+		}
+	}
+	
 	public void writeTID(short[] data, TagFilter target) throws ReaderException {
 		if (myReader == null) {
 			MyLogger.printLog("Reader is not initialized...");
@@ -577,6 +594,15 @@ public class ReaderUtility implements ReadListener {
 		
 		Gen2.WriteData write = new Gen2.WriteData(Gen2.Bank.TID, 0, data);
 		myReader.executeTagOp(write, target);
+	}
+	
+	public void writeUSERBANK(String hexString, TagFilter target) throws ReaderException {
+		short[] data = StringTool.toShortArray(hexString);
+		if (data == null) {
+			return;
+		} else {
+			writeUSERBANK(data, target);
+		}
 	}
 	
 	public void writeUSERBANK(short[] data, TagFilter target) throws ReaderException {

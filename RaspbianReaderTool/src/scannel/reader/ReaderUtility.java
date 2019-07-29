@@ -42,10 +42,10 @@ public class ReaderUtility implements ReadListener {
 	private static String filter_str;
 	
 	private final static boolean PRINT_TRANSPORT_LOG = false;
-//	private final static boolean USE_SERIAL_PORT = false;
-//	private final static String URI_SERIAL = "tmr:///dev/ttyS0";
-//	private final static String URI_IP = "192.168.100.160";
-//	private final static String URI_PORT = "4001";
+	private final static boolean USE_SERIAL_PORT = true;
+	private final static String URI_SERIAL = "tmr:///dev/ttyS0";
+	private final static String URI_IP = "192.168.100.160";
+	private final static String URI_PORT = "4001";
 	
 	
 	private final static long INTERVAL = 300;
@@ -131,14 +131,22 @@ public class ReaderUtility implements ReadListener {
 		System.out.println("Serial Reader created!");
 	}
 	
-	public void connectReader(String ip, String port) throws ReaderException{
-		if (myReader != null){
-			
-			if (myReader != null) {
-				myReader.destroy();
-				myReader = null;
-			}
-		} 
+	public void connectReader() throws ReaderException {
+		if (USE_SERIAL_PORT) {
+			// Since the reader is connect to raspberry pi by UART, 
+			// use "tmr:///dev/ttyS0" as default connection path
+			this.connectReader(URI_SERIAL);
+		} else {
+			// Connect reader through ethernet for testing, reader ip and port may change 
+			this.connectReader(URI_IP, URI_PORT);
+		}
+	}
+	
+	private void connectReader(String ip, String port) throws ReaderException{
+		if (myReader != null) {
+			myReader.destroy();
+			myReader = null;
+		}
 		
 		this.createTCPReader(ip, port);
 		myReader.connect();
@@ -148,14 +156,11 @@ public class ReaderUtility implements ReadListener {
 		
 	}
 	
-	public void connectReader(String port) throws ReaderException {
-		if (myReader != null){
-			
-			if (myReader != null) {
-				myReader.destroy();
-				myReader = null;
-			}
-		} 
+	private void connectReader(String port) throws ReaderException {
+		if (myReader != null) {
+			myReader.destroy();
+			myReader = null;
+		}
 		
 		this.createSerialReader(port);
 		myReader.connect();
@@ -552,5 +557,35 @@ public class ReaderUtility implements ReadListener {
 		if (value > 0) {
 			refresh_rate = value;
 		}
+	}
+	
+	public void writeEPC(short[] data, TagFilter target) throws ReaderException {
+		if (myReader == null) {
+			MyLogger.printLog("Reader is not initialized...");
+			return;
+		}
+		
+		Gen2.WriteData write = new Gen2.WriteData(Gen2.Bank.EPC, 0, data);
+		myReader.executeTagOp(write, target);
+	}
+	
+	public void writeTID(short[] data, TagFilter target) throws ReaderException {
+		if (myReader == null) {
+			MyLogger.printLog("Reader is not initialized...");
+			return;
+		}
+		
+		Gen2.WriteData write = new Gen2.WriteData(Gen2.Bank.TID, 0, data);
+		myReader.executeTagOp(write, target);
+	}
+	
+	public void writeUSERBANK(short[] data, TagFilter target) throws ReaderException {
+		if (myReader == null) {
+			MyLogger.printLog("Reader is not initialized...");
+			return;
+		}
+		
+		Gen2.WriteData write = new Gen2.WriteData(Gen2.Bank.USER, 0, data);
+		myReader.executeTagOp(write, target);
 	}
 }

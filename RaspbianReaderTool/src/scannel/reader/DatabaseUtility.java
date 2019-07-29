@@ -125,18 +125,13 @@ public class DatabaseUtility {
 			e.printStackTrace();
 			MyLogger.printErrorLog(e);
 			
-			Platform.runLater(new Runnable() {
-
-				@Override
-				public void run() {
-					Alert alert = new Alert(AlertType.ERROR);
-					alert.setTitle("Error");
-					alert.setHeaderText(null);
-					alert.setResizable(true);
-					alert.setContentText(e.getMessage());
-					alert.showAndWait();
-				}
-				
+			Platform.runLater(() -> {
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("Error");
+				alert.setHeaderText(null);
+				alert.setResizable(true);
+				alert.setContentText(e.getMessage());
+				alert.showAndWait();
 			});
 			
 		} finally {
@@ -199,19 +194,16 @@ public class DatabaseUtility {
 			e.printStackTrace();
 			MyLogger.printErrorLog(e);
 			
-			Platform.runLater(new Runnable() {
-
-				@Override
-				public void run() {
-					Alert alert = new Alert(AlertType.ERROR);
-					alert.setTitle("Error");
-					alert.setHeaderText(null);
-					alert.setResizable(true);
-					alert.setContentText(e.getMessage());
-					alert.showAndWait();
-				}
+			Platform.runLater(() -> {
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("Error");
+				alert.setHeaderText(null);
+				alert.setResizable(true);
+				alert.setContentText(e.getMessage());
+				alert.showAndWait();
 				
 			});
+			
 		} finally {
 			if (myStmt != null) {
 				try {

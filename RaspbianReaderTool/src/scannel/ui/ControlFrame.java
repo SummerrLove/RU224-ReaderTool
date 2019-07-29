@@ -13,7 +13,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
-import scannel.reader.DatabaseUtility;
 import scannel.reader.ReaderConfig;
 import scannel.reader.ReaderUtility;
 
@@ -24,11 +23,6 @@ public class ControlFrame extends AnchorPane implements EventHandler<ActionEvent
 	private ConfigurationFrame config;
 	private Circle status_light;
 	private Label status;
-	
-	private final static boolean USE_SERIAL_PORT = true;
-	private final static String URI_SERIAL = "tmr:///dev/ttyS0";
-	private final static String URI_IP = "192.168.100.160";
-	private final static String URI_PORT = "4001";
 	
 	
 	public ControlFrame() {
@@ -87,14 +81,7 @@ public class ControlFrame extends AnchorPane implements EventHandler<ActionEvent
 				disconnectReader();
 			} else {
 				System.out.println("[ControlFrame] pressed connect button...");
-//				ReaderUtility.getInstance().createTestTagData();
-//				DatabaseUtility.getInstance().insertTagData();
 				connectReader();
-//				try {
-//					ReaderUtility.getInstance().printSupportRegeion();
-//				} catch (ReaderException e) {
-//					e.printStackTrace();
-//				}
 			}
 			
 		} else {
@@ -114,16 +101,7 @@ public class ControlFrame extends AnchorPane implements EventHandler<ActionEvent
 	
 	private void connectReader() {
 		try {
-			
-			if (USE_SERIAL_PORT) {
-				// Since the reader is connect to raspberry pi by UART, 
-				// use "tmr:///dev/ttyS0" as default connection path
-				ReaderUtility.getInstance().connectReader(URI_SERIAL);
-			} else {
-				// Connect reader through ethernet for testing, reader ip and port may change 
-				ReaderUtility.getInstance().connectReader(URI_IP, URI_PORT);
-			}
-			
+			ReaderUtility.getInstance().connectReader();
 			btn_connect.setText("Disconnect");
 			isConnected = true;
 			status_light.setFill(Color.LIGHTGREEN);

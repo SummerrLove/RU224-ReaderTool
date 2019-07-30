@@ -40,13 +40,14 @@ public class StringTool {
 			return null;
 		}
 		
-		if (str.length()%2 != 0) {
+		// if the string cannot be divided into complete short strings, add "0" to the end of string to make it complete
+		while (str.length()%4 != 0) {
 			str += "0";
 		}
 		
-		short[] data = new short[str.length()/2];
-		for (int i=0; (i+1)*2<str.length(); i++) {
-			String temp = str.substring(i*2, (i+1)*2);
+		short[] data = new short[str.length()/4];
+		for (int i=0; (i+1)*4<str.length(); i++) {
+			String temp = str.substring(i*4, (i+1)*4);
 			data[i] = Short.parseShort(temp, 16);
 		}
 		

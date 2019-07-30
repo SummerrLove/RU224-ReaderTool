@@ -7,8 +7,11 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import javax.xml.bind.DatatypeConverter;
 
 import com.thingmagic.Gen2;
 import com.thingmagic.ReadListener;
@@ -20,8 +23,11 @@ import com.thingmagic.TMConstants;
 import com.thingmagic.TagFilter;
 import com.thingmagic.TagProtocol;
 import com.thingmagic.TagReadData;
+import com.thingmagic.Gen2.Bank;
 
 import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import scannel.gpio.DigitalIOController;
 
 import com.thingmagic.Reader.Region;
@@ -524,7 +530,10 @@ public class ReaderUtility implements ReadListener {
 		}
 		
 		myReader.paramSet(TMConstants.TMR_PARAM_REGION_ID, ReaderConfig.getInstance().getRegion());
-		SimpleReadPlan plan = new SimpleReadPlan(ReaderConfig.getInstance().getAntennaList(), TagProtocol.GEN2, null, null, 1000);
+		
+		EnumSet<Bank> memBanks = EnumSet.of(Gen2.Bank.EPC, Gen2.Bank.TID, Gen2.Bank.GEN2BANKTIDENABLED, Gen2.Bank.USER, Gen2.Bank.GEN2BANKUSERENABLED);
+		Gen2.ReadData readOp = new Gen2.ReadData(memBanks, 0, (byte) 0);
+		SimpleReadPlan plan = new SimpleReadPlan(ReaderConfig.getInstance().getAntennaList(), TagProtocol.GEN2, null, readOp, 1000);
         myReader.paramSet(TMConstants.TMR_PARAM_READ_PLAN, plan);
         
         TagReadData[] data = myReader.read(300);
@@ -558,26 +567,69 @@ public class ReaderUtility implements ReadListener {
 			refresh_rate = value;
 		}
 	}
-	public void writeEPC(String hexString, TagFilter target) throws ReaderException {
-		short[] data = StringTool.toShortArray(hexString);
-		if (data == null) {
-			return;
-		} else {
-			writeEPC(data, target);
-		}
-	}
 	
-	public void writeEPC(short[] data, TagFilter target) throws ReaderException {
-		if (myReader == null) {
-			MyLogger.printLog("Reader is not initialized...");
+	public void writeEPC(String hexString, TagFilter target) throws ReaderException {
+		if (!StringTool.isHexString(hexString)) {
 			return;
 		}
 		
-		Gen2.WriteData write = new Gen2.WriteData(Gen2.Bank.EPC, 0, data);
-		myReader.executeTagOp(write, target);
+		while (hexString.length()%4 != 0) {
+			hexString += "0";
+			MyLogger.printLog(hexString);
+		}
+		
+		byte[] data = DatatypeConverter.parseHexBinary(hexString);
+		if (data == null) {
+			return;
+		} else {
+			MyLogger.printLog("data length: "+data.length);
+			Gen2.TagData write_data = new Gen2.TagData(data);
+			this.writeTag(write_data, target);
+		}
 	}
 	
+	public void writeAsciiEPC(String asciiString, TagFilter target) throws ReaderException {
+		if (asciiString.length()%2 != 0) {
+			asciiString += "0";
+		}
+		
+		Gen2.TagData write_data = new Gen2.TagData(asciiString.getBytes());
+		try {
+			this.writeTag(write_data, target);
+		} catch (ReaderException e) {
+			e.printStackTrace();
+			
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Error");
+			alert.setHeaderText(null);
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
+		}
+	}
+	
+//	public void writeEPC(short[] data, TagFilter target) throws ReaderException {
+//		if (myReader == null) {
+//			MyLogger.printLog("Reader is not initialized...");
+//			return;
+//		}
+//		
+//		int[] antennaList = ReaderConfig.getInstance().getAntennaList();
+//		if (antennaList == null || antennaList.length == 0) {
+//			MyLogger.printLog("Incorrect Antenna Setting...");
+//			return;
+//		}
+//		
+//		myReader.paramSet("/reader/tagop/antenna", antennaList[0]);
+//		
+//		Gen2.WriteData write = new Gen2.WriteData(Gen2.Bank.EPC, 0, data);
+//		myReader.executeTagOp(write, target);
+//	}
+	
 	public void writeTID(String hexString, TagFilter target) throws ReaderException {
+		if (!StringTool.isHexString(hexString)) {
+			return;
+		}
+		
 		short[] data = StringTool.toShortArray(hexString);
 		if (data == null) {
 			return;
@@ -592,11 +644,23 @@ public class ReaderUtility implements ReadListener {
 			return;
 		}
 		
+		int[] antennaList = ReaderConfig.getInstance().getAntennaList();
+		if (antennaList == null || antennaList.length == 0) {
+			MyLogger.printLog("Incorrect Antenna Setting...");
+			return;
+		}
+		
+		myReader.paramSet("/reader/tagop/antenna", antennaList[0]);
+		
 		Gen2.WriteData write = new Gen2.WriteData(Gen2.Bank.TID, 0, data);
 		myReader.executeTagOp(write, target);
 	}
 	
 	public void writeUSERBANK(String hexString, TagFilter target) throws ReaderException {
+		if (!StringTool.isHexString(hexString)) {
+			return;
+		}
+		
 		short[] data = StringTool.toShortArray(hexString);
 		if (data == null) {
 			return;
@@ -610,6 +674,14 @@ public class ReaderUtility implements ReadListener {
 			MyLogger.printLog("Reader is not initialized...");
 			return;
 		}
+		
+		int[] antennaList = ReaderConfig.getInstance().getAntennaList();
+		if (antennaList == null || antennaList.length == 0) {
+			MyLogger.printLog("Incorrect Antenna Setting...");
+			return;
+		}
+		
+		myReader.paramSet("/reader/tagop/antenna", antennaList[0]);
 		
 		Gen2.WriteData write = new Gen2.WriteData(Gen2.Bank.USER, 0, data);
 		myReader.executeTagOp(write, target);

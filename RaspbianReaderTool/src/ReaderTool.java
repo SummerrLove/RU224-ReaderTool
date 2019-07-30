@@ -8,7 +8,7 @@ import scannel.ui.MainWindow;
 
 public class ReaderTool extends Application {
 
-	private final static String version = "v1.10.02";
+	private final static String version = "v1.10.03";
 	private final static String subject = "GS1 decoder";
 
 	@Override

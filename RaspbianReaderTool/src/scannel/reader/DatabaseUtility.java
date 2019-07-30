@@ -109,7 +109,6 @@ public class DatabaseUtility {
 				tu = tagList.get(i);
 				myStmt.setString(1, tu.getEPC());
 				myStmt.setString(2, readerId);
-//				myStmt.setDate(3, new Date(tu.getTime().getTime()));
 				myStmt.setTimestamp(3, new Timestamp(tu.getTime().getTime()));
 				myStmt.addBatch();
 			}
@@ -126,18 +125,13 @@ public class DatabaseUtility {
 			e.printStackTrace();
 			MyLogger.printErrorLog(e);
 			
-			Platform.runLater(new Runnable() {
-
-				@Override
-				public void run() {
-					Alert alert = new Alert(AlertType.ERROR);
-					alert.setTitle("Error");
-					alert.setHeaderText(null);
-					alert.setResizable(true);
-					alert.setContentText(e.getMessage());
-					alert.showAndWait();
-				}
-				
+			Platform.runLater(() -> {
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("Error");
+				alert.setHeaderText(null);
+				alert.setResizable(true);
+				alert.setContentText(e.getMessage());
+				alert.showAndWait();
 			});
 			
 		} finally {
@@ -185,7 +179,6 @@ public class DatabaseUtility {
 				tu = tagList.get(i);
 				myStmt.setString(1, tu.getEPC());
 				myStmt.setString(2, readerId);
-//				myStmt.setDate(3, new Date(tu.getTime().getTime()));
 				myStmt.setTimestamp(3, new Timestamp(tu.getTime().getTime()));
 				myStmt.addBatch();
 			}
@@ -202,19 +195,16 @@ public class DatabaseUtility {
 			e.printStackTrace();
 			MyLogger.printErrorLog(e);
 			
-			Platform.runLater(new Runnable() {
-
-				@Override
-				public void run() {
-					Alert alert = new Alert(AlertType.ERROR);
-					alert.setTitle("Error");
-					alert.setHeaderText(null);
-					alert.setResizable(true);
-					alert.setContentText(e.getMessage());
-					alert.showAndWait();
-				}
+			Platform.runLater(() -> {
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("Error");
+				alert.setHeaderText(null);
+				alert.setResizable(true);
+				alert.setContentText(e.getMessage());
+				alert.showAndWait();
 				
 			});
+			
 		} finally {
 			if (myStmt != null) {
 				try {

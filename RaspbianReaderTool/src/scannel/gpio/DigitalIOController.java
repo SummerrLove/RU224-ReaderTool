@@ -266,8 +266,6 @@ public class DigitalIOController implements GpioPinListenerDigital{
 	}
 	
 	private boolean allDigitalInputOff() {
-		// TODO This function needs to be modified when digital input issue is fixed. 
-		
 		boolean temp = true;
 		
 		for (int i=0; i<di_activate.length; i++) {

@@ -3,6 +3,8 @@ package scannel.reader;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.xml.bind.DatatypeConverter;
+
 import com.thingmagic.TagReadData;
 
 public class TagList {
@@ -47,7 +49,7 @@ public class TagList {
 		if (tagList == null){
 //			System.out.println("No tag list, so create new one and add the tag data...");
 			tagList = new ArrayList<TagUnit>();
-			TagUnit tag = new TagUnit(trd.epcString(), trd.getReadCount(), trd.getFrequency());
+			TagUnit tag = new TagUnit(trd.epcString(), trd.getReadCount(), trd.getFrequency(),  DatatypeConverter.printHexBinary(trd.getTIDMemData()), DatatypeConverter.printHexBinary(trd.getUserMemData()));
 			tag.setTime(new Date());
 			tag.setAntennaId(trd.getAntenna());
 			tagList.add(tag);
@@ -55,7 +57,7 @@ public class TagList {
 			TagUnit tag = this.checkList(trd.epcString());
 			if (tag == null){
 //				System.out.println("No tag data with epc ["+trd.epcString()+"] was found in the list.");
-				TagUnit newTag = new TagUnit(trd.epcString(), trd.getReadCount(), trd.getFrequency());
+				TagUnit newTag = new TagUnit(trd.epcString(), trd.getReadCount(), trd.getFrequency(), DatatypeConverter.printHexBinary(trd.getTIDMemData()), DatatypeConverter.printHexBinary(trd.getUserMemData()));
 				newTag.setTime(new Date());
 				newTag.setAntennaId(trd.getAntenna());
 				tagList.add(newTag);

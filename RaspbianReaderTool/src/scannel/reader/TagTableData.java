@@ -8,11 +8,13 @@ import javafx.beans.property.StringProperty;
 public class TagTableData {
 
 	private StringProperty epc = new SimpleStringProperty(this, "epc");
-	private StringProperty ascii = new SimpleStringProperty(this, "ascii");
+//	private StringProperty ascii = new SimpleStringProperty(this, "ascii");
 	private IntegerProperty readCount = new SimpleIntegerProperty(this, "readCount");
 	private StringProperty time = new SimpleStringProperty(this, "time");
 	private IntegerProperty readFrequency = new SimpleIntegerProperty(this, "readFrequency");
 	private StringProperty antennaId = new SimpleStringProperty(this, "antennaId");
+	private StringProperty tid = new SimpleStringProperty(this, "tid");
+	private StringProperty userBank = new SimpleStringProperty(this, "userBank");
 	
 	
 	public TagTableData() {
@@ -31,17 +33,17 @@ public class TagTableData {
 		return epc;
 	}
 	
-	public void setAscii(String value) {
-		ascii.set(value);
-	}
-	
-	public String getAscii() {
-		return ascii.get();
-	}
-	
-	public StringProperty asciiProperty() {
-		return ascii;
-	}
+//	public void setAscii(String value) {
+//		ascii.set(value);
+//	}
+//	
+//	public String getAscii() {
+//		return ascii.get();
+//	}
+//	
+//	public StringProperty asciiProperty() {
+//		return ascii;
+//	}
 	
 	public void setReadCount(int value) {
 		readCount.set(value);
@@ -89,5 +91,29 @@ public class TagTableData {
 	
 	public StringProperty antennaIdProperty() {
 		return antennaId;
+	}
+	
+	public void setTid(String value) {
+		tid.set(value);
+	}
+	
+	public String getTid() {
+		return tid.get();
+	}
+	
+	public StringProperty tidProperty() {
+		return tid;
+	}
+	
+	public void setUserBank(String value) {
+		userBank.set(value);
+	}
+	
+	public String getUserBank() {
+		return userBank.get();
+	}
+	
+	public StringProperty userBankProperty() {
+		return userBank;
 	}
 }

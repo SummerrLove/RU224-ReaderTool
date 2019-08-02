@@ -43,11 +43,12 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 	private ChoiceBox<Region> cb_region;
 	private Button btn_start;
 	private Button btn_reset;
-	private RadioButton rb_volume;
+//	private RadioButton rb_volume;
+	private RadioButton rb_tid;
+	private RadioButton rb_userbank;
 //	private RadioButton rb_hoptable;
 //	private TextArea hoptable;
 	private static ObservableList<Region> SUPPORT_REGIONS = FXCollections.observableArrayList();
-//			FXCollections.observableArrayList("NA", "IN", "PRC", "EU3", "KR2", "AU", "NZ", "MY", "ID", "PH", "TW", "MO", "RU", "SG");
 	
 //	private final static boolean ACTIVATE_HOPTABLE = false;
 	
@@ -79,7 +80,6 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 		antenna_list.setVgap(15);
 		antenna_list.setHgap(15);
 		antenna_list.setPadding(new Insets(20, 10, 20, 10));
-//		antenna_list.initComponents();
 		AnchorPane.setLeftAnchor(antenna_list, 20.0);
 		AnchorPane.setTopAnchor(antenna_list, 70.0);
 		this.getChildren().add(antenna_list);
@@ -93,7 +93,6 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 		
 		cb_session = new ChoiceBox<Session>(FXCollections.observableArrayList(Session.S0, Session.S1, Session.S2, Session.S3));
 		cb_session.setTooltip(new Tooltip("Select a session value"));
-//		cb_session.setValue(Session.S0);
 		AnchorPane.setLeftAnchor(cb_session, 110.0);
 		AnchorPane.setTopAnchor(cb_session, 210.0);
 		this.getChildren().add(cb_session);
@@ -106,7 +105,6 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 		this.getChildren().add(target_title);
 		
 		cb_target = new ChoiceBox<Target>(FXCollections.observableArrayList(Target.A, Target.B, Target.AB, Target.BA));
-//		cb_target.setValue("A");
 		AnchorPane.setLeftAnchor(cb_target, 95.0);
 		AnchorPane.setTopAnchor(cb_target, 260.0);
 		this.getChildren().add(cb_target);
@@ -118,9 +116,7 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 		AnchorPane.setTopAnchor(region_title, 310.0);
 		this.getChildren().add(region_title);
 		
-//		cb_region = new ChoiceBox<String>(FXCollections.observableArrayList("NA", "EU", "TW"));
 		cb_region = new ChoiceBox<Region>();
-//		cb_region.setValue("NA");
 		AnchorPane.setLeftAnchor(cb_region, 100.0);
 		AnchorPane.setTopAnchor(cb_region, 310.0);
 		this.getChildren().add(cb_region);
@@ -128,7 +124,6 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 		
 		btn_start = new Button("Start");
 		btn_start.setOnAction(this);
-//		btn_start.setFont(new Font("Arial", 14));
 		btn_start.setFont(Font.font("Arial", FontWeight.BOLD, 24));
 		btn_start.setPrefSize(150, 50);
 		AnchorPane.setLeftAnchor(btn_start, 30.0);
@@ -137,7 +132,6 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 		
 		btn_reset = new Button("Reset");
 		btn_reset.setOnAction(this);
-//		btn_start.setFont(new Font("Arial", 14));
 		btn_reset.setFont(Font.font("Arial", FontWeight.BOLD, 24));
 		btn_reset.setPrefSize(150, 50);
 		AnchorPane.setLeftAnchor(btn_reset, 30.0);
@@ -145,11 +139,23 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 		this.getChildren().add(btn_reset);
 		
 		
-		rb_volume = new RadioButton("High Tag Volume");
-		rb_volume.setOnAction(this);
-		AnchorPane.setLeftAnchor(rb_volume, 30.0);
-		AnchorPane.setTopAnchor(rb_volume, 500.0);
-		this.getChildren().add(rb_volume);
+//		rb_volume = new RadioButton("High Tag Volume");
+//		rb_volume.setOnAction(this);
+//		AnchorPane.setLeftAnchor(rb_volume, 30.0);
+//		AnchorPane.setTopAnchor(rb_volume, 500.0);
+//		this.getChildren().add(rb_volume);
+		
+		rb_tid = new RadioButton("TID");
+		rb_tid.setOnAction(this);
+		AnchorPane.setLeftAnchor(rb_tid, 30.0);
+		AnchorPane.setTopAnchor(rb_tid, 540.0);
+		this.getChildren().add(rb_tid);
+		
+		rb_userbank = new RadioButton("User Memory");
+		rb_userbank.setOnAction(this);
+		AnchorPane.setLeftAnchor(rb_userbank, 30.0);
+		AnchorPane.setTopAnchor(rb_userbank, 580.0);
+		this.getChildren().add(rb_userbank);
 		
 //		Separator separator = new Separator();
 //		separator.setOrientation(Orientation.HORIZONTAL);
@@ -201,13 +207,13 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 			ReaderUtility.getInstance().resetData();
 		}
 		
-		if (event.getSource() == rb_volume) {
-			if (rb_volume.isSelected()) {
-				ReaderUtility.getInstance().setRefreshRate(30);
-			} else {
-				ReaderUtility.getInstance().setRefreshRate(5);
-			}
-		}
+//		if (event.getSource() == rb_volume) {
+//			if (rb_volume.isSelected()) {
+//				ReaderUtility.getInstance().setRefreshRate(30);
+//			} else {
+//				ReaderUtility.getInstance().setRefreshRate(5);
+//			}
+//		}
 		
 //		if (ACTIVATE_HOPTABLE && (event.getSource() == rb_hoptable)) {
 //			if (rb_hoptable.isSelected()) {
@@ -240,11 +246,12 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 			this.setSession(cb_session.getSelectionModel().getSelectedItem());
 			this.setTargetFlag(cb_target.getSelectionModel().getSelectedItem());
 			this.setRegion(cb_region.getSelectionModel().getSelectedItem());
-			if (rb_volume.isSelected()) {
-				ReaderUtility.getInstance().setRefreshRate(30);
-			} else {
-				ReaderUtility.getInstance().setRefreshRate(5);
-			}
+			
+//			if (rb_volume.isSelected()) {
+//				ReaderUtility.getInstance().setRefreshRate(30);
+//			} else {
+//				ReaderUtility.getInstance().setRefreshRate(1);
+//			}
 			
 //			if (ACTIVATE_HOPTABLE && rb_hoptable.isSelected()) {
 //				// Use user-defined frequency list
@@ -254,6 +261,9 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 //				// However, if the reader hop table has been modified, 
 //				// the region parameter of the reader must be set again to reset the hop table to default value.   
 //			}
+			
+			ReaderUtility.getInstance().includeTID(rb_tid.isSelected());
+			ReaderUtility.getInstance().includeUSERBANK(rb_userbank.isSelected());
 			
 			int[] ant_setting = antenna_list.getAntennaList();
 			ReaderConfig.getInstance().setAntennaList(ant_setting);
@@ -302,24 +312,6 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 		ReaderUtility.getInstance().setSession(session);
 		ReaderConfig.getInstance().setSession(session);
 		
-//		switch (cb_session.getSelectionModel().getSelectedIndex()) {
-//		case 0:
-//			System.out.println("Set Session: Session 0");
-//			ReaderUtility.getInstance().setSession(Gen2.Session.S0);
-//			break;
-//		case 1:
-//			System.out.println("Set Session: Session 1");
-//			ReaderUtility.getInstance().setSession(Gen2.Session.S1);
-//			break;
-//		case 2:
-//			System.out.println("Set Session: Session 2");
-//			ReaderUtility.getInstance().setSession(Gen2.Session.S2);
-//			break;
-//		case 3:
-//			System.out.println("Set Session: Session 3");
-//			ReaderUtility.getInstance().setSession(Gen2.Session.S3);
-//			break;
-//		}
 	}
 	
 	private void setTargetFlag(Target target) throws ReaderException {
@@ -327,24 +319,6 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 		ReaderUtility.getInstance().setTargetFlag(target);
 		ReaderConfig.getInstance().setTargetFlag(target);
 		
-//		switch (cb_target.getSelectionModel().getSelectedIndex()) {
-//		case 0:
-//			MyLogger.printLog("Set Target: A then B");
-//			ReaderUtility.getInstance().setTargetFlag(Gen2.Target.AB);
-//			break;
-//		case 1:
-//			MyLogger.printLog("Set Target: B then A");
-//			ReaderUtility.getInstance().setTargetFlag(Gen2.Target.BA);
-//			break;
-//		case 2:
-//			MyLogger.printLog("Set Target: Only A");
-//			ReaderUtility.getInstance().setTargetFlag(Gen2.Target.A);
-//			break;
-//		case 3:
-//			MyLogger.printLog("Set Target: Only B");
-//			ReaderUtility.getInstance().setTargetFlag(Gen2.Target.B);
-//			break;
-//		}
 	}
 	
 	private void setRegion(Region region) throws ReaderException {
@@ -352,17 +326,6 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 		ReaderUtility.getInstance().setRegion(region);
 		ReaderConfig.getInstance().setRegion(region);
 		
-//		switch (cb_target.getSelectionModel().getSelectedIndex()) {
-//		case 0:
-//			ReaderUtility.getInstance().setRegion(Region.NA);
-//			break;
-//		case 1:
-//			ReaderUtility.getInstance().setRegion(Region.EU);
-//			break;
-//		case 2:
-//			ReaderUtility.getInstance().setRegion(Region.TW);
-//			break;
-//		}
 	}
 	
 	private int[] parseHopTable(String text) {
@@ -401,29 +364,11 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 		btn_start.setText("Start");
 	}
 	
-//	private ObservableList getRegionList(){
-//		ObservableList list = FXCollections.observableArrayList();
-//		Region[] regions;
-//		try {
-//			regions = ReaderUtility.getInstance().getSupportedRegion();
-//		} catch (ReaderException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//			return null;
-//		}
-//		
-//		for (int i=0; i<regions.length; i++) {
-//			list.add(regions[i]);
-//		}
-//		return list;
-//	}
-	
 	private void loadSupportRegion() {
 		try {
 			SUPPORT_REGIONS.addAll(ReaderUtility.getInstance().getSupportedRegion());
 			cb_region.setItems(SUPPORT_REGIONS);
 		} catch (ReaderException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -452,7 +397,6 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 
 	@Override
 	public void digitalInputOn() {
-		// TODO Auto-generated method stub
 		Platform.runLater(new Runnable() {
 
 			@Override
@@ -466,7 +410,6 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 
 	@Override
 	public void digitalInputOff() {
-		// TODO Auto-generated method stub
 		Platform.runLater(new Runnable() {
 
 			@Override

@@ -28,8 +28,6 @@ public class DataFrame extends AnchorPane implements DataUpdateListener, EventHa
 
 	private Label tag_num;
 	private RFIDTable table;
-//	private Button btn_reset;
-//	private Button btn_save;
 	private Label icon;
 	private ObservableList<TagTableData> dataList = FXCollections.observableArrayList();
 	private SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -46,21 +44,6 @@ public class DataFrame extends AnchorPane implements DataUpdateListener, EventHa
 	}
 
 	private void initComponents() {
-		
-//		btn_reset = new Button("Reset");
-//		btn_reset.setOnAction(this);
-//		btn_reset.setFont(new Font("Arial", 14));
-//		AnchorPane.setLeftAnchor(btn_reset, 20.0);
-//		AnchorPane.setTopAnchor(btn_reset, 30.0);
-//		this.getChildren().add(btn_reset);
-		
-//		btn_save = new Button("Save");
-//		btn_save.setOnAction(this);
-//		btn_save.setFont(new Font("Arial", 14));
-//		AnchorPane.setLeftAnchor(btn_save, 70.0);
-//		AnchorPane.setTopAnchor(btn_save, 30.0);
-//		this.getChildren().add(btn_save);
-		
 		
 		tag_num = new Label(String.format("%03d", 0));
 		tag_num.setFont(new Font("Arial", 300));
@@ -122,11 +105,13 @@ public class DataFrame extends AnchorPane implements DataUpdateListener, EventHa
 				TagUnit tu = tagList.get(i);
 				TagTableData ttd = new TagTableData();
 				ttd.setEpc(tu.getEPC());
-				ttd.setAscii(StringTool.hexToAsciiString(tu.getEPC()));
+//				ttd.setAscii(StringTool.hexToAsciiString(tu.getEPC()));
 				ttd.setReadCount(tu.getReadCount());
 				ttd.setTime(formatter.format(tu.getTime()));
 				ttd.setReadFrequency(tu.getReadFrequency());
 				ttd.setAntennaId(Integer.toString(tu.getAntennaId()));
+				ttd.setTid(tu.getTid());
+				ttd.setUserBank(tu.getUserBank());
 				dataList.add(ttd);
 			}
 			//==============================================
@@ -146,12 +131,7 @@ public class DataFrame extends AnchorPane implements DataUpdateListener, EventHa
 
 	@Override
 	public void handle(ActionEvent event) {
-//		if (event.getSource() == btn_reset) {
-//			this.resetDisplayData();
-//			ReaderUtility.getInstance().resetData();
-//		} else if (event.getSource() == btn_save){
-//			
-//		}
+		
 	}
 	
 	public void resetDisplayData() {
@@ -160,11 +140,4 @@ public class DataFrame extends AnchorPane implements DataUpdateListener, EventHa
 		total_inventory_time.setText("");
 	}
 	
-//	public void hideTotalInventoryTime(boolean hide) {
-//		if (hide) {
-//			this.getChildren().remove(total_inventory_time);
-//		} else {
-//			this.getChildren().add(total_inventory_time);
-//		}
-//	}
 }

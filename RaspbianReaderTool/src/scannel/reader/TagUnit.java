@@ -9,6 +9,8 @@ public class TagUnit {
 	private Date time;
 	private int readFrequency;
 	private int antennaId;
+	private String tid;
+	private String userBank;
 	
 	public TagUnit(String epc) {
 		this.epc = epc;
@@ -20,10 +22,12 @@ public class TagUnit {
 		readCount = count;
 	}
 	
-	public TagUnit(String epc, int count, int frequency) {
+	public TagUnit(String epc, int count, int frequency, String tid, String userBank) {
 		this.epc = epc;
 		readCount = count;
 		readFrequency = frequency;
+		this.tid = tid;
+		this.userBank = userBank;
 	}
 
 	public void setEPC(String epc){
@@ -32,6 +36,22 @@ public class TagUnit {
 	
 	public String getEPC(){
 		return this.epc;
+	}
+	
+	public void setTid(String tid) {
+		this.tid = tid;
+	}
+	
+	public String getTid() {
+		return this.tid;
+	}
+	
+	public void setUserBank(String userBank) {
+		this.userBank = userBank;
+	}
+	
+	public String getUserBank() {
+		return this.userBank;
 	}
 	
 	public void addReadCount(int count){
@@ -74,5 +94,7 @@ public class TagUnit {
 		epc = null;
 		readCount = 0;
 		readFrequency = 0;
+		tid = null;
+		userBank = null;
 	}
 }

@@ -65,7 +65,10 @@ public class ReaderUtility implements ReadListener {
 	private int prev_tagNum = -1;
 	private long startTime;
 	private float total_inventory_time;
-	private int refresh_rate = 5;
+	private int refresh_rate = 1;
+	
+	private boolean includeTID = true;
+	private boolean includeUSERBANK = true;
 	
 	
 	private ReaderUtility() {
@@ -291,7 +294,25 @@ public class ReaderUtility implements ReadListener {
 		}
 		
 		System.out.println("start reading");
-		SimpleReadPlan plan = new SimpleReadPlan(antenna, TagProtocol.GEN2, null, null, 1000);
+		
+		Gen2.ReadData readOp = null;
+		if (includeTID || includeUSERBANK) {
+			EnumSet<Bank> memBanks = EnumSet.of(Gen2.Bank.EPC);
+			
+			if (includeTID) {
+//				memBanks.add(Bank.TID);
+				memBanks.add(Bank.GEN2BANKTIDENABLED);
+			}
+			
+			if (includeUSERBANK) {
+//				memBanks.add(Bank.USER);
+				memBanks.add(Bank.GEN2BANKUSERENABLED);
+			}
+			
+			readOp = new Gen2.ReadData(memBanks, 0, (byte) 0);
+		}
+		
+		SimpleReadPlan plan = new SimpleReadPlan(antenna, TagProtocol.GEN2, null, readOp, 1000);
         myReader.paramSet(TMConstants.TMR_PARAM_READ_PLAN, plan);
         
         // set up the timeout value
@@ -425,7 +446,7 @@ public class ReaderUtility implements ReadListener {
 		
 		if (counter > refresh_rate) {
 			System.out.println("Update GUI, time = " + System.currentTimeMillis());
-			counter = 0;
+			counter = 1;
 			Platform.runLater(new Runnable() {
 
 				@Override
@@ -685,5 +706,13 @@ public class ReaderUtility implements ReadListener {
 		
 		Gen2.WriteData write = new Gen2.WriteData(Gen2.Bank.USER, 0, data);
 		myReader.executeTagOp(write, target);
+	}
+	
+	public void includeTID(boolean include) {
+		includeTID = include;
+	}
+	
+	public void includeUSERBANK(boolean include) {
+		includeUSERBANK = include;
 	}
 }

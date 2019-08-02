@@ -8,8 +8,8 @@ import scannel.ui.MainWindow;
 
 public class ReaderTool extends Application {
 
-	private final static String version = "v1.10.03";
-	private final static String subject = "GS1 decoder";
+	private final static String version = "v1.10.04 - GS1 decoder";
+	private final static String subject = "TID/UserMemory inventory";
 
 	@Override
 	public void start(Stage mainStage) throws Exception {

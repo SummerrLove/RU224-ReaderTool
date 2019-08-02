@@ -105,11 +105,13 @@ public class DataFrame extends AnchorPane implements DataUpdateListener, EventHa
 				TagUnit tu = tagList.get(i);
 				TagTableData ttd = new TagTableData();
 				ttd.setEpc(tu.getEPC());
-				ttd.setAscii(StringTool.hexToAsciiString(tu.getEPC()));
+//				ttd.setAscii(StringTool.hexToAsciiString(tu.getEPC()));
 				ttd.setReadCount(tu.getReadCount());
 				ttd.setTime(formatter.format(tu.getTime()));
 				ttd.setReadFrequency(tu.getReadFrequency());
 				ttd.setAntennaId(Integer.toString(tu.getAntennaId()));
+				ttd.setTid(tu.getTid());
+				ttd.setUserBank(tu.getUserBank());
 				dataList.add(ttd);
 			}
 			//==============================================

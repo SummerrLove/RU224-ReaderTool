@@ -43,7 +43,9 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 	private ChoiceBox<Region> cb_region;
 	private Button btn_start;
 	private Button btn_reset;
-	private RadioButton rb_volume;
+//	private RadioButton rb_volume;
+	private RadioButton rb_tid;
+	private RadioButton rb_userbank;
 //	private RadioButton rb_hoptable;
 //	private TextArea hoptable;
 	private static ObservableList<Region> SUPPORT_REGIONS = FXCollections.observableArrayList();
@@ -137,11 +139,23 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 		this.getChildren().add(btn_reset);
 		
 		
-		rb_volume = new RadioButton("High Tag Volume");
-		rb_volume.setOnAction(this);
-		AnchorPane.setLeftAnchor(rb_volume, 30.0);
-		AnchorPane.setTopAnchor(rb_volume, 500.0);
-		this.getChildren().add(rb_volume);
+//		rb_volume = new RadioButton("High Tag Volume");
+//		rb_volume.setOnAction(this);
+//		AnchorPane.setLeftAnchor(rb_volume, 30.0);
+//		AnchorPane.setTopAnchor(rb_volume, 500.0);
+//		this.getChildren().add(rb_volume);
+		
+		rb_tid = new RadioButton("TID");
+		rb_tid.setOnAction(this);
+		AnchorPane.setLeftAnchor(rb_tid, 30.0);
+		AnchorPane.setTopAnchor(rb_tid, 540.0);
+		this.getChildren().add(rb_tid);
+		
+		rb_userbank = new RadioButton("User Memory");
+		rb_userbank.setOnAction(this);
+		AnchorPane.setLeftAnchor(rb_userbank, 30.0);
+		AnchorPane.setTopAnchor(rb_userbank, 580.0);
+		this.getChildren().add(rb_userbank);
 		
 //		Separator separator = new Separator();
 //		separator.setOrientation(Orientation.HORIZONTAL);
@@ -193,13 +207,13 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 			ReaderUtility.getInstance().resetData();
 		}
 		
-		if (event.getSource() == rb_volume) {
-			if (rb_volume.isSelected()) {
-				ReaderUtility.getInstance().setRefreshRate(30);
-			} else {
-				ReaderUtility.getInstance().setRefreshRate(5);
-			}
-		}
+//		if (event.getSource() == rb_volume) {
+//			if (rb_volume.isSelected()) {
+//				ReaderUtility.getInstance().setRefreshRate(30);
+//			} else {
+//				ReaderUtility.getInstance().setRefreshRate(5);
+//			}
+//		}
 		
 //		if (ACTIVATE_HOPTABLE && (event.getSource() == rb_hoptable)) {
 //			if (rb_hoptable.isSelected()) {
@@ -232,11 +246,12 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 			this.setSession(cb_session.getSelectionModel().getSelectedItem());
 			this.setTargetFlag(cb_target.getSelectionModel().getSelectedItem());
 			this.setRegion(cb_region.getSelectionModel().getSelectedItem());
-			if (rb_volume.isSelected()) {
-				ReaderUtility.getInstance().setRefreshRate(30);
-			} else {
-				ReaderUtility.getInstance().setRefreshRate(5);
-			}
+			
+//			if (rb_volume.isSelected()) {
+//				ReaderUtility.getInstance().setRefreshRate(30);
+//			} else {
+//				ReaderUtility.getInstance().setRefreshRate(1);
+//			}
 			
 //			if (ACTIVATE_HOPTABLE && rb_hoptable.isSelected()) {
 //				// Use user-defined frequency list
@@ -246,6 +261,9 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 //				// However, if the reader hop table has been modified, 
 //				// the region parameter of the reader must be set again to reset the hop table to default value.   
 //			}
+			
+			ReaderUtility.getInstance().includeTID(rb_tid.isSelected());
+			ReaderUtility.getInstance().includeUSERBANK(rb_userbank.isSelected());
 			
 			int[] ant_setting = antenna_list.getAntennaList();
 			ReaderConfig.getInstance().setAntennaList(ant_setting);

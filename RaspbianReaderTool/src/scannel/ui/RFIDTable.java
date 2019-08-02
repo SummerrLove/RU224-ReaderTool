@@ -12,11 +12,12 @@ public class RFIDTable extends AnchorPane {
 
 	private TableView<TagTableData> table;
 	private TableColumn<TagTableData, String> epcCol;
-	private TableColumn<TagTableData, String> asciiCol;
+	private TableColumn<TagTableData, String> tidCol;
 	private TableColumn<TagTableData, Integer> countCol;
 	private TableColumn<TagTableData, String> antIdCol;
 	private TableColumn<TagTableData, String> timeCol;
 	private TableColumn<TagTableData, Integer> frequencyCol;
+	private TableColumn<TagTableData, String> userBankCol;
 	
 	
 	public RFIDTable() {
@@ -31,9 +32,9 @@ public class RFIDTable extends AnchorPane {
 		epcCol.setPrefWidth(200.0);
 		epcCol.setCellValueFactory(new PropertyValueFactory("epc"));
 		
-		asciiCol = new TableColumn<TagTableData, String>("ASCII Code");
-		asciiCol.setPrefWidth(200.0);
-		asciiCol.setCellValueFactory(new PropertyValueFactory("ascii"));
+		tidCol = new TableColumn<TagTableData, String>("TID");
+		tidCol.setPrefWidth(200.0);
+		tidCol.setCellValueFactory(new PropertyValueFactory("tid"));
 		
 		countCol = new TableColumn<TagTableData, Integer>("Read Count");
 		countCol.setPrefWidth(50.0);
@@ -50,9 +51,13 @@ public class RFIDTable extends AnchorPane {
 		frequencyCol = new TableColumn<TagTableData, Integer>("Frequency");
 		frequencyCol.setPrefWidth(100.0);
 		frequencyCol.setCellValueFactory(new PropertyValueFactory("readFrequency"));
+		
+		userBankCol = new TableColumn<TagTableData, String>("User Memory");
+		userBankCol.setPrefWidth(300.0);
+		userBankCol.setCellValueFactory(new PropertyValueFactory("userBank"));
 
 		table = new TableView<TagTableData>();
-		table.getColumns().setAll(epcCol, asciiCol, countCol, antIdCol, timeCol, frequencyCol);
+		table.getColumns().setAll(epcCol, tidCol, countCol, antIdCol, timeCol, frequencyCol, userBankCol);
 		AnchorPane.setLeftAnchor(table, 0.0);
 		AnchorPane.setTopAnchor(table, 0.0);
 		AnchorPane.setBottomAnchor(table, 0.0);

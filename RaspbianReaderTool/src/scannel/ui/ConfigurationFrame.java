@@ -8,6 +8,8 @@ import com.thingmagic.Reader.Region;
 
 import java.io.IOException;
 
+import javax.xml.bind.DatatypeConverter;
+
 import com.thingmagic.ReaderException;
 
 import javafx.application.Platform;
@@ -17,6 +19,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
@@ -24,6 +27,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -43,7 +47,8 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 	private ChoiceBox<Region> cb_region;
 	private Button btn_start;
 	private Button btn_reset;
-//	private RadioButton rb_volume;
+	private TextField filter;
+	private RadioButton rb_volume;
 	private RadioButton rb_tid;
 	private RadioButton rb_userbank;
 //	private RadioButton rb_hoptable;
@@ -88,74 +93,70 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 		Label session_title = new Label("Session: ");
 		session_title.setFont(Font.font("Arial", FontWeight.BOLD, 16));
 		AnchorPane.setLeftAnchor(session_title, 30.0);
-		AnchorPane.setTopAnchor(session_title, 210.0);
+		AnchorPane.setTopAnchor(session_title, 170.0);
 		this.getChildren().add(session_title);
 		
 		cb_session = new ChoiceBox<Session>(FXCollections.observableArrayList(Session.S0, Session.S1, Session.S2, Session.S3));
 		cb_session.setTooltip(new Tooltip("Select a session value"));
 		AnchorPane.setLeftAnchor(cb_session, 110.0);
-		AnchorPane.setTopAnchor(cb_session, 210.0);
+		AnchorPane.setTopAnchor(cb_session, 170.0);
 		this.getChildren().add(cb_session);
 		
 		
 		Label target_title = new Label("Target: ");
 		target_title.setFont(Font.font("Arial", FontWeight.BOLD, 16));
 		AnchorPane.setLeftAnchor(target_title, 30.0);
-		AnchorPane.setTopAnchor(target_title, 260.0);
+		AnchorPane.setTopAnchor(target_title, 220.0);
 		this.getChildren().add(target_title);
 		
 		cb_target = new ChoiceBox<Target>(FXCollections.observableArrayList(Target.A, Target.B, Target.AB, Target.BA));
 		AnchorPane.setLeftAnchor(cb_target, 95.0);
-		AnchorPane.setTopAnchor(cb_target, 260.0);
+		AnchorPane.setTopAnchor(cb_target, 220.0);
 		this.getChildren().add(cb_target);
 		
 		
 		Label region_title = new Label("Region: ");
 		region_title.setFont(Font.font("Arial", FontWeight.BOLD, 16));
 		AnchorPane.setLeftAnchor(region_title, 30.0);
-		AnchorPane.setTopAnchor(region_title, 310.0);
+		AnchorPane.setTopAnchor(region_title, 270.0);
 		this.getChildren().add(region_title);
 		
 		cb_region = new ChoiceBox<Region>();
 		AnchorPane.setLeftAnchor(cb_region, 100.0);
-		AnchorPane.setTopAnchor(cb_region, 310.0);
+		AnchorPane.setTopAnchor(cb_region, 270.0);
 		this.getChildren().add(cb_region);
-		
-		
-		btn_start = new Button("Start");
-		btn_start.setOnAction(this);
-		btn_start.setFont(Font.font("Arial", FontWeight.BOLD, 24));
-		btn_start.setPrefSize(150, 50);
-		AnchorPane.setLeftAnchor(btn_start, 30.0);
-		AnchorPane.setTopAnchor(btn_start, 350.0);
-		this.getChildren().add(btn_start);
-		
-		btn_reset = new Button("Reset");
-		btn_reset.setOnAction(this);
-		btn_reset.setFont(Font.font("Arial", FontWeight.BOLD, 24));
-		btn_reset.setPrefSize(150, 50);
-		AnchorPane.setLeftAnchor(btn_reset, 30.0);
-		AnchorPane.setTopAnchor(btn_reset, 420.0);
-		this.getChildren().add(btn_reset);
 		
 		
 //		rb_volume = new RadioButton("High Tag Volume");
 //		rb_volume.setOnAction(this);
 //		AnchorPane.setLeftAnchor(rb_volume, 30.0);
-//		AnchorPane.setTopAnchor(rb_volume, 500.0);
+//		AnchorPane.setTopAnchor(rb_volume, 320.0);
 //		this.getChildren().add(rb_volume);
 		
-		rb_tid = new RadioButton("TID");
+		rb_tid = new RadioButton("show TID");
 		rb_tid.setOnAction(this);
 		AnchorPane.setLeftAnchor(rb_tid, 30.0);
-		AnchorPane.setTopAnchor(rb_tid, 540.0);
+		AnchorPane.setTopAnchor(rb_tid, 350.0);
 		this.getChildren().add(rb_tid);
 		
-		rb_userbank = new RadioButton("User Memory");
+		rb_userbank = new RadioButton("show User Memory");
 		rb_userbank.setOnAction(this);
 		AnchorPane.setLeftAnchor(rb_userbank, 30.0);
-		AnchorPane.setTopAnchor(rb_userbank, 580.0);
+		AnchorPane.setTopAnchor(rb_userbank, 380.0);
 		this.getChildren().add(rb_userbank);
+		
+//		Label filter_title = new Label("EPC filter:");
+//		filter_title.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+//		AnchorPane.setLeftAnchor(filter_title, 30.0);
+//		AnchorPane.setTopAnchor(filter_title, 420.0);
+//		this.getChildren().add(filter_title);
+//		
+//		filter = new TextField();
+//		filter.setPromptText("Input even-length hex string.");
+//		AnchorPane.setLeftAnchor(filter, 30.0);
+//		AnchorPane.setTopAnchor(filter, 450.0);
+//		this.getChildren().add(filter);
+		
 		
 //		Separator separator = new Separator();
 //		separator.setOrientation(Orientation.HORIZONTAL);
@@ -182,6 +183,22 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 //			this.getChildren().add(hoptable);
 //			hoptable.setDisable(true);
 //		}
+		
+		btn_start = new Button("Start");
+		btn_start.setOnAction(this);
+		btn_start.setFont(Font.font("Arial", FontWeight.BOLD, 24));
+		btn_start.setPrefSize(150, 40);
+		AnchorPane.setLeftAnchor(btn_start, 50.0);
+		AnchorPane.setTopAnchor(btn_start, 500.0);
+		this.getChildren().add(btn_start);
+		
+		btn_reset = new Button("Reset");
+		btn_reset.setOnAction(this);
+		btn_reset.setFont(Font.font("Arial", FontWeight.BOLD, 24));
+		btn_reset.setPrefSize(150, 40);
+		AnchorPane.setLeftAnchor(btn_reset, 50.0);
+		AnchorPane.setTopAnchor(btn_reset, 560.0);
+		this.getChildren().add(btn_reset);
 	}
 
 	@Override
@@ -211,7 +228,7 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 //			if (rb_volume.isSelected()) {
 //				ReaderUtility.getInstance().setRefreshRate(30);
 //			} else {
-//				ReaderUtility.getInstance().setRefreshRate(5);
+//				ReaderUtility.getInstance().setRefreshRate(1);
 //			}
 //		}
 		
@@ -265,6 +282,9 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 			ReaderUtility.getInstance().includeTID(rb_tid.isSelected());
 			ReaderUtility.getInstance().includeUSERBANK(rb_userbank.isSelected());
 			
+			byte[] data = DatatypeConverter.parseHexBinary(filter.getText());
+			ReaderUtility.getInstance().setEPCFilter(data);
+			
 			int[] ant_setting = antenna_list.getAntennaList();
 			ReaderConfig.getInstance().setAntennaList(ant_setting);
 			ReaderUtility.getInstance().resetData();
@@ -272,6 +292,20 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 			btn_start.setText("Stop");
 		} catch (ReaderException e) {
 			e.printStackTrace();
+			
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Error");
+			alert.setHeaderText(null);
+			alert.setContentText(e.getMessage());
+			alert.showAndWait();
+//		} catch (IllegalArgumentException e) {
+//			e.printStackTrace();
+//			
+//			Alert alert = new Alert(AlertType.ERROR);
+//			alert.setTitle("EPC filter error");
+//			alert.setHeaderText(null);
+//			alert.setContentText(e.getMessage());
+//			alert.showAndWait();
 		}
 	}
 	

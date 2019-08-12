@@ -2,11 +2,8 @@ package scannel.ui;
 
 import java.util.ArrayList;
 
-import org.llrp.ltk.generated.parameters.AntennaProperties;
-
-import javafx.geometry.Insets;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -14,7 +11,7 @@ import scannel.reader.MyLogger;
 
 public class AntennaFrame extends GridPane {
 	
-	private CheckBox[] antenna;
+	private RadioButton[] antenna;
 
 	public AntennaFrame() {
 		this.initComponents();
@@ -25,11 +22,11 @@ public class AntennaFrame extends GridPane {
 		ant_title.setFont(Font.font("Arial", FontWeight.BOLD, 16));
 		this.add(ant_title, 0, 0, 2, 1);
 		
-		antenna = new CheckBox[4];
+		antenna = new RadioButton[4];
 		for (int i=0; i<4; i++) {
-			antenna[i] = new CheckBox("Antenna "+(i+1));
-			int index_x = i%2;
-			int index_y = 1 + i/2;
+			antenna[i] = new RadioButton(Integer.toString((i+1)));
+			int index_x = i;
+			int index_y = 1;
 			this.add(antenna[i], index_x, index_y);
 		}
 	}

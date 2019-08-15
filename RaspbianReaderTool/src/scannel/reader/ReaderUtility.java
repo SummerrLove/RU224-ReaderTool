@@ -349,7 +349,7 @@ public class ReaderUtility implements ReadListener {
 			counter = -1;
 		}
 		isReading = false;
-		select = null;
+//		select = null;
 		
 		DigitalIOController.getInstance().turnOnOutput();
 	}
@@ -728,5 +728,9 @@ public class ReaderUtility implements ReadListener {
 	
 	public void setFilter(Gen2.Bank bank, int bitPointer, int bitLength, byte[] data) {
 		select = new Gen2.Select(false, bank, bitPointer, bitLength, data);
+	}
+	
+	public void resetFilter() {
+		select = null;
 	}
 }

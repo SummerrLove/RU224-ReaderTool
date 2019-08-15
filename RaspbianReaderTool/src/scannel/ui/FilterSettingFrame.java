@@ -1,10 +1,15 @@
 package scannel.ui;
 
+import javax.xml.bind.DatatypeConverter;
+
 import com.thingmagic.Gen2;
+import com.thingmagic.Gen2.Bank;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
@@ -12,6 +17,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import scannel.reader.ReaderUtility;
 
 public class FilterSettingFrame extends AnchorPane implements EventHandler<ActionEvent> {
 
@@ -41,6 +47,7 @@ public class FilterSettingFrame extends AnchorPane implements EventHandler<Actio
 		
 		
 		rb_epc = new RadioButton("EPC");
+		rb_epc.setFont(Font.font("Arial", FontWeight.NORMAL, 16));
 		rb_epc.setOnAction(this);
 		AnchorPane.setLeftAnchor(rb_epc, 30.0);
 		AnchorPane.setTopAnchor(rb_epc, 100.0);
@@ -48,35 +55,42 @@ public class FilterSettingFrame extends AnchorPane implements EventHandler<Actio
 		
 		
 		rb_userMem = new RadioButton("User Memory");
+		rb_userMem.setFont(Font.font("Arial", FontWeight.NORMAL, 16));
 		rb_userMem.setOnAction(this);
 		AnchorPane.setLeftAnchor(rb_userMem, 130.0);
 		AnchorPane.setTopAnchor(rb_userMem, 100.0);
 		this.getChildren().add(rb_userMem);
 		
 		
-		Label filter_title = new Label("Filter String:");
+		Label filter_title = new Label("Mask:");
 		filter_title.setFont(Font.font("Arial", FontWeight.BOLD, 20));
 		AnchorPane.setLeftAnchor(filter_title, 30.0);
-		AnchorPane.setTopAnchor(filter_title, 350.0);
+		AnchorPane.setTopAnchor(filter_title, 170.0);
 		this.getChildren().add(filter_title);
 		
 		filter = new TextField();
-		filter.setPromptText("Input even-length hex string.");
+		filter.setFont(Font.font("Arial", FontWeight.NORMAL, 30));
+		filter.setPromptText("Input even-length hex string");
+		filter.setPrefWidth(500);
+		filter.setDisable(true);
 		AnchorPane.setLeftAnchor(filter, 30.0);
-		AnchorPane.setTopAnchor(filter, 390.0);
+		AnchorPane.setTopAnchor(filter, 210.0);
 		this.getChildren().add(filter);
 		
 		
 		Label butPointer_title = new Label("Starting Bit Position:");
 		butPointer_title.setFont(Font.font("Arial", FontWeight.BOLD, 20));
 		AnchorPane.setLeftAnchor(butPointer_title, 30.0);
-		AnchorPane.setTopAnchor(butPointer_title, 450.0);
+		AnchorPane.setTopAnchor(butPointer_title, 320.0);
 		this.getChildren().add(butPointer_title);
 		
 		bitPointer = new TextField();
 //		bitPointer.setPromptText("");
+		bitPointer.setFont(Font.font("Arial", FontWeight.NORMAL, 20));
+		bitPointer.setPrefWidth(100);
+		bitPointer.setDisable(true);
 		AnchorPane.setLeftAnchor(bitPointer, 30.0);
-		AnchorPane.setTopAnchor(bitPointer, 380.0);
+		AnchorPane.setTopAnchor(bitPointer, 360.0);
 		this.getChildren().add(bitPointer);
 		
 		
@@ -94,26 +108,50 @@ public class FilterSettingFrame extends AnchorPane implements EventHandler<Actio
 			if (rb_epc.isSelected() && rb_userMem.isSelected()) {
 				rb_userMem.setSelected(false);
 			}
+			
+			// disable input if neither of the memory bank is selected
+			filter.setDisable(!rb_epc.isSelected() && !rb_userMem.isSelected());
+			bitPointer.setDisable(!rb_epc.isSelected() && !rb_userMem.isSelected());
 		} else if (event.getSource() == rb_userMem) {
 			if (rb_epc.isSelected() && rb_userMem.isSelected()) {
 				rb_epc.setSelected(false);
 			}
+			
+			// disable input if neither of the memory banks is selected
+			filter.setDisable(!rb_epc.isSelected() && !rb_userMem.isSelected());
+			bitPointer.setDisable(!rb_epc.isSelected() && !rb_userMem.isSelected());
 		} else if (event.getSource() == btn_apply) {
-			Gen2.Bank memBank;
-			if (rb_epc.isSelected()) {
+			if (!rb_epc.isSelected() && !rb_userMem.isSelected()) {
+				// if neither of the memory banks is selected, remove the filter
+				ReaderUtility.getInstance().resetFilter();
+			} else {
+				Gen2.Bank bank = null;
+				try {
+					byte[] data = DatatypeConverter.parseHexBinary(filter.getText());
+					int pointer = Integer.parseInt(bitPointer.getText());
+					if (rb_epc.isSelected()) {
+						bank = Bank.EPC;
+						// the data in EPC bank before bit 32 is meta-data
+						pointer += 32;
+					} else if (rb_userMem.isSelected()) {
+						bank = Bank.USER;
+					}
+					
+					ReaderUtility.getInstance().setFilter(bank, pointer, data.length*8, data);
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+					
+					Alert alert = new Alert(AlertType.ERROR);
+					alert.setTitle("Error");
+					alert.setHeaderText(null);
+					alert.setContentText(e.getMessage());
+					alert.showAndWait();
+				}
 				
-				return;
-			} 
-			
-			if (rb_userMem.isSelected()) {
-				
-				return;
 			}
-			
-			// Neither epc filter nor user memory filter is selected,
-			// so do nothing.
-			
 		}
 		
 	}
+	
+	
 }

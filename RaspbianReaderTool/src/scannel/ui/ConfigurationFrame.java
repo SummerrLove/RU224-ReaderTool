@@ -282,9 +282,6 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 			ReaderUtility.getInstance().includeTID(rb_tid.isSelected());
 			ReaderUtility.getInstance().includeUSERBANK(rb_userbank.isSelected());
 			
-			byte[] data = DatatypeConverter.parseHexBinary(filter.getText());
-			ReaderUtility.getInstance().setEPCFilter(data);
-			
 			int[] ant_setting = antenna_list.getAntennaList();
 			ReaderConfig.getInstance().setAntennaList(ant_setting);
 			ReaderUtility.getInstance().resetData();
@@ -298,14 +295,6 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 			alert.setHeaderText(null);
 			alert.setContentText(e.getMessage());
 			alert.showAndWait();
-//		} catch (IllegalArgumentException e) {
-//			e.printStackTrace();
-//			
-//			Alert alert = new Alert(AlertType.ERROR);
-//			alert.setTitle("EPC filter error");
-//			alert.setHeaderText(null);
-//			alert.setContentText(e.getMessage());
-//			alert.showAndWait();
 		}
 	}
 	

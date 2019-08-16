@@ -69,6 +69,7 @@ public class ReaderUtility implements ReadListener {
 	
 	private boolean includeTID = true;
 	private boolean includeUSERBANK = true;
+	private Gen2.Select select = null;
 	
 	
 	private ReaderUtility() {
@@ -312,7 +313,7 @@ public class ReaderUtility implements ReadListener {
 			readOp = new Gen2.ReadData(memBanks, 0, (byte) 0);
 		}
 		
-		SimpleReadPlan plan = new SimpleReadPlan(antenna, TagProtocol.GEN2, null, readOp, 1000);
+		SimpleReadPlan plan = new SimpleReadPlan(antenna, TagProtocol.GEN2, select, readOp, 1000);
         myReader.paramSet(TMConstants.TMR_PARAM_READ_PLAN, plan);
         
         // set up the timeout value
@@ -348,6 +349,7 @@ public class ReaderUtility implements ReadListener {
 			counter = -1;
 		}
 		isReading = false;
+//		select = null;
 		
 		DigitalIOController.getInstance().turnOnOutput();
 	}
@@ -714,5 +716,21 @@ public class ReaderUtility implements ReadListener {
 	
 	public void includeUSERBANK(boolean include) {
 		includeUSERBANK = include;
+	}
+	
+	public void setEPCFilter(byte[] data) {
+		select = new Gen2.Select(false, Gen2.Bank.EPC, 32, data.length*8, data);
+	}
+	
+	public void setEPCFilter(int bitPointer, int bitLength, byte[] data) {
+		select = new Gen2.Select(false, Gen2.Bank.EPC, bitPointer, bitLength, data);
+	}
+	
+	public void setFilter(Gen2.Bank bank, int bitPointer, int bitLength, byte[] data) {
+		select = new Gen2.Select(false, bank, bitPointer, bitLength, data);
+	}
+	
+	public void resetFilter() {
+		select = null;
 	}
 }

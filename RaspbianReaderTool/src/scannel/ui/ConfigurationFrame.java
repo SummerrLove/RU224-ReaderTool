@@ -127,11 +127,11 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 		this.getChildren().add(cb_region);
 		
 		
-//		rb_volume = new RadioButton("High Tag Volume");
-//		rb_volume.setOnAction(this);
-//		AnchorPane.setLeftAnchor(rb_volume, 30.0);
-//		AnchorPane.setTopAnchor(rb_volume, 320.0);
-//		this.getChildren().add(rb_volume);
+		rb_volume = new RadioButton("High Tag Volume");
+		rb_volume.setOnAction(this);
+		AnchorPane.setLeftAnchor(rb_volume, 30.0);
+		AnchorPane.setTopAnchor(rb_volume, 320.0);
+		this.getChildren().add(rb_volume);
 		
 		rb_tid = new RadioButton("show TID");
 		rb_tid.setOnAction(this);
@@ -264,11 +264,11 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 			this.setTargetFlag(cb_target.getSelectionModel().getSelectedItem());
 			this.setRegion(cb_region.getSelectionModel().getSelectedItem());
 			
-//			if (rb_volume.isSelected()) {
-//				ReaderUtility.getInstance().setRefreshRate(30);
-//			} else {
-//				ReaderUtility.getInstance().setRefreshRate(1);
-//			}
+			if (rb_volume.isSelected()) {
+				ReaderUtility.getInstance().setRefreshRate(20);
+			} else {
+				ReaderUtility.getInstance().setRefreshRate(1);
+			}
 			
 //			if (ACTIVATE_HOPTABLE && rb_hoptable.isSelected()) {
 //				// Use user-defined frequency list

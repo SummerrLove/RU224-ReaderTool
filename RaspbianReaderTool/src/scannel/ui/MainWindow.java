@@ -18,6 +18,8 @@ public class MainWindow extends TabPane implements EventHandler<Event> {
 	private DigitalIOSettingFrame io_window;
 	private Tab decodeTab;
 	private DecodeSettingFrame decode_window;
+	private Tab filterTab;
+	private FilterSettingFrame filter_window;
 	
 	
 	public MainWindow() {
@@ -59,7 +61,14 @@ public class MainWindow extends TabPane implements EventHandler<Event> {
 		decodeTab.setContent(decode_window);
 		decodeTab.setOnSelectionChanged(this);
 		
-		this.getTabs().addAll(readTab, writeTab, saveTab, ioTab, decodeTab);
+		filterTab = new Tab("Filter");
+		filterTab.setClosable(false);
+		filter_window = new FilterSettingFrame();
+		filterTab.setContent(filter_window);
+		filterTab.setOnSelectionChanged(this);
+		
+		
+		this.getTabs().addAll(readTab, filterTab, writeTab, saveTab, ioTab, decodeTab);
 //		this.getTabs().addAll(readTab, writeTab);
 //		this.setStyle("-fx-background-color: #F0F0F0;");
 	}

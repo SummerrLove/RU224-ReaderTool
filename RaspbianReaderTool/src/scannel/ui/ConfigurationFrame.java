@@ -127,7 +127,7 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 		this.getChildren().add(cb_region);
 		
 		
-		rb_volume = new RadioButton("High Tag Volume");
+		rb_volume = new RadioButton("large tag quantity");
 		rb_volume.setOnAction(this);
 		AnchorPane.setLeftAnchor(rb_volume, 30.0);
 		AnchorPane.setTopAnchor(rb_volume, 320.0);

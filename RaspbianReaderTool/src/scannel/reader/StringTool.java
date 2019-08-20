@@ -34,6 +34,10 @@ public class StringTool {
 		return str.matches("[0-9a-fA-F]+");
 	}
 	
+	public static boolean isBinaryString(String str) {
+		return str.matches("[01]+");
+	}
+	
 	public static short[] toShortArray(String str) {
 		if (str==null || !isHexString(str)) {
 			MyLogger.printLog("Not hex string: "+str);
@@ -51,6 +55,27 @@ public class StringTool {
 			data[i] = Short.parseShort(temp, 16);
 		}
 		
+		return data;
+	}
+	
+	/**
+	 * Convert a binary string into a byte array which is used as mask data is Select function. 
+	 * This method add 0 to the end if the remain of the string is less than 8 digits. Therefore, the 
+	 * return result may be different from regular conversion.
+	 *  
+	 * @param str the binary string to be converted
+	 * @return the byte array
+	 */
+	public static byte[] toByteArray(String str) {
+		if (str==null || !isBinaryString(str)) {
+			return null;
+		}
+		
+		while (str.length()%8 != 0) {
+			str += "0";
+		}
+		
+		byte[] data = DatatypeConverter.parseHexBinary(Integer.toHexString(Integer.parseInt(str, 2)));
 		return data;
 	}
 }

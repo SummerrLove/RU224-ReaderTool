@@ -18,6 +18,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import scannel.reader.ReaderUtility;
+import scannel.reader.StringTool;
 
 public class FilterSettingFrame extends AnchorPane implements EventHandler<ActionEvent> {
 
@@ -70,7 +71,7 @@ public class FilterSettingFrame extends AnchorPane implements EventHandler<Actio
 		
 		filter = new TextField();
 		filter.setFont(Font.font("Arial", FontWeight.NORMAL, 30));
-		filter.setPromptText("Input even-length hex string");
+		filter.setPromptText("Input binary string");
 		filter.setPrefWidth(500);
 		filter.setDisable(true);
 		AnchorPane.setLeftAnchor(filter, 30.0);
@@ -110,16 +111,30 @@ public class FilterSettingFrame extends AnchorPane implements EventHandler<Actio
 			}
 			
 			// disable input if neither of the memory bank is selected
-			filter.setDisable(!rb_epc.isSelected() && !rb_userMem.isSelected());
-			bitPointer.setDisable(!rb_epc.isSelected() && !rb_userMem.isSelected());
+			if (!rb_epc.isSelected() && !rb_userMem.isSelected()) {
+				filter.setDisable(true);
+				filter.setText("");
+				bitPointer.setDisable(true);
+				bitPointer.setText("");
+			} else {
+				filter.setDisable(false);
+				bitPointer.setDisable(false);
+			}
 		} else if (event.getSource() == rb_userMem) {
 			if (rb_epc.isSelected() && rb_userMem.isSelected()) {
 				rb_epc.setSelected(false);
 			}
 			
 			// disable input if neither of the memory banks is selected
-			filter.setDisable(!rb_epc.isSelected() && !rb_userMem.isSelected());
-			bitPointer.setDisable(!rb_epc.isSelected() && !rb_userMem.isSelected());
+			if (!rb_epc.isSelected() && !rb_userMem.isSelected()) {
+				filter.setDisable(true);
+				filter.setText("");
+				bitPointer.setDisable(true);
+				bitPointer.setText("");
+			} else {
+				filter.setDisable(false);
+				bitPointer.setDisable(false);
+			}
 		} else if (event.getSource() == btn_apply) {
 			if (!rb_epc.isSelected() && !rb_userMem.isSelected()) {
 				// if neither of the memory banks is selected, remove the filter
@@ -127,17 +142,25 @@ public class FilterSettingFrame extends AnchorPane implements EventHandler<Actio
 			} else {
 				Gen2.Bank bank = null;
 				try {
-					byte[] data = DatatypeConverter.parseHexBinary(filter.getText());
-					int pointer = Integer.parseInt(bitPointer.getText());
-					if (rb_epc.isSelected()) {
-						bank = Bank.EPC;
-						// the data in EPC bank before bit 32 is meta-data
-						pointer += 32;
-					} else if (rb_userMem.isSelected()) {
-						bank = Bank.USER;
+					byte[] data = StringTool.toByteArray(filter.getText());
+					if (data == null) {
+						Alert alert = new Alert(AlertType.ERROR);
+						alert.setTitle("Error");
+						alert.setHeaderText(null);
+						alert.setContentText("Please input valid binary string...");
+						alert.showAndWait();
+					} else {
+						int pointer = Integer.parseInt(bitPointer.getText());
+						if (rb_epc.isSelected()) {
+							bank = Bank.EPC;
+							// the data in EPC bank before bit 32 is meta-data
+							pointer += 32;
+						} else if (rb_userMem.isSelected()) {
+							bank = Bank.USER;
+						}
+						
+						ReaderUtility.getInstance().setFilter(bank, pointer, filter.getText().length(), data);
 					}
-					
-					ReaderUtility.getInstance().setFilter(bank, pointer, data.length*8, data);
 				} catch (IllegalArgumentException e) {
 					e.printStackTrace();
 					

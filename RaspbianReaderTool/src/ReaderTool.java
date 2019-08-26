@@ -8,8 +8,8 @@ import scannel.ui.MainWindow;
 
 public class ReaderTool extends Application {
 
-	private final static String version = "v1.11.04 - basic";
-	private final static String subject = "EPC/UserMemory Filter";
+	private final static String version = "v1.31.05 - basic";
+	private final static String subject = "Real-time Inventory";
 
 	@Override
 	public void start(Stage mainStage) throws Exception {

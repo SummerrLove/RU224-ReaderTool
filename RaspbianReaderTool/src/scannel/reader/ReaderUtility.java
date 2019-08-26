@@ -37,6 +37,7 @@ public class ReaderUtility implements ReadListener {
 	private static ReaderUtility ru;
 	private static Reader myReader;
 	private static TagList tagReadList;
+	private TagList tempList;
 	private static Timer readTimer;
 	private static TimerTask task;
 	
@@ -54,17 +55,17 @@ public class ReaderUtility implements ReadListener {
 	private final static String URI_PORT = "4001";
 	
 	
-	private final static long INTERVAL = 300;
+	private long INTERVAL = 400;
 	private final static int TIMEOUT = 60000;
 	
 	public static boolean USE_TIMER = true;
-	public final static int READ_TIME = 100;
+	private int READ_TIME = 300;
 	public final static String FILE_DIRECTORY = "./saveData/";
 	
 	private int counter = -1;
 	private int prev_tagNum = -1;
 	private long startTime;
-	private float total_inventory_time;
+//	private float total_inventory_time;
 	private int refresh_rate = 1;
 	
 	private boolean includeTID = true;
@@ -97,6 +98,11 @@ public class ReaderUtility implements ReadListener {
 		if (tagReadList != null) {
 			tagReadList.reset();
 			tagReadList = null;
+		}
+		
+		if (tempList != null) {
+			tempList.reset();
+			tempList = null;
 		}
 		
 		if (ru != null) {
@@ -270,11 +276,11 @@ public class ReaderUtility implements ReadListener {
 			return;
 		}
 		
-		if (ReaderConfig.getInstance().getDOTrigger()) {
+//		if (ReaderConfig.getInstance().getDOTrigger()) {
 			USE_TIMER = true;
-		} else {
-			USE_TIMER = false;
-		}
+//		} else {
+//			USE_TIMER = false;
+//		}
 		
 		//============================================================
 //		myReader.paramSet(TMConstants.TMR_PARAM_GEN2_TAGENCODING, Gen2.TagEncoding.FM0);
@@ -329,7 +335,7 @@ public class ReaderUtility implements ReadListener {
         	myReader.addReadListener(this);
         	myReader.startReading();
         	startTime = System.currentTimeMillis();
-        	total_inventory_time = 0;
+//        	total_inventory_time = 0;
         }
         
 		isReading = true;
@@ -359,10 +365,14 @@ public class ReaderUtility implements ReadListener {
 			tagReadList.reset();
 		}
 		
+		if (tempList != null) {
+			tempList.reset();
+		}
+		
 		counter = 0;
     	prev_tagNum = -1;
     	startTime = System.currentTimeMillis();
-    	total_inventory_time = 0;
+//    	total_inventory_time = 0;
 		
 		if (updateListener != null) {
 			updateListener.dataUpdate();
@@ -394,9 +404,13 @@ public class ReaderUtility implements ReadListener {
 	}
 	
 	private void parseTagData(TagReadData[] trd){
+		tempList = new TagList();
+		
 		for (int i=0; i<trd.length; i++){
 			parseTagData(trd[i]);
 		}
+		
+		tagReadList = tempList;
 	}
 
 	private void parseTagData(TagReadData trd) {
@@ -404,7 +418,8 @@ public class ReaderUtility implements ReadListener {
 		if ((filter_str != null) && !trd.epcString().startsWith(filter_str)) {
 			return;
 		}
-		tagReadList.addTag(trd);
+//		tagReadList.addTag(trd);
+		tempList.addTag(trd);
 	}
 	
 	private void readData() {
@@ -442,8 +457,8 @@ public class ReaderUtility implements ReadListener {
 		counter++;
 		if (tagReadList.size() != prev_tagNum) {
 			prev_tagNum = tagReadList.size();
-			this.total_inventory_time = (float)(System.currentTimeMillis()-startTime)/1000;
-			System.out.println("Total tag = "+prev_tagNum+", Total inventory time = "+total_inventory_time);
+//			this.total_inventory_time = (float)(System.currentTimeMillis()-startTime)/1000;
+//			System.out.println("Total tag = "+prev_tagNum+", Total inventory time = "+total_inventory_time);
 		}
 		
 		if (counter > refresh_rate) {
@@ -581,9 +596,9 @@ public class ReaderUtility implements ReadListener {
 		myReader.executeTagOp(new Gen2.WriteTag(data), target);
 	}
 	
-	public float getTotalInventoryTime() {
-		return total_inventory_time;
-	}
+//	public float getTotalInventoryTime() {
+//		return total_inventory_time;
+//	}
 	
 	public void setRefreshRate(int value) {
 		if (value > 0) {
@@ -732,5 +747,17 @@ public class ReaderUtility implements ReadListener {
 	
 	public void resetFilter() {
 		select = null;
+	}
+	
+	public void setReadTime(int readTime) {
+		if (readTime > 0) {
+			READ_TIME = readTime;
+			INTERVAL = READ_TIME+100;
+		}
+	}
+	
+	public void resetReadTime() {
+		READ_TIME = 300;
+		INTERVAL = 400;
 	}
 }

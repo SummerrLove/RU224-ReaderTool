@@ -31,7 +31,7 @@ public class DataFrame extends AnchorPane implements DataUpdateListener, EventHa
 	private Label icon;
 	private ObservableList<TagTableData> dataList = FXCollections.observableArrayList();
 	private SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-	private Label total_inventory_time;
+//	private Label total_inventory_time;
 	
 	
 	public DataFrame() {
@@ -69,12 +69,12 @@ public class DataFrame extends AnchorPane implements DataUpdateListener, EventHa
 		AnchorPane.setTopAnchor(icon, 10.0);
 		this.getChildren().add(icon);
 		
-		total_inventory_time = new Label();
-		total_inventory_time.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-		total_inventory_time.setAlignment(Pos.CENTER);
-		AnchorPane.setLeftAnchor(total_inventory_time, 50.0);
-		AnchorPane.setTopAnchor(total_inventory_time, 440.0);
-		this.getChildren().add(total_inventory_time);
+//		total_inventory_time = new Label();
+//		total_inventory_time.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+//		total_inventory_time.setAlignment(Pos.CENTER);
+//		AnchorPane.setLeftAnchor(total_inventory_time, 50.0);
+//		AnchorPane.setTopAnchor(total_inventory_time, 440.0);
+//		this.getChildren().add(total_inventory_time);
 	}
 	
 	private void setDisplayNumber(int num) {
@@ -119,11 +119,11 @@ public class DataFrame extends AnchorPane implements DataUpdateListener, EventHa
 			setDisplayNumber(0);
 		}
 		
-		if (!ReaderConfig.getInstance().getDOTrigger()) {
-			total_inventory_time.setText(Float.toString(ReaderUtility.getInstance().getTotalInventoryTime()) + " sec");
-		} else {
-			total_inventory_time.setText("");
-		}
+//		if (!ReaderConfig.getInstance().getDOTrigger()) {
+//			total_inventory_time.setText(Float.toString(ReaderUtility.getInstance().getTotalInventoryTime()) + " sec");
+//		} else {
+//			total_inventory_time.setText("");
+//		}
 		
 		table.setTableData(dataList);
 		
@@ -137,7 +137,7 @@ public class DataFrame extends AnchorPane implements DataUpdateListener, EventHa
 	public void resetDisplayData() {
 		setDisplayNumber(0);
 		clearTableData();
-		total_inventory_time.setText("");
+//		total_inventory_time.setText("");
 	}
 	
 }

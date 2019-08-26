@@ -47,8 +47,8 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 	private ChoiceBox<Region> cb_region;
 	private Button btn_start;
 	private Button btn_reset;
-	private TextField filter;
-	private RadioButton rb_volume;
+	private TextField inventory_time;
+//	private RadioButton rb_volume;
 	private RadioButton rb_tid;
 	private RadioButton rb_userbank;
 //	private RadioButton rb_hoptable;
@@ -127,11 +127,11 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 		this.getChildren().add(cb_region);
 		
 		
-		rb_volume = new RadioButton("large tag quantity");
-		rb_volume.setOnAction(this);
-		AnchorPane.setLeftAnchor(rb_volume, 30.0);
-		AnchorPane.setTopAnchor(rb_volume, 320.0);
-		this.getChildren().add(rb_volume);
+//		rb_volume = new RadioButton("large tag quantity");
+//		rb_volume.setOnAction(this);
+//		AnchorPane.setLeftAnchor(rb_volume, 30.0);
+//		AnchorPane.setTopAnchor(rb_volume, 320.0);
+//		this.getChildren().add(rb_volume);
 		
 		rb_tid = new RadioButton("show TID");
 		rb_tid.setOnAction(this);
@@ -145,17 +145,23 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 		AnchorPane.setTopAnchor(rb_userbank, 380.0);
 		this.getChildren().add(rb_userbank);
 		
-//		Label filter_title = new Label("EPC filter:");
-//		filter_title.setFont(Font.font("Arial", FontWeight.BOLD, 16));
-//		AnchorPane.setLeftAnchor(filter_title, 30.0);
-//		AnchorPane.setTopAnchor(filter_title, 420.0);
-//		this.getChildren().add(filter_title);
-//		
-//		filter = new TextField();
-//		filter.setPromptText("Input even-length hex string.");
-//		AnchorPane.setLeftAnchor(filter, 30.0);
-//		AnchorPane.setTopAnchor(filter, 450.0);
-//		this.getChildren().add(filter);
+		Label time_title = new Label("Inventory time:");
+		time_title.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+		AnchorPane.setLeftAnchor(time_title, 30.0);
+		AnchorPane.setTopAnchor(time_title, 420.0);
+		this.getChildren().add(time_title);
+		
+		inventory_time = new TextField();
+		inventory_time.setPrefWidth(50);
+		AnchorPane.setLeftAnchor(inventory_time, 30.0);
+		AnchorPane.setTopAnchor(inventory_time, 450.0);
+		this.getChildren().add(inventory_time);
+		
+		Label millisecond = new Label("ms");
+		millisecond.setFont(Font.font("Arial", FontWeight.NORMAL, 16));
+		AnchorPane.setLeftAnchor(millisecond, 85.0);
+		AnchorPane.setTopAnchor(millisecond, 450.0);
+		this.getChildren().add(millisecond);
 		
 		
 //		Separator separator = new Separator();
@@ -264,11 +270,11 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 			this.setTargetFlag(cb_target.getSelectionModel().getSelectedItem());
 			this.setRegion(cb_region.getSelectionModel().getSelectedItem());
 			
-			if (rb_volume.isSelected()) {
-				ReaderUtility.getInstance().setRefreshRate(20);
-			} else {
-				ReaderUtility.getInstance().setRefreshRate(1);
-			}
+//			if (rb_volume.isSelected()) {
+//				ReaderUtility.getInstance().setRefreshRate(20);
+//			} else {
+//				ReaderUtility.getInstance().setRefreshRate(1);
+//			}
 			
 //			if (ACTIVATE_HOPTABLE && rb_hoptable.isSelected()) {
 //				// Use user-defined frequency list
@@ -281,6 +287,18 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 			
 			ReaderUtility.getInstance().includeTID(rb_tid.isSelected());
 			ReaderUtility.getInstance().includeUSERBANK(rb_userbank.isSelected());
+			try {
+				ReaderUtility.getInstance().setReadTime(Integer.parseInt(inventory_time.getText()));
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+				
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("Error");
+				alert.setHeaderText(null);
+				alert.setContentText("Incorrect number format!");
+				alert.showAndWait();
+				return;
+			}
 			
 			int[] ant_setting = antenna_list.getAntennaList();
 			ReaderConfig.getInstance().setAntennaList(ant_setting);

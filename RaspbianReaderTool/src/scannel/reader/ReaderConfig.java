@@ -147,6 +147,8 @@ public class ReaderConfig {
 		case SG:
 			config_properties.setProperty(KEY_REGION, "SG");
 			break;
+		case OPEN:
+			config_properties.setProperty(KEY_REGION, "OPEN");
 		default:
 			break;
 		}
@@ -370,6 +372,7 @@ public class ReaderConfig {
 		regionMap.put("MO", Region.MO);
 		regionMap.put("RU", Region.RU);
 		regionMap.put("SG", Region.SG);
+		regionMap.put("OPEN", Region.OPEN);
 		
 	}
 	

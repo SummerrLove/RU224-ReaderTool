@@ -318,6 +318,145 @@ public class GS1Decoder {
 		}
 	}
 	
+	public String parseEPCString(String epcString) {
+		hexString = epcString;
+		header = epcString.substring(0, 2);
+		
+		if (header.equals("2C")) {
+			// GDTI-96
+			schema = EPC_SCHEMA.GDTI_96;
+			MyLogger.printLog(schema.name());
+			encode_length = 96;
+			return this.parseGDTI96HexString(hexString);
+		} else if (header.equals("2D")) {
+			// GSRN-96
+			schema = EPC_SCHEMA.GSRN_96;
+			MyLogger.printLog(schema.name());
+			encode_length = 96;
+			return this.parseGSRNHexString(hexString);
+		} else if (header.equals("2E")) {
+			// GSRNP
+			schema = EPC_SCHEMA.GSRNP;
+			MyLogger.printLog(schema.name());
+			encode_length = 96;
+			return this.parseGSRNHexString(hexString);
+		} else if (header.equals("2F")) {
+			// USDoD-96
+			schema = EPC_SCHEMA.USDoD_96;
+			MyLogger.printLog(schema.name());
+			encode_length = 96;
+			return this.parseUSDOD96HexString(hexString);
+		} else if (header.equals("30")) {
+			// SGTIN-96
+			schema = EPC_SCHEMA.SGTIN_96;
+			MyLogger.printLog(schema.name());
+			encode_length = 96;
+			return this.parseSGTIN96HexString(hexString);
+		} else if (header.equals("31")) {
+			// SSCC-96
+			schema = EPC_SCHEMA.SSCC_96;
+			MyLogger.printLog(schema.name());
+			encode_length = 96;
+			return this.parseSSCC96HexString(hexString);
+		} else if (header.equals("32")) {
+			// SGLN-96
+			schema = EPC_SCHEMA.SGLN_96;
+			MyLogger.printLog(schema.name());
+			encode_length = 96;
+			return this.parseSGLN96HexString(hexString);
+		} else if (header.equals("33")) {
+			// GRAI-96
+			schema = EPC_SCHEMA.GRAI_96;
+			MyLogger.printLog(schema.name());
+			encode_length = 96;
+			return this.parseGRAI96HexString(hexString);
+		} else if (header.equals("34")) {
+			// GIAI-96
+			schema = EPC_SCHEMA.GIAI_96;
+			MyLogger.printLog(schema.name());
+			encode_length = 96;
+			return this.parseGIAI96HexString(hexString);
+		} else if (header.equals("35")) {
+			// GID-96
+			schema = EPC_SCHEMA.GID_96;
+			MyLogger.printLog(schema.name());
+			encode_length = 96;
+			return this.parseGID96HexString(hexString);
+		} else if (header.equals("36")) {
+			// SGTIN-198
+			schema = EPC_SCHEMA.SGTIN_198;
+			MyLogger.printLog(schema.name());
+			encode_length = 198;
+			return this.parseSGTIN198HexString(hexString);
+		} else if (header.equals("37")) {
+			// GRAI-170
+			schema = EPC_SCHEMA.GRAI_170;
+			MyLogger.printLog(schema.name());
+			encode_length = 170;
+			return this.parseGRAI170HexString(hexString);
+		} else if (header.equals("38")) {
+			// GIAI-202
+			schema = EPC_SCHEMA.GIAI_202;
+			MyLogger.printLog(schema.name());
+			encode_length = 202;
+			return this.parseGIAI202HexString(hexString);
+		} else if (header.equals("39")) {
+			// SGLN-195
+			schema = EPC_SCHEMA.SGLN_195;
+			MyLogger.printLog(schema.name());
+			encode_length = 195;
+			return this.parseSGLN195HexString(hexString);
+		} else if (header.equals("3A")) {
+			// GDTI-113
+			schema = EPC_SCHEMA.GDTI_113;
+			MyLogger.printLog(schema.name());
+			encode_length = 113;
+			return this.parseGDTI113HexString(hexString);
+		} else if (header.equals("3B")) {
+			// ADI-var
+			schema = EPC_SCHEMA.ADI_var;
+			MyLogger.printLog(schema.name());
+			return this.parseADIvarHexString(hexString);
+		} else if (header.equals("3C")) {
+			// CPI-96
+			schema = EPC_SCHEMA.CPI_96;
+			MyLogger.printLog(schema.name());
+			encode_length = 96;
+			return this.parseCPI96HexString(hexString);
+		} else if (header.equals("3D")) {
+			// CPI-var
+			schema = EPC_SCHEMA.CPI_var;
+			MyLogger.printLog(schema.name());
+			return this.parseCPIvarHexString(hexString);
+		} else if (header.equals("3E")) {
+			// GDTI-174
+			schema = EPC_SCHEMA.GDTI_174;
+			MyLogger.printLog(schema.name());
+			encode_length = 174;
+			return this.parseGDTI174HexString(hexString);
+		} else if (header.equals("3F")) {
+			// SGCN-96
+			schema = EPC_SCHEMA.SGCN_96;
+			MyLogger.printLog(schema.name());
+			encode_length = 96;
+			return this.parseSGCN96HexString(hexString);
+		} else if (header.equals("40")) {
+			// ITIP-110
+			schema = EPC_SCHEMA.ITIP_110;
+			MyLogger.printLog(schema.name());
+			encode_length = 110;
+			return this.parseITIP110HexString(hexString);
+		} else if (header.equals("41")) {
+			// ITIP-212
+			schema = EPC_SCHEMA.ITIP_212;
+			MyLogger.printLog(schema.name());
+			encode_length = 212;
+			return this.parseITIP212HexString(hexString);
+		} else {
+			return null;
+		}
+	}
+	
 	private void parseSGTINPartition(int partition) {
 		switch (partition) {
 		case 0:

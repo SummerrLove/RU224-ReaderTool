@@ -47,7 +47,7 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 	private ChoiceBox<Region> cb_region;
 	private Button btn_start;
 	private Button btn_reset;
-	private TextField filter;
+	private TextField dwellTime;
 	private RadioButton rb_volume;
 	private RadioButton rb_tid;
 	private RadioButton rb_userbank;
@@ -145,17 +145,17 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 		AnchorPane.setTopAnchor(rb_userbank, 380.0);
 		this.getChildren().add(rb_userbank);
 		
-//		Label filter_title = new Label("EPC filter:");
-//		filter_title.setFont(Font.font("Arial", FontWeight.BOLD, 16));
-//		AnchorPane.setLeftAnchor(filter_title, 30.0);
-//		AnchorPane.setTopAnchor(filter_title, 420.0);
-//		this.getChildren().add(filter_title);
-//		
-//		filter = new TextField();
-//		filter.setPromptText("Input even-length hex string.");
-//		AnchorPane.setLeftAnchor(filter, 30.0);
-//		AnchorPane.setTopAnchor(filter, 450.0);
-//		this.getChildren().add(filter);
+		Label dwelltime_title = new Label("Dwell Time:");
+		dwelltime_title.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+		AnchorPane.setLeftAnchor(dwelltime_title, 30.0);
+		AnchorPane.setTopAnchor(dwelltime_title, 420.0);
+		this.getChildren().add(dwelltime_title);
+		
+		dwellTime = new TextField();
+		dwellTime.setPromptText("in millisecond");
+		AnchorPane.setLeftAnchor(dwellTime, 30.0);
+		AnchorPane.setTopAnchor(dwellTime, 450.0);
+		this.getChildren().add(dwellTime);
 		
 		
 //		Separator separator = new Separator();
@@ -263,6 +263,7 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 			this.setSession(cb_session.getSelectionModel().getSelectedItem());
 			this.setTargetFlag(cb_target.getSelectionModel().getSelectedItem());
 			this.setRegion(cb_region.getSelectionModel().getSelectedItem());
+//			this.setRegion(Region.OPEN_EXTENDED);
 			
 			if (rb_volume.isSelected()) {
 				ReaderUtility.getInstance().setRefreshRate(20);
@@ -281,6 +282,8 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 			
 			ReaderUtility.getInstance().includeTID(rb_tid.isSelected());
 			ReaderUtility.getInstance().includeUSERBANK(rb_userbank.isSelected());
+			int dt = Integer.parseInt(dwellTime.getText());
+			ReaderUtility.getInstance().setDwellTime(dt);
 			
 			int[] ant_setting = antenna_list.getAntennaList();
 			ReaderConfig.getInstance().setAntennaList(ant_setting);

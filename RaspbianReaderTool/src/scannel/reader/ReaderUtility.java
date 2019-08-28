@@ -733,4 +733,13 @@ public class ReaderUtility implements ReadListener {
 	public void resetFilter() {
 		select = null;
 	}
+	
+	public void setDwellTime(int time) throws ReaderException {
+		if (myReader == null) {
+			System.out.println("Reader is not initialized...");
+			return;
+		}
+		
+		myReader.paramSet(TMConstants.TMR_PARAM_REGION_DWELL_TIME, time);
+	}
 }

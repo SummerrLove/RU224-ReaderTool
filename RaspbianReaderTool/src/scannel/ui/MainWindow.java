@@ -1,5 +1,7 @@
 package scannel.ui;
 
+import com.thingmagic.ReaderException;
+
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.control.Tab;
@@ -16,8 +18,8 @@ public class MainWindow extends TabPane implements EventHandler<Event> {
 	private SaveDataFrame save_window;
 	private Tab ioTab;
 	private DigitalIOSettingFrame io_window;
-//	private Tab decodeTab;
-//	private DecodeSettingFrame decode_window;
+	private Tab hopTableTab;
+	private HopTableFrame hopTable_window;
 	private Tab filterTab;
 	private FilterSettingFrame filter_window;
 	
@@ -55,11 +57,11 @@ public class MainWindow extends TabPane implements EventHandler<Event> {
 		ioTab.setContent(io_window);
 		ioTab.setOnSelectionChanged(this);
 		
-//		decodeTab = new Tab("EPC Decode Setting");
-//		decodeTab.setClosable(false);
-//		decode_window = new DecodeSettingFrame();
-//		decodeTab.setContent(decode_window);
-//		decodeTab.setOnSelectionChanged(this);
+		hopTableTab = new Tab("Hop Table");
+		hopTableTab.setClosable(false);
+		hopTable_window = new HopTableFrame();
+		hopTableTab.setContent(hopTable_window);
+		hopTableTab.setOnSelectionChanged(this);
 		
 		filterTab = new Tab("Filter");
 		filterTab.setClosable(false);
@@ -68,7 +70,7 @@ public class MainWindow extends TabPane implements EventHandler<Event> {
 		filterTab.setOnSelectionChanged(this);
 		
 		
-		this.getTabs().addAll(readTab, filterTab, writeTab, saveTab, ioTab);
+		this.getTabs().addAll(readTab, hopTableTab, filterTab, writeTab, saveTab, ioTab);
 //		this.getTabs().addAll(readTab, writeTab);
 //		this.setStyle("-fx-background-color: #F0F0F0;");
 	}
@@ -87,6 +89,18 @@ public class MainWindow extends TabPane implements EventHandler<Event> {
 		if (readTab.isSelected()) {
 			read_window.checkDITrigger();
 		} 
+		
+		if ((event.getSource() == hopTableTab) && hopTableTab.isSelected()) {
+			hopTable_window.enableInput(ReaderUtility.getInstance().isConnected());
+			
+			if (ReaderUtility.getInstance().isConnected()) {
+				try {
+					hopTable_window.setHopTableText(ReaderUtility.getInstance().getHopTable());
+				} catch (ReaderException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 		
 //		if ((event.getSource() == decodeTab) && decodeTab.isSelected()) {
 //			decode_window.disableReadFunction(!ReaderUtility.getInstance().isConnected());

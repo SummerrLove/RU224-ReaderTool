@@ -22,6 +22,8 @@ public class MainWindow extends TabPane implements EventHandler<Event> {
 	private HopTableFrame hopTable_window;
 	private Tab filterTab;
 	private FilterSettingFrame filter_window;
+	private Tab regulatoryTab;
+	private RegulatoryTestFrame regulatory_window;
 	
 	
 	public MainWindow() {
@@ -69,8 +71,13 @@ public class MainWindow extends TabPane implements EventHandler<Event> {
 		filterTab.setContent(filter_window);
 		filterTab.setOnSelectionChanged(this);
 		
+		regulatoryTab = new Tab("Regulatory Test");
+		regulatoryTab.setClosable(false);
+		regulatory_window = new RegulatoryTestFrame();
+		regulatoryTab.setContent(regulatory_window);
+		regulatoryTab.setOnSelectionChanged(this);
 		
-		this.getTabs().addAll(readTab, hopTableTab, filterTab, writeTab, saveTab, ioTab);
+		this.getTabs().addAll(readTab, hopTableTab, regulatoryTab, filterTab, writeTab, saveTab, ioTab);
 //		this.getTabs().addAll(readTab, writeTab);
 //		this.setStyle("-fx-background-color: #F0F0F0;");
 	}

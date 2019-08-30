@@ -735,14 +735,14 @@ public class ReaderUtility implements ReadListener, Runnable {
 		select = null;
 	}
 	
-	public void setDwellTime(int time) throws ReaderException {
-		if (myReader == null) {
-			System.out.println("Reader is not initialized...");
-			return;
-		}
-		
-		myReader.paramSet(TMConstants.TMR_PARAM_REGION_DWELL_TIME, time);
-	}
+//	public void setDwellTime(int time) throws ReaderException {
+//		if (myReader == null) {
+//			System.out.println("Reader is not initialized...");
+//			return;
+//		}
+//		
+//		myReader.paramSet(TMConstants.TMR_PARAM_REGION_DWELL_TIME, time);
+//	}
 	
 	public void startRegulatoryTest(int[] antList, Reader.RegulatoryMode mode, Reader.RegulatoryModulation modulation, int onTime, int offTime) throws ReaderException {
 		if (myReader == null) {

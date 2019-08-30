@@ -108,11 +108,32 @@ public class ReaderConfig {
 		case NA:
 			config_properties.setProperty(KEY_REGION, "NA");
 			break;
+		case NA2:
+			config_properties.setProperty(KEY_REGION, "NA2");
+			break;
+		case NA3:
+			config_properties.setProperty(KEY_REGION, "NA3");
+			break;
+		case JP:
+			config_properties.setProperty(KEY_REGION, "JP");
+			break;
+		case JP2:
+			config_properties.setProperty(KEY_REGION, "JP2");
+			break;
+		case JP3:
+			config_properties.setProperty(KEY_REGION, "JP3");
+			break;
 		case IN:
 			config_properties.setProperty(KEY_REGION, "IN");
 			break;
 		case PRC:
 			config_properties.setProperty(KEY_REGION, "PRC");
+			break;
+		case EU:
+			config_properties.setProperty(KEY_REGION, "EU");
+			break;
+		case EU2:
+			config_properties.setProperty(KEY_REGION, "EU2");
 			break;
 		case EU3:
 			config_properties.setProperty(KEY_REGION, "EU3");
@@ -146,6 +167,12 @@ public class ReaderConfig {
 			break;
 		case SG:
 			config_properties.setProperty(KEY_REGION, "SG");
+			break;
+		case OPEN:
+			config_properties.setProperty(KEY_REGION, "OPEN");
+			break;
+		case OPEN_EXTENDED:
+			config_properties.setProperty(KEY_REGION, "OPEN_EXTENDED");
 			break;
 		default:
 			break;
@@ -357,8 +384,13 @@ public class ReaderConfig {
 		}
 		
 		regionMap.put("NA", Region.NA);
+		regionMap.put("NA2", Region.NA2);
+		regionMap.put("NA3", Region.NA3);
 		regionMap.put("IN", Region.IN);
 		regionMap.put("PRC", Region.PRC);
+		regionMap.put("PRC2", Region.PRC2);
+		regionMap.put("EU", Region.EU);
+		regionMap.put("EU2", Region.EU2);
 		regionMap.put("EU3", Region.EU3);
 		regionMap.put("KR2", Region.KR2);
 		regionMap.put("AU", Region.AU);
@@ -370,7 +402,11 @@ public class ReaderConfig {
 		regionMap.put("MO", Region.MO);
 		regionMap.put("RU", Region.RU);
 		regionMap.put("SG", Region.SG);
-		
+		regionMap.put("JP", Region.JP);
+		regionMap.put("JP2", Region.JP2);
+		regionMap.put("JP3", Region.JP3);
+		regionMap.put("OPEN", Region.OPEN);
+		regionMap.put("OPEN_EXTENDED", Region.OPEN_EXTENDED);
 	}
 	
 	public void setDataLocalSave(boolean local_save) {

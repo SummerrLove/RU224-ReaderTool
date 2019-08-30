@@ -145,17 +145,17 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 		AnchorPane.setTopAnchor(rb_userbank, 380.0);
 		this.getChildren().add(rb_userbank);
 		
-		Label dwelltime_title = new Label("Dwell Time:");
-		dwelltime_title.setFont(Font.font("Arial", FontWeight.BOLD, 16));
-		AnchorPane.setLeftAnchor(dwelltime_title, 30.0);
-		AnchorPane.setTopAnchor(dwelltime_title, 420.0);
-		this.getChildren().add(dwelltime_title);
-		
-		dwellTime = new TextField();
-		dwellTime.setPromptText("in millisecond");
-		AnchorPane.setLeftAnchor(dwellTime, 30.0);
-		AnchorPane.setTopAnchor(dwellTime, 450.0);
-		this.getChildren().add(dwellTime);
+//		Label dwelltime_title = new Label("Dwell Time:");
+//		dwelltime_title.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+//		AnchorPane.setLeftAnchor(dwelltime_title, 30.0);
+//		AnchorPane.setTopAnchor(dwelltime_title, 420.0);
+//		this.getChildren().add(dwelltime_title);
+//		
+//		dwellTime = new TextField();
+//		dwellTime.setPromptText("in millisecond");
+//		AnchorPane.setLeftAnchor(dwellTime, 30.0);
+//		AnchorPane.setTopAnchor(dwellTime, 450.0);
+//		this.getChildren().add(dwellTime);
 		
 		
 //		Separator separator = new Separator();
@@ -283,7 +283,7 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 			ReaderUtility.getInstance().includeTID(rb_tid.isSelected());
 			ReaderUtility.getInstance().includeUSERBANK(rb_userbank.isSelected());
 			int dt = Integer.parseInt(dwellTime.getText());
-			ReaderUtility.getInstance().setDwellTime(dt);
+//			ReaderUtility.getInstance().setDwellTime(dt);
 			
 			int[] ant_setting = antenna_list.getAntennaList();
 			ReaderConfig.getInstance().setAntennaList(ant_setting);

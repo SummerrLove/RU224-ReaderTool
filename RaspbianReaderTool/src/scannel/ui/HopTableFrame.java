@@ -55,6 +55,11 @@ public class HopTableFrame extends AnchorPane implements EventHandler<ActionEven
 	public void handle(ActionEvent event) {
 		if (event.getSource() == btn_apply) {
 			FrequencyList = this.parseHopTable(hoptable.getText());
+			try {
+				ReaderUtility.getInstance().setHopTable(FrequencyList);
+			} catch (ReaderException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	

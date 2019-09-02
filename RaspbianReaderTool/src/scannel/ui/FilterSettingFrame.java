@@ -42,7 +42,7 @@ public class FilterSettingFrame extends AnchorPane implements EventHandler<Actio
 		
 		Label title = new Label("Tag Filter");
 		title.setFont(Font.font("Arial", FontWeight.BOLD, 24));
-		AnchorPane.setLeftAnchor(title, 30.0);
+		AnchorPane.setLeftAnchor(title, 50.0);
 		AnchorPane.setTopAnchor(title, 50.0);
 		this.getChildren().add(title);
 		
@@ -50,7 +50,7 @@ public class FilterSettingFrame extends AnchorPane implements EventHandler<Actio
 		rb_epc = new RadioButton("EPC");
 		rb_epc.setFont(Font.font("Arial", FontWeight.NORMAL, 16));
 		rb_epc.setOnAction(this);
-		AnchorPane.setLeftAnchor(rb_epc, 30.0);
+		AnchorPane.setLeftAnchor(rb_epc, 50.0);
 		AnchorPane.setTopAnchor(rb_epc, 100.0);
 		this.getChildren().add(rb_epc);
 		
@@ -58,14 +58,14 @@ public class FilterSettingFrame extends AnchorPane implements EventHandler<Actio
 		rb_userMem = new RadioButton("User Memory");
 		rb_userMem.setFont(Font.font("Arial", FontWeight.NORMAL, 16));
 		rb_userMem.setOnAction(this);
-		AnchorPane.setLeftAnchor(rb_userMem, 130.0);
+		AnchorPane.setLeftAnchor(rb_userMem, 150.0);
 		AnchorPane.setTopAnchor(rb_userMem, 100.0);
 		this.getChildren().add(rb_userMem);
 		
 		
 		Label filter_title = new Label("Mask:");
 		filter_title.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-		AnchorPane.setLeftAnchor(filter_title, 30.0);
+		AnchorPane.setLeftAnchor(filter_title, 50.0);
 		AnchorPane.setTopAnchor(filter_title, 170.0);
 		this.getChildren().add(filter_title);
 		
@@ -74,14 +74,14 @@ public class FilterSettingFrame extends AnchorPane implements EventHandler<Actio
 		filter.setPromptText("Input binary string");
 		filter.setPrefWidth(500);
 		filter.setDisable(true);
-		AnchorPane.setLeftAnchor(filter, 30.0);
+		AnchorPane.setLeftAnchor(filter, 50.0);
 		AnchorPane.setTopAnchor(filter, 210.0);
 		this.getChildren().add(filter);
 		
 		
 		Label butPointer_title = new Label("Starting Bit Position:");
 		butPointer_title.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-		AnchorPane.setLeftAnchor(butPointer_title, 30.0);
+		AnchorPane.setLeftAnchor(butPointer_title, 50.0);
 		AnchorPane.setTopAnchor(butPointer_title, 320.0);
 		this.getChildren().add(butPointer_title);
 		
@@ -90,7 +90,7 @@ public class FilterSettingFrame extends AnchorPane implements EventHandler<Actio
 		bitPointer.setFont(Font.font("Arial", FontWeight.NORMAL, 20));
 		bitPointer.setPrefWidth(100);
 		bitPointer.setDisable(true);
-		AnchorPane.setLeftAnchor(bitPointer, 30.0);
+		AnchorPane.setLeftAnchor(bitPointer, 50.0);
 		AnchorPane.setTopAnchor(bitPointer, 360.0);
 		this.getChildren().add(bitPointer);
 		
@@ -98,7 +98,7 @@ public class FilterSettingFrame extends AnchorPane implements EventHandler<Actio
 		btn_apply = new Button("Apply");
 		btn_apply.setOnAction(this);
 		btn_apply.setFont(Font.font("Arial", FontWeight.NORMAL, 20));
-		AnchorPane.setLeftAnchor(btn_apply, 30.0);
+		AnchorPane.setLeftAnchor(btn_apply, 50.0);
 		AnchorPane.setTopAnchor(btn_apply, 500.0);
 		this.getChildren().add(btn_apply);
 	}

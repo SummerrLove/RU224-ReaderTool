@@ -82,6 +82,7 @@ public class HopTableFrame extends AnchorPane implements EventHandler<ActionEven
 	}
 	
 	public void setHopTableText(int[] frequencyList) {
+		FrequencyList = frequencyList;
 		String text = "";
 		
 		for (int i=0; i<frequencyList.length; i++) {

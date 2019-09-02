@@ -72,6 +72,8 @@ public class ReaderUtility implements ReadListener, Runnable {
 	private Gen2.Select select = null;
 	
 	private static boolean stopRegulatoryTest = true;
+	private static int regOnTime;
+	private static int regOffTime;
 	
 	private ReaderUtility() {
 		// TODO Auto-generated constructor stub
@@ -807,10 +809,30 @@ public class ReaderUtility implements ReadListener, Runnable {
 
 	@Override
 	public void run() {
+		int[] frequencyList = null;
+		try {
+			frequencyList = this.getHopTable();
+		} catch (ReaderException e2) {
+			e2.printStackTrace();
+			return;
+		}
+		for (int i=0; i<frequencyList.length; i++) {
+			System.out.println(i+": "+frequencyList[i]);
+		}
+
+		int counter = 0;
+		int[] hoptable = new int[1];
 		while (!stopRegulatoryTest) {
 			try {
+				hoptable[0] = frequencyList[counter];
 				System.out.println("Temperature: " + myReader.paramGet(TMConstants.TMR_PARAM_RADIO_TEMPERATURE));
-				Thread.sleep(1000);
+				
+				this.setHopTable(hoptable);
+				myReader.paramSet("/reader/regulatory/enable", true);
+				myReader.paramSet(TMConstants.TMR_PARAM_COMMANDTIMEOUT, (regOnTime + regOffTime));
+				Thread.sleep(regOnTime + regOffTime + 200);
+				myReader.paramSet("/reader/regulatory/enable", false);
+				
 			} catch (ReaderException e) {
 				if (e.getMessage().equalsIgnoreCase("The module has exceeded the maximum or minimum operating temperature "
 						+ "and will not allow an RF operation until it is back in range")) {
@@ -824,7 +846,53 @@ public class ReaderUtility implements ReadListener, Runnable {
 				e.printStackTrace();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
+			} finally {
+				counter++;
+				System.out.println("counter: "+counter);
+				if (counter >= frequencyList.length) {
+					stopRegulatoryTest = true;
+				}
 			}
+		}
+	}
+	
+	public void startRegulatoryTest(Reader.RegulatoryModulation modulation, int onTime, int offTime) throws ReaderException {
+		if (myReader == null) {
+			MyLogger.printLog("Reader is not initialized...");
+			return;
+		}
+		
+		regOnTime = onTime;
+		regOffTime = offTime;
+		stopRegulatoryTest = false;
+		try {
+			this.setRegion(ReaderConfig.getInstance().getRegion());
+			myReader.paramSet("/reader/regulatory/mode", Reader.RegulatoryMode.CONTINUOUS); 
+			myReader.paramSet("/reader/regulatory/modulation", modulation);
+			myReader.paramSet("/reader/regulatory/onTime", onTime);
+			myReader.paramSet("/reader/regulatory/offTime", offTime);
+			
+			System.out.println("!!!!! ALERT !!!!");
+			System.out.println("Module may get hot when RF ON time is more than 10 seconds");
+			System.out.println("Risk of damage to the module despite auto cut off feature");
+			
+//			myReader.paramSet("/reader/regulatory/enable", true);
+//			myReader.paramSet(TMConstants.TMR_PARAM_COMMANDTIMEOUT, (onTime + offTime));
+			
+			Thread t = new Thread(this);
+			t.start();
+		} catch (ReaderException e) {
+			if (e.getMessage().equalsIgnoreCase("The module has exceeded the maximum or minimum operating temperature "
+					+ "and will not allow an RF operation until it is back in range")) {
+				System.out.println("Reader temperature is too High! Turn off RF.");
+				try {
+					myReader.paramSet("/reader/regulatory/enable", false);
+				} catch (ReaderException e1) {
+					e1.printStackTrace();
+				}
+				throw e;
+			}
+			e.printStackTrace();
 		}
 	}
 }

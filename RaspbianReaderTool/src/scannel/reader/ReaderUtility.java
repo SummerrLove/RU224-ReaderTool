@@ -830,7 +830,7 @@ public class ReaderUtility implements ReadListener, Runnable {
 				this.setHopTable(hoptable);
 				myReader.paramSet("/reader/regulatory/enable", true);
 				myReader.paramSet(TMConstants.TMR_PARAM_COMMANDTIMEOUT, (regOnTime + regOffTime));
-				Thread.sleep(regOnTime + regOffTime + 200);
+				Thread.sleep(regOnTime + regOffTime);
 				myReader.paramSet("/reader/regulatory/enable", false);
 				
 			} catch (ReaderException e) {
@@ -850,7 +850,8 @@ public class ReaderUtility implements ReadListener, Runnable {
 				counter++;
 				System.out.println("counter: "+counter);
 				if (counter >= frequencyList.length) {
-					stopRegulatoryTest = true;
+					counter = 0;
+//					stopRegulatoryTest = true;
 				}
 			}
 		}

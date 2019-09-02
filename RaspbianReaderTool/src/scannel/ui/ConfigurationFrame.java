@@ -282,7 +282,7 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 			
 			ReaderUtility.getInstance().includeTID(rb_tid.isSelected());
 			ReaderUtility.getInstance().includeUSERBANK(rb_userbank.isSelected());
-			int dt = Integer.parseInt(dwellTime.getText());
+//			int dt = Integer.parseInt(dwellTime.getText());
 //			ReaderUtility.getInstance().setDwellTime(dt);
 			
 			int[] ant_setting = antenna_list.getAntennaList();

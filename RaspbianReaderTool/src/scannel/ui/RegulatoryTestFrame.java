@@ -21,7 +21,7 @@ import scannel.reader.ReaderUtility;
 public class RegulatoryTestFrame extends AnchorPane implements EventHandler<ActionEvent> {
 
 	private RadioButton rb_mode_continuous;
-	private RadioButton rb_mode_timed;
+//	private RadioButton rb_mode_timed;
 	private RadioButton rb_modulation_cw;
 	private RadioButton rb_modulation_prbs;
 	private AntennaFrame antenna_list;
@@ -58,12 +58,12 @@ public class RegulatoryTestFrame extends AnchorPane implements EventHandler<Acti
 		AnchorPane.setTopAnchor(rb_mode_continuous, 90.0);
 		this.getChildren().add(rb_mode_continuous);
 		
-		rb_mode_timed = new RadioButton("Timed");
-		rb_mode_timed.setFont(Font.font("Arial", FontWeight.BOLD, 16));
-		rb_mode_timed.setOnAction(this);
-		AnchorPane.setLeftAnchor(rb_mode_timed, 200.0);
-		AnchorPane.setTopAnchor(rb_mode_timed, 90.0);
-		this.getChildren().add(rb_mode_timed);
+//		rb_mode_timed = new RadioButton("Timed");
+//		rb_mode_timed.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+//		rb_mode_timed.setOnAction(this);
+//		AnchorPane.setLeftAnchor(rb_mode_timed, 200.0);
+//		AnchorPane.setTopAnchor(rb_mode_timed, 90.0);
+//		this.getChildren().add(rb_mode_timed);
 		
 		
 		Label modulation = new Label("Modulation:");
@@ -137,9 +137,10 @@ public class RegulatoryTestFrame extends AnchorPane implements EventHandler<Acti
 	@Override
 	public void handle(ActionEvent event) {
 		if (event.getSource() == rb_mode_continuous) {
-			rb_mode_timed.setSelected(!rb_mode_continuous.isSelected());
-		} else if (event.getSource() == rb_mode_timed) {
-			rb_mode_continuous.setSelected(!rb_mode_timed.isSelected());
+			rb_mode_continuous.setSelected(true);
+//			rb_mode_timed.setSelected(!rb_mode_continuous.isSelected());
+//		} else if (event.getSource() == rb_mode_timed) {
+//			rb_mode_continuous.setSelected(!rb_mode_timed.isSelected());
 		} else if (event.getSource() == rb_modulation_cw) {
 			rb_modulation_prbs.setSelected(!rb_modulation_cw.isSelected());
 		} else if (event.getSource() == rb_modulation_prbs) {
@@ -186,8 +187,8 @@ public class RegulatoryTestFrame extends AnchorPane implements EventHandler<Acti
 		Reader.RegulatoryMode regMode = null;
 		if (rb_mode_continuous.isSelected()) {
 			regMode = Reader.RegulatoryMode.CONTINUOUS;
-		} else if (rb_mode_timed.isSelected()) {
-			regMode = Reader.RegulatoryMode.TIMED;
+//		} else if (rb_mode_timed.isSelected()) {
+//			regMode = Reader.RegulatoryMode.TIMED;
 		}
 		
 		Reader.RegulatoryModulation regModulation = null;
@@ -200,7 +201,8 @@ public class RegulatoryTestFrame extends AnchorPane implements EventHandler<Acti
 		int regOnTime = Integer.parseInt(tf_onTime.getText());
 		int regOffTime = Integer.parseInt(tf_offTime.getText());
 		
-		ReaderUtility.getInstance().startRegulatoryTest(antList, regMode, regModulation, regOnTime, regOffTime);
+//		ReaderUtility.getInstance().startRegulatoryTest(antList, regMode, regModulation, regOnTime, regOffTime);
+		ReaderUtility.getInstance().startRegulatoryTest(regModulation, regOnTime, regOffTime);
 		
 	}
 	

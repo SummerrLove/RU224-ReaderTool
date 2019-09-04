@@ -66,6 +66,7 @@ public class ReaderUtility implements ReadListener {
 	private long startTime;
 	private float total_inventory_time;
 	private int refresh_rate = 1;
+	private long updateTime;
 	
 	private boolean includeTID = true;
 	private boolean includeUSERBANK = true;
@@ -330,6 +331,9 @@ public class ReaderUtility implements ReadListener {
         	myReader.startReading();
         	startTime = System.currentTimeMillis();
         	total_inventory_time = 0;
+        	
+        	// update UI when 1st tag data is received, after that update UI every 300 milliseconds
+        	updateTime = 0;
         }
         
 		isReading = true;
@@ -446,9 +450,24 @@ public class ReaderUtility implements ReadListener {
 			System.out.println("Total tag = "+prev_tagNum+", Total inventory time = "+total_inventory_time);
 		}
 		
-		if (counter > refresh_rate) {
+//		if (counter > refresh_rate) {
+//			System.out.println("Update GUI, time = " + System.currentTimeMillis());
+//			counter = 1;
+//			Platform.runLater(new Runnable() {
+//
+//				@Override
+//				public void run() {
+//					if (updateListener != null) {
+//						updateListener.dataUpdate();
+//					}
+//				}
+//				
+//			});
+//		}
+		
+		if (refresh_rate > 1 && (System.currentTimeMillis() - updateTime) > 300) {
+			updateTime = System.currentTimeMillis();
 			System.out.println("Update GUI, time = " + System.currentTimeMillis());
-			counter = 1;
 			Platform.runLater(new Runnable() {
 
 				@Override

@@ -8,8 +8,8 @@ import scannel.ui.MainWindow;
 
 public class ReaderTool extends Application {
 
-	private final static String version = "v1.11.04 - basic";
-	private final static String subject = "EPC/UserMemory Filter";
+	private final static String version = "v1.11.05";
+	private final static String subject = "Basic - Improved UI update mechanism";
 
 	@Override
 	public void start(Stage mainStage) throws Exception {
@@ -27,7 +27,7 @@ public class ReaderTool extends Application {
 		MainWindow main = new MainWindow();
 		Scene scene = new Scene(main, 1000, 800);
 		mainStage.setScene(scene);
-		mainStage.setTitle("Scannel ReaderTool");
+		mainStage.setTitle("Scannel ReaderTool - "+version);
 		mainStage.show();
 	}
 

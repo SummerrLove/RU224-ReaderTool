@@ -3,6 +3,7 @@ package scannel.ui;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -32,6 +33,7 @@ public class DataFrame extends AnchorPane implements DataUpdateListener, EventHa
 	private ObservableList<TagTableData> dataList = FXCollections.observableArrayList();
 	private SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 	private Label total_inventory_time;
+	private boolean update_in_queue = false;
 	
 	
 	public DataFrame() {
@@ -89,7 +91,35 @@ public class DataFrame extends AnchorPane implements DataUpdateListener, EventHa
 
 	@Override
 	public void dataUpdate() {
+		if (!update_in_queue) {
+			update_in_queue = true;
+			
+			Platform.runLater(new Runnable() {
+				
+				@Override
+				public void run() {
+					updateTableContent();
+				}
+				
+			});
+		}
 		
+	}
+
+	@Override
+	public void handle(ActionEvent event) {
+		
+	}
+	
+	public void resetDisplayData() {
+		setDisplayNumber(0);
+		clearTableData();
+		total_inventory_time.setText("");
+	}
+	
+	private void updateTableContent() {
+		System.out.println("Update GUI, time = " + System.currentTimeMillis());
+		update_in_queue = false;
 		dataList.clear();
 		TagList tagList = ReaderUtility.getInstance().getTagData();
 		
@@ -126,18 +156,5 @@ public class DataFrame extends AnchorPane implements DataUpdateListener, EventHa
 		}
 		
 		table.setTableData(dataList);
-		
 	}
-
-	@Override
-	public void handle(ActionEvent event) {
-		
-	}
-	
-	public void resetDisplayData() {
-		setDisplayNumber(0);
-		clearTableData();
-		total_inventory_time.setText("");
-	}
-	
 }

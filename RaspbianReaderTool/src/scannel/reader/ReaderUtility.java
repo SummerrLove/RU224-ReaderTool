@@ -288,6 +288,8 @@ public class ReaderUtility implements ReadListener {
 		System.out.println(myReader.paramGet(TMConstants.TMR_PARAM_GEN2_TARI));
 		System.out.println(myReader.paramGet(TMConstants.TMR_PARAM_GEN2_Q));
 //		System.out.println(myReader.paramGet(TMConstants.TMR_PARAM_VERSION_SOFTWARE));
+//		System.out.println(myReader.paramGet(TMConstants.TMR_PARAM_READ_ASYNCONTIME));
+//		System.out.println(myReader.paramGet(TMConstants.TMR_PARAM_READ_ASYNCOFFTIME));
 		System.out.println("==============================");
 		//============================================================
 		
@@ -465,8 +467,24 @@ public class ReaderUtility implements ReadListener {
 //			});
 //		}
 		
-		if (refresh_rate > 1 && (System.currentTimeMillis() - updateTime) > 300) {
-			updateTime = System.currentTimeMillis();
+		if (refresh_rate > 1 ) {
+			// large tag quantity, update every 300 ms
+			if ((System.currentTimeMillis() - updateTime) > 300) {
+				updateTime = System.currentTimeMillis();
+				System.out.println("Update GUI, time = " + System.currentTimeMillis());
+				Platform.runLater(new Runnable() {
+	
+					@Override
+					public void run() {
+						if (updateListener != null) {
+							updateListener.dataUpdate();
+						}
+					}
+					
+				});
+			}
+		} else {
+			// small tag quantity, update every time a tag data is received
 			System.out.println("Update GUI, time = " + System.currentTimeMillis());
 			Platform.runLater(new Runnable() {
 

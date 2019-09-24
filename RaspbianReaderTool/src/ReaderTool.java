@@ -8,8 +8,8 @@ import scannel.ui.MainWindow;
 
 public class ReaderTool extends Application {
 
-	private final static String version = "v1.11.05a";
-	private final static String subject = "Basic - Improved UI update mechanism";
+	private final static String version = "v1.11.06";
+	private final static String subject = "Basic - Add Advance Setting";
 
 	@Override
 	public void start(Stage mainStage) throws Exception {
@@ -33,14 +33,6 @@ public class ReaderTool extends Application {
 
 	@Override
 	public void stop(){
-//		if (ReaderConfig.getInstance().isDataLocalSaveEnabled()) {
-//			try {
-//				ReaderUtility.getInstance().saveTagDataToFile();
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-//		}
-
 		DigitalIOController.getInstance().destroy();
 		ReaderUtility.getInstance().destroy();
 		ReaderConfig.getInstance().saveConfig();

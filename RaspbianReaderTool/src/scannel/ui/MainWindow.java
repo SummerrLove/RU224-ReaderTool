@@ -4,6 +4,10 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 import scannel.reader.ReaderUtility;
 
 public class MainWindow extends TabPane implements EventHandler<Event> {
@@ -20,10 +24,15 @@ public class MainWindow extends TabPane implements EventHandler<Event> {
 //	private DecodeSettingFrame decode_window;
 	private Tab filterTab;
 	private FilterSettingFrame filter_window;
+	private Tab advanceTab;
+	private AdvanceFrame advance_window;
+	
+	final KeyCombination keyCombo = new KeyCodeCombination(KeyCode.D, KeyCombination.CONTROL_DOWN);
 	
 	
 	public MainWindow() {
 		this.initComponents();
+		this.setOnKeyPressed(this);
 	}
 
 	public MainWindow(Tab... arg0) {
@@ -71,6 +80,12 @@ public class MainWindow extends TabPane implements EventHandler<Event> {
 		this.getTabs().addAll(readTab, filterTab, writeTab, saveTab, ioTab);
 //		this.getTabs().addAll(readTab, writeTab);
 //		this.setStyle("-fx-background-color: #F0F0F0;");
+		
+		advanceTab = new Tab("Advance Setting");
+		advance_window = new AdvanceFrame();
+		advanceTab.setContent(advance_window);
+		advanceTab.setOnSelectionChanged(this);
+		
 	}
 
 	@Override
@@ -91,6 +106,18 @@ public class MainWindow extends TabPane implements EventHandler<Event> {
 //		if ((event.getSource() == decodeTab) && decodeTab.isSelected()) {
 //			decode_window.disableReadFunction(!ReaderUtility.getInstance().isConnected());
 //		}
+		
+		if (this.getTabs().contains(advanceTab) && advanceTab.isSelected()) {
+			advance_window.getCurretSetting();
+		}
+		
+		if (event instanceof KeyEvent && keyCombo.match((KeyEvent) event)) {
+			if (this.getTabs().contains(advanceTab)) {
+				this.getTabs().remove(advanceTab);
+			} else {
+				this.getTabs().add(advanceTab);
+			}
+		}
 	}
 	
 }

@@ -71,6 +71,7 @@ public class ReaderUtility implements ReadListener {
 	private boolean includeTID = true;
 	private boolean includeUSERBANK = true;
 	private Gen2.Select select = null;
+	private SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.S");
 	
 	
 	private ReaderUtility() {
@@ -444,6 +445,7 @@ public class ReaderUtility implements ReadListener {
 
 	@Override
 	public void tagRead(Reader r, TagReadData t) {
+//		System.out.println("tag read, epc = "+t.epcString()+", time = "+sdf.format(new Date()));
 		this.parseTagData(t);
 		counter++;
 		if (tagReadList.size() != prev_tagNum) {
@@ -725,5 +727,39 @@ public class ReaderUtility implements ReadListener {
 	
 	public void resetFilter() {
 		select = null;
+	}
+	
+	public void setRFOnTime(int onTime) throws ReaderException, Exception {
+		if (myReader != null) {
+			myReader.paramSet(TMConstants.TMR_PARAM_READ_ASYNCONTIME, onTime);
+		} else {
+			throw new Exception("Reader not connected!");
+		}
+	}
+	
+	public int getRFOnTime() throws ReaderException, Exception {
+		if (myReader != null) {
+			Integer i = (Integer) myReader.paramGet(TMConstants.TMR_PARAM_READ_ASYNCONTIME);
+			return i.intValue();
+		} else {
+			throw new Exception("Reader not connected!");
+		}
+	}
+	
+	public void setRFOffTime(int offTime) throws ReaderException, Exception {
+		if (myReader != null) {
+			myReader.paramSet(TMConstants.TMR_PARAM_READ_ASYNCOFFTIME, offTime);
+		} else {
+			throw new Exception("Reader not connected!");
+		}
+	}
+	
+	public int getRFOffTime() throws ReaderException, Exception {
+		if (myReader != null) {
+			Integer i = (Integer) myReader.paramGet(TMConstants.TMR_PARAM_READ_ASYNCOFFTIME);
+			return i.intValue();
+		} else {
+			throw new Exception("Reader not connected!");
+		}
 	}
 }

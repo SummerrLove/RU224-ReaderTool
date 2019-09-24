@@ -135,12 +135,12 @@ public class ReaderUtility implements ReadListener {
 	private void createTCPReader(String ip, String port) throws ReaderException {
 		Reader.setSerialTransport("tcp", new SerialTransportTCP.Factory());
 		myReader = Reader.create("tcp://"+ip+":"+port);
-		System.out.println("TCP reader created!");
+		MyLogger.printLog("TCP reader created!");
 	}
 	
 	private void createSerialReader(String port) throws ReaderException{
 		myReader = Reader.create(port);
-		System.out.println("Serial Reader created!");
+		MyLogger.printLog("Serial Reader created!");
 	}
 	
 	public void connectReader() throws ReaderException {
@@ -164,7 +164,7 @@ public class ReaderUtility implements ReadListener {
 		myReader.connect();
 		tagReadList = new TagList();
 		isConnected = true;
-		System.out.println("connect reader!");
+		MyLogger.printLog("connect reader!");
 		
 	}
 	
@@ -178,7 +178,7 @@ public class ReaderUtility implements ReadListener {
 		myReader.connect();
 		tagReadList = new TagList();
 		isConnected = true;
-		System.out.println("connect reader!");
+		MyLogger.printLog("connect reader!");
 	}
 	
 	public void disconnectReader() {
@@ -196,13 +196,13 @@ public class ReaderUtility implements ReadListener {
 			isConnected = false;
 			isReading = false;
 		} else {
-			System.out.println("[ReaderUtility] failed to disconnect from reader cause reader is null..");
+			MyLogger.printLog("[ReaderUtility] failed to disconnect from reader cause reader is null..");
 		}
 	}
 	
 	public void setSession(Gen2.Session session) throws ReaderException {
 		if (myReader == null) {
-			System.out.println("Reader is not initialized...");
+			MyLogger.printLog("Reader is not initialized...");
 			return;
 		}
 		
@@ -211,7 +211,7 @@ public class ReaderUtility implements ReadListener {
 	
 	public void setTargetFlag(Gen2.Target target) throws ReaderException {
 		if (myReader == null) {
-			System.out.println("Reader is not initialized...");
+			MyLogger.printLog("Reader is not initialized...");
 			return;
 		}
 		
@@ -220,7 +220,7 @@ public class ReaderUtility implements ReadListener {
 	
 	public void setRFPower(int power) throws ReaderException {
 		if (myReader == null) {
-			System.out.println("Reader is not initialized...");
+			MyLogger.printLog("Reader is not initialized...");
 			return;
 		}
 		
@@ -239,7 +239,7 @@ public class ReaderUtility implements ReadListener {
 	
 	public void setRegion(Region region) throws ReaderException {
 		if (myReader == null) {
-			System.out.println("Reader is not initialized...");
+			MyLogger.printLog("Reader is not initialized...");
 			return;
 		}
 		
@@ -258,7 +258,7 @@ public class ReaderUtility implements ReadListener {
 	
 	public Region[] getSupportedRegion() throws ReaderException {
 		if (myReader == null) {
-			System.out.println("Reader is not initialized...");
+			MyLogger.printLog("Reader is not initialized...");
 			return null;
 		}
 		
@@ -268,7 +268,7 @@ public class ReaderUtility implements ReadListener {
 	
 	public void startReading(int[] antenna) throws ReaderException {
 		if (myReader == null) {
-			System.out.println("Reader is not initialized...");
+			MyLogger.printLog("Reader is not initialized...");
 			return;
 		}
 		
@@ -298,7 +298,7 @@ public class ReaderUtility implements ReadListener {
 			myReader.addTransportListener(myReader.simpleTransportListener);
 		}
 		
-		System.out.println("start reading");
+		MyLogger.printLog("start reading");
 		
 		Gen2.ReadData readOp = null;
 		if (includeTID || includeUSERBANK) {
@@ -433,11 +433,11 @@ public class ReaderUtility implements ReadListener {
 			}
 			//=====================================================
 			
-			System.out.println("tag number = "+trd.length);
+			MyLogger.printLog("tag number = "+trd.length);
 			this.parseTagData(trd);
 			
 		} catch (ReaderException e1) {
-			System.out.println("Stop reading due to the following exception:");
+			MyLogger.printLog("Stop reading due to the following exception:");
 			e1.printStackTrace();
 			readTimer.cancel();
 		}
@@ -451,7 +451,7 @@ public class ReaderUtility implements ReadListener {
 		if (tagReadList.size() != prev_tagNum) {
 			prev_tagNum = tagReadList.size();
 			this.total_inventory_time = (float)(System.currentTimeMillis()-startTime)/1000;
-			System.out.println("Total tag = "+prev_tagNum+", Total inventory time = "+total_inventory_time);
+			MyLogger.printLog("Total tag = "+prev_tagNum+", Total inventory time = "+total_inventory_time);
 		}
 		
 		updateListener.dataUpdate();
@@ -461,7 +461,7 @@ public class ReaderUtility implements ReadListener {
 		if (myReader != null) {
 			Region[] regions = (Region[]) myReader.paramGet(TMConstants.TMR_PARAM_REGION_SUPPORTEDREGIONS);
 			for (int i=0; i<regions.length; i++) {
-				System.out.println("supported regeion ["+i+"]: "+regions[i]);
+				MyLogger.printLog("supported regeion ["+i+"]: "+regions[i]);
 			}
 		}
 	}
@@ -479,7 +479,7 @@ public class ReaderUtility implements ReadListener {
 		if (myReader != null) {
 			int[] list = (int[]) myReader.paramGet(TMConstants.TMR_PARAM_REGION_HOPTABLE);
 			for (int i=0; i<list.length; i++) {
-				System.out.println("Frequency Hop List [" + i + "]: " + list[i]);
+				MyLogger.printLog("Frequency Hop List [" + i + "]: " + list[i]);
 			}
 			
 			return list;
@@ -516,7 +516,7 @@ public class ReaderUtility implements ReadListener {
 		
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
 		String file_path = FILE_DIRECTORY+formatter.format(new Date())+".txt";
-		System.out.println(file_path);
+		MyLogger.printLog(file_path);
 		
 		File save_file = new File(file_path);
 		if (!save_file.exists()) {

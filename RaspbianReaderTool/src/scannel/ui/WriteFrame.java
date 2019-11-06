@@ -24,6 +24,7 @@ import javafx.scene.text.FontWeight;
 import scannel.reader.MyLogger;
 import scannel.reader.ReaderUtility;
 import scannel.reader.StringTool;
+import scannel.reader.TagUnit;
 
 public class WriteFrame extends AnchorPane implements EventHandler<ActionEvent> {
 
@@ -131,15 +132,18 @@ public class WriteFrame extends AnchorPane implements EventHandler<ActionEvent> 
 		if (event.getSource() == btn_read) {
 			// read tag and show epc
 			try {
-				TagReadData trd = ReaderUtility.getInstance().readTag();
-				if (trd == null) {
+				TagUnit tu = ReaderUtility.getInstance().readTag();
+				if (tu == null) {
 					MyLogger.printLog("No tag detected....");
+					epc.setText("No tag detected...");
+					tid.setText("");
+					userBank.setText("");
 					return;
 				} else {
-					MyLogger.printLog("Tag read: "+trd.epcString());
-					epc.setText(trd.epcString());
-					tid.setText(DatatypeConverter.printHexBinary(trd.getTIDMemData()));
-					userBank.setText(DatatypeConverter.printHexBinary(trd.getUserMemData()));
+					MyLogger.printLog("Tag read: "+tu.getEPC());
+					epc.setText(tu.getEPC());
+					tid.setText(tu.getTid());
+					userBank.setText(tu.getUserBank());
 					
 				}
 			} catch (ReaderException e) {

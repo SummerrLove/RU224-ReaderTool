@@ -42,8 +42,9 @@ public class MyLogger {
 		
 		try {
 			PrintWriter pw = new PrintWriter(new FileWriter(f, true));
-			pw.write(new Date().toString());
+			pw.write(new Date().toString()+"\n");
 			e.printStackTrace(pw);
+			pw.write("\n");
 			pw.flush();
 			pw.close();
 		} catch (IOException e1) {

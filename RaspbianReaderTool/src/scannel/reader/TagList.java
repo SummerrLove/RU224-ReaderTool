@@ -67,6 +67,18 @@ public class TagList {
 				tag.setReadFrequency(trd.getFrequency());
 				tag.setAntennaId(trd.getAntenna());
 				tag.setTime(new Date());
+				
+				if (tag.getTid().equals("") && trd.getTIDMemData() != null) {
+					String tid = DatatypeConverter.printHexBinary(trd.getTIDMemData());
+					MyLogger.printLog("set TID: "+tid);
+					tag.setTid(tid);
+				}
+				
+				if (tag.getUserBank().equals("") && trd.getUserMemData() != null) {
+					String userBank = DatatypeConverter.printHexBinary(trd.getUserMemData());
+					MyLogger.printLog("set User Bank: "+userBank);
+					tag.setUserBank(userBank);
+				} 
 			}
 		}
 //		System.out.println();

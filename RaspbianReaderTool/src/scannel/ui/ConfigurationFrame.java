@@ -48,14 +48,9 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 	private Button btn_start;
 	private Button btn_reset;
 //	private TextField filter;
-//	private RadioButton rb_volume;
 	private RadioButton rb_tid;
 	private RadioButton rb_userbank;
-//	private RadioButton rb_hoptable;
-//	private TextArea hoptable;
 	private static ObservableList<Region> SUPPORT_REGIONS = FXCollections.observableArrayList();
-	
-//	private final static boolean ACTIVATE_HOPTABLE = false;
 	
 	
 	public ConfigurationFrame() {
@@ -127,12 +122,6 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 		this.getChildren().add(cb_region);
 		
 		
-//		rb_volume = new RadioButton("large tag quantity");
-//		rb_volume.setOnAction(this);
-//		AnchorPane.setLeftAnchor(rb_volume, 30.0);
-//		AnchorPane.setTopAnchor(rb_volume, 320.0);
-//		this.getChildren().add(rb_volume);
-		
 		rb_tid = new RadioButton("show TID");
 		rb_tid.setOnAction(this);
 		AnchorPane.setLeftAnchor(rb_tid, 30.0);
@@ -145,44 +134,6 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 		AnchorPane.setTopAnchor(rb_userbank, 380.0);
 		this.getChildren().add(rb_userbank);
 		
-//		Label filter_title = new Label("EPC filter:");
-//		filter_title.setFont(Font.font("Arial", FontWeight.BOLD, 16));
-//		AnchorPane.setLeftAnchor(filter_title, 30.0);
-//		AnchorPane.setTopAnchor(filter_title, 420.0);
-//		this.getChildren().add(filter_title);
-//		
-//		filter = new TextField();
-//		filter.setPromptText("Input even-length hex string.");
-//		AnchorPane.setLeftAnchor(filter, 30.0);
-//		AnchorPane.setTopAnchor(filter, 450.0);
-//		this.getChildren().add(filter);
-		
-		
-//		Separator separator = new Separator();
-//		separator.setOrientation(Orientation.HORIZONTAL);
-//		AnchorPane.setLeftAnchor(separator, 20.0);
-//		AnchorPane.setRightAnchor(separator, 20.0);
-//		AnchorPane.setTopAnchor(separator, 390.0);
-//		this.getChildren().add(separator);
-//		
-//		
-//		if (ACTIVATE_HOPTABLE) {
-//			rb_hoptable = new RadioButton("Hop Table");
-//			rb_hoptable.setOnAction(this);
-//			AnchorPane.setLeftAnchor(rb_hoptable, 30.0);
-//			AnchorPane.setTopAnchor(rb_hoptable, 410.0);
-//			this.getChildren().add(rb_hoptable);
-//			
-//			hoptable = new TextArea();
-//			hoptable.setWrapText(true);
-//			hoptable.setPromptText("Frequency value in kHz");
-//			AnchorPane.setLeftAnchor(hoptable, 30.0);
-//			AnchorPane.setTopAnchor(hoptable, 440.0);
-//			AnchorPane.setRightAnchor(hoptable, 30.0);
-//			AnchorPane.setBottomAnchor(hoptable, 30.0);
-//			this.getChildren().add(hoptable);
-//			hoptable.setDisable(true);
-//		}
 		
 		btn_start = new Button("Start");
 		btn_start.setOnAction(this);
@@ -224,28 +175,6 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 			ReaderUtility.getInstance().resetData();
 		}
 		
-//		if (event.getSource() == rb_volume) {
-//			if (rb_volume.isSelected()) {
-//				ReaderUtility.getInstance().setRefreshRate(30);
-//			} else {
-//				ReaderUtility.getInstance().setRefreshRate(1);
-//			}
-//		}
-		
-//		if (ACTIVATE_HOPTABLE && (event.getSource() == rb_hoptable)) {
-//			if (rb_hoptable.isSelected()) {
-//				System.out.println("RadioButon selected.");
-//				try {
-//					this.setHopTableText(ReaderUtility.getInstance().getHopTable());
-//				} catch (ReaderException e) {
-//					e.printStackTrace();
-//				}
-//				hoptable.setDisable(false);
-//			} else {
-//				System.out.println("RadioButon un-selected.");
-//				hoptable.setDisable(true);
-//			}
-//		}
 	}
 	
 	private void startReading() {
@@ -264,20 +193,6 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 			this.setTargetFlag(cb_target.getSelectionModel().getSelectedItem());
 			this.setRegion(cb_region.getSelectionModel().getSelectedItem());
 			
-//			if (rb_volume.isSelected()) {
-//				ReaderUtility.getInstance().setRefreshRate(20);
-//			} else {
-//				ReaderUtility.getInstance().setRefreshRate(1);
-//			}
-			
-//			if (ACTIVATE_HOPTABLE && rb_hoptable.isSelected()) {
-//				// Use user-defined frequency list
-//				ReaderUtility.getInstance().setHopTable(this.parseHopTable(hoptable.getText()));
-//			} else {
-//				// Use default hop table for selected region. 
-//				// However, if the reader hop table has been modified, 
-//				// the region parameter of the reader must be set again to reset the hop table to default value.   
-//			}
 			
 			ReaderUtility.getInstance().includeTID(rb_tid.isSelected());
 			ReaderUtility.getInstance().includeUSERBANK(rb_userbank.isSelected());
@@ -368,20 +283,6 @@ public class ConfigurationFrame extends AnchorPane implements EventHandler<Actio
 		
 		return frequencyList;
 	}
-	
-//	private void setHopTableText(int[] frequencyList) {
-//		String text = "";
-//		
-//		for (int i=0; i<frequencyList.length; i++) {
-//			if (i == 0) {
-//				text = Integer.toString(frequencyList[i]);
-//			} else {
-//				text += ","+Integer.toString(frequencyList[i]);
-//			}
-//		}
-//		
-//		hoptable.setText(text);
-//	}
 	
 	public void resetStartButton() {
 		btn_start.setText("Start");

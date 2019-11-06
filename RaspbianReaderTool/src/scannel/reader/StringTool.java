@@ -78,4 +78,14 @@ public class StringTool {
 		byte[] data = DatatypeConverter.parseHexBinary(Integer.toHexString(Integer.parseInt(str, 2)));
 		return data;
 	}
+	
+	public static byte[] convertShortArraytoByteArray(short[] shortData) {
+		byte[] byteData = new byte[shortData.length * 2];
+		for (int i = 0; i < shortData.length; i++) {
+			byteData[i * 2] = (byte) ((shortData[i] >> 8) & 0xff);
+			byteData[i * 2 + 1] = (byte) ((shortData[i]) & 0xff);
+		}
+		
+		return byteData;
+	}
 }

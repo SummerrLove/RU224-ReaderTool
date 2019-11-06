@@ -352,6 +352,7 @@ public class ReaderUtility implements ReadListener {
 			readTimer.cancel();
 			readTimer = null;
 		} else {
+			myReader.removeReadListener(this);
 			myReader.stopReading();
 			counter = -1;
 		}
@@ -541,28 +542,102 @@ public class ReaderUtility implements ReadListener {
 		fos.close();
 	}
 	
-	public TagReadData readTag() throws ReaderException {
+	public TagUnit readTag() throws ReaderException {
 		if (myReader == null) {
 			MyLogger.printLog("Reader is not initialized...");
 			return null;
 		}
 		
+		myReader.paramSet(TMConstants.TMR_PARAM_RADIO_READPOWER, ReaderConfig.getInstance().getRFPower()*100);
+        myReader.paramSet(TMConstants.TMR_PARAM_GEN2_SESSION, Gen2.Session.S0);
 		myReader.paramSet(TMConstants.TMR_PARAM_REGION_ID, ReaderConfig.getInstance().getRegion());
+		SimpleReadPlan plan = new SimpleReadPlan(ReaderConfig.getInstance().getAntennaList(), TagProtocol.GEN2, null, null, 1000);
+		myReader.paramSet(TMConstants.TMR_PARAM_READ_PLAN, plan);
+		TagReadData[] tagData = myReader.read(500);
 		
-		EnumSet<Bank> memBanks = EnumSet.of(Gen2.Bank.EPC, Gen2.Bank.TID, Gen2.Bank.GEN2BANKTIDENABLED, Gen2.Bank.USER, Gen2.Bank.GEN2BANKUSERENABLED);
-		Gen2.ReadData readOp = new Gen2.ReadData(memBanks, 0, (byte) 0);
-		SimpleReadPlan plan = new SimpleReadPlan(ReaderConfig.getInstance().getAntennaList(), TagProtocol.GEN2, null, readOp, 1000);
-        myReader.paramSet(TMConstants.TMR_PARAM_READ_PLAN, plan);
-        
-        TagReadData[] data = myReader.read(300);
-        MyLogger.printLog("Number of tags read: "+data.length);
-        
-        if (data.length > 0) {
-        	return data[0];
-        } else {
-        	return null;
-        }
+		if (tagData.length <= 0) {
+			return null;
+		} else if (tagData.length > 1) {
+			MyLogger.printLog();
+			MyLogger.printLog("!!!!!!!!!!!!!!!!!!!!!!!!!");
+			MyLogger.printLog("Multiple tags detected...");
+			MyLogger.printLog("!!!!!!!!!!!!!!!!!!!!!!!!!");
+			MyLogger.printLog();
+		}
 		
+		myReader.paramSet("/reader/tagop/antenna", ReaderConfig.getInstance().getAntennaList()[0]);
+		
+		String tid = null;
+		String user = null;
+		
+		// Use tag object as filter
+		Gen2.ReadData readTID = new Gen2.ReadData(Bank.TID, 0, (byte) 0);
+		try {
+			short[] tidData = (short[]) myReader.executeTagOp(readTID, tagData[0].getTag());
+			tid = DatatypeConverter.printHexBinary(StringTool.convertShortArraytoByteArray(tidData));
+		} catch (ReaderException ex) {
+			MyLogger.printErrorLog(ex);
+			tid = ex.getMessage();
+		}
+		
+		// Use tag object as filter
+		Gen2.ReadData readUser = new Gen2.ReadData(Bank.USER, 0, (byte) 0);
+		try {
+			short[] userData = (short[]) myReader.executeTagOp(readUser, tagData[0].getTag());
+			user = DatatypeConverter.printHexBinary(StringTool.convertShortArraytoByteArray(userData));
+		} catch (ReaderException ex) {
+			MyLogger.printErrorLog(ex);
+			user = ex.getMessage();
+		}
+		
+		String epc = tagData[0].epcString();
+		TagUnit tagUnit = new TagUnit(epc);
+		tagUnit.setTid(tid);
+		tagUnit.setUserBank(user);
+		
+		return tagUnit;
+		
+//		EnumSet<Bank> memBanks = EnumSet.of(Gen2.Bank.EPC, Gen2.Bank.TID, Gen2.Bank.GEN2BANKTIDENABLED, Gen2.Bank.USER, Gen2.Bank.GEN2BANKUSERENABLED);
+//		Gen2.ReadData readOp = new Gen2.ReadData(memBanks, 0, (byte) 0);
+//		SimpleReadPlan plan = new SimpleReadPlan(ReaderConfig.getInstance().getAntennaList(), TagProtocol.GEN2, null, readOp, 1000);
+//        myReader.paramSet(TMConstants.TMR_PARAM_READ_PLAN, plan);
+//        
+//        TagReadData[] data = myReader.read(300);
+//        MyLogger.printLog("Number of tags read: "+data.length);
+//        
+//        if (data.length > 0) {
+//        	return data[0];
+//        } else {
+//        	return null;
+//        }
+		
+	}
+	
+	public String readSingleTagEPC() throws ReaderException {
+		if (myReader == null) {
+			MyLogger.printLog("Reader is not initialized...");
+			return null;
+		}
+		
+		myReader.paramSet(TMConstants.TMR_PARAM_RADIO_READPOWER, ReaderConfig.getInstance().getRFPower()*100);
+        myReader.paramSet(TMConstants.TMR_PARAM_GEN2_SESSION, Gen2.Session.S0);
+		myReader.paramSet(TMConstants.TMR_PARAM_REGION_ID, ReaderConfig.getInstance().getRegion());
+		SimpleReadPlan plan = new SimpleReadPlan(ReaderConfig.getInstance().getAntennaList(), TagProtocol.GEN2, null, null, 1000);
+		myReader.paramSet(TMConstants.TMR_PARAM_READ_PLAN, plan);
+		TagReadData[] tagData = myReader.read(500);
+		
+		if (tagData.length <= 0) {
+			return null;
+		} else if (tagData.length > 1) {
+			MyLogger.printLog();
+			MyLogger.printLog("!!!!!!!!!!!!!!!!!!!!!!!!!");
+			MyLogger.printLog("Multiple tags detected...");
+			MyLogger.printLog("!!!!!!!!!!!!!!!!!!!!!!!!!");
+			MyLogger.printLog();
+			return tagData[0].epcString();
+		} else {
+			return tagData[0].epcString();
+		}
 	}
 	
 	public void writeTag(Gen2.TagData data, TagFilter target) throws ReaderException {

@@ -181,13 +181,12 @@ public class DecodeSettingFrame extends AnchorPane implements EventHandler<Actio
 			}
 			
 			try {
-				TagReadData trd = ReaderUtility.getInstance().readTag();
-				if (trd == null) {
+				String epc = ReaderUtility.getInstance().readSingleTagEPC();
+				if (epc == null) {
 					MyLogger.printLog("No tag detected....");
 					return;
 				} else {
-					MyLogger.printLog("Tag read: "+trd.epcString());
-					String epc = trd.epcString();
+					MyLogger.printLog("Tag read: "+epc);
 					tf_epc.setText(this.parseEPC(epc));
 				}
 			} catch (ReaderException e) {

@@ -141,9 +141,9 @@ public class WriteFrame extends AnchorPane implements EventHandler<ActionEvent> 
 					return;
 				} else {
 					MyLogger.printLog("Tag read: "+tu.getEPC());
-					epc.setText(tu.getEPC());
-					tid.setText(tu.getTid());
-					userBank.setText(tu.getUserBank());
+					epc.setText(this.formatString(tu.getEPC()));
+					tid.setText(this.formatString(tu.getTid()));
+					userBank.setText(this.formatString(tu.getUserBank()));
 					
 				}
 			} catch (ReaderException e) {
@@ -210,5 +210,21 @@ public class WriteFrame extends AnchorPane implements EventHandler<ActionEvent> 
 			alert.setContentText(e.getMessage());
 			alert.showAndWait();
 		}
+	}
+	
+	private String formatString(String str) {
+		int counter = 0;
+		String output = "";
+		
+		while (counter < str.length()) {
+			if ((counter+2) <= str.length()) {
+				output += str.substring(counter, counter+2)+" ";
+			} else {
+				output += str.substring(counter, str.length());
+			}
+			counter += 2;
+		}
+		
+		return output;
 	}
 }

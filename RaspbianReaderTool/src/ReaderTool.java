@@ -8,8 +8,8 @@ import scannel.ui.MainWindow;
 
 public class ReaderTool extends Application {
 
-	private final static String version = "v1.11.06";
-	private final static String subject = "Basic - Add Advance Setting";
+	private final static String version = "v1.11.07";
+	private final static String subject = "Basic - Fix TID/UserBank Reading Issues";
 
 	@Override
 	public void start(Stage mainStage) throws Exception {
@@ -19,7 +19,7 @@ public class ReaderTool extends Application {
 		System.out.println("==========================");
 		System.out.println("RU-224 ReaderTool");
 		System.out.println("version: "+version);
-		System.out.println("subject: "+subject);
+//		System.out.println("subject: "+subject);
 		System.out.println("==========================");
 		System.out.println();
 		

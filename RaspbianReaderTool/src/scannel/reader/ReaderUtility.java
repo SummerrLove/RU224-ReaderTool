@@ -597,20 +597,26 @@ public class ReaderUtility implements ReadListener {
 		
 		return tagUnit;
 		
-//		EnumSet<Bank> memBanks = EnumSet.of(Gen2.Bank.EPC, Gen2.Bank.TID, Gen2.Bank.GEN2BANKTIDENABLED, Gen2.Bank.USER, Gen2.Bank.GEN2BANKUSERENABLED);
-//		Gen2.ReadData readOp = new Gen2.ReadData(memBanks, 0, (byte) 0);
-//		SimpleReadPlan plan = new SimpleReadPlan(ReaderConfig.getInstance().getAntennaList(), TagProtocol.GEN2, null, readOp, 1000);
-//        myReader.paramSet(TMConstants.TMR_PARAM_READ_PLAN, plan);
-//        
-//        TagReadData[] data = myReader.read(300);
-//        MyLogger.printLog("Number of tags read: "+data.length);
-//        
-//        if (data.length > 0) {
-//        	return data[0];
-//        } else {
-//        	return null;
-//        }
+	}
+	
+	private String readSingleTagUserBank(TagFilter filter) {
+		String userBank = "";
 		
+		for (int i=0; ;i++) {
+			try {
+				Gen2.ReadData read = new Gen2.ReadData(Gen2.Bank.USER, i, (byte) 0x01);
+				short[] readData = (short[]) myReader.executeTagOp(read, filter);
+				userBank += DatatypeConverter.printHexBinary(StringTool.convertShortArraytoByteArray(readData));
+			} catch (ReaderException e) {
+				MyLogger.printLog("i="+i);
+				e.printStackTrace();
+				break;
+			}
+		}
+		
+		MyLogger.printLog("User Bank retrieved:");
+		MyLogger.printLog(userBank);
+		return userBank;
 	}
 	
 	public String readSingleTagEPC() throws ReaderException {

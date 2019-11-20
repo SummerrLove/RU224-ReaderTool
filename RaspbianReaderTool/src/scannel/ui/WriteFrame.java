@@ -141,9 +141,9 @@ public class WriteFrame extends AnchorPane implements EventHandler<ActionEvent> 
 					return;
 				} else {
 					MyLogger.printLog("Tag read: "+tu.getEPC());
-					epc.setText(this.formatString(tu.getEPC()));
-					tid.setText(this.formatString(tu.getTid()));
-					userBank.setText(this.formatString(tu.getUserBank()));
+					epc.setText(tu.getEPC());
+					tid.setText(tu.getTid());
+					userBank.setText(tu.getUserBank());
 					
 				}
 			} catch (ReaderException e) {

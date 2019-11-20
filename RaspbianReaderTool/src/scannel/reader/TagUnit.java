@@ -22,12 +22,12 @@ public class TagUnit {
 		readCount = count;
 	}
 	
-	public TagUnit(String epc, int count, int frequency, String tid, String userBank) {
+	public TagUnit(String epc, int count, int frequency) {
 		this.epc = epc;
 		readCount = count;
 		readFrequency = frequency;
-		this.tid = tid;
-		this.userBank = userBank;
+//		this.tid = tid;
+//		this.userBank = userBank;
 	}
 
 	public void setEPC(String epc){

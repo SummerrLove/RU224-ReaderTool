@@ -46,10 +46,20 @@ public class TagList {
 	
 	public void addTag(TagReadData trd){
 //		System.out.println("TagList.addTag() with trd, epc="+trd.epcString()+", count="+trd.getReadCount()+", time="+new Date().toString()+", frequency="+trd.getFrequency());
+		boolean showTID = ReaderUtility.getInstance().includeTID();
+		boolean showUserMemory = ReaderUtility.getInstance().includeUSERBANK();
 		if (tagList == null){
 //			System.out.println("No tag list, so create new one and add the tag data...");
 			tagList = new ArrayList<TagUnit>();
-			TagUnit tag = new TagUnit(trd.epcString(), trd.getReadCount(), trd.getFrequency(),  DatatypeConverter.printHexBinary(trd.getTIDMemData()), DatatypeConverter.printHexBinary(trd.getUserMemData()));
+			TagUnit tag = new TagUnit(trd.epcString(), trd.getReadCount(), trd.getFrequency());
+			if (showTID) {
+				tag.setTid(DatatypeConverter.printHexBinary(trd.getTIDMemData()));
+			}
+			
+			if (showUserMemory) {
+				tag.setUserBank(DatatypeConverter.printHexBinary(trd.getUserMemData()));
+			}
+			
 			tag.setTime(new Date());
 			tag.setAntennaId(trd.getAntenna());
 			tagList.add(tag);
@@ -57,7 +67,14 @@ public class TagList {
 			TagUnit tag = this.checkList(trd.epcString());
 			if (tag == null){
 //				System.out.println("No tag data with epc ["+trd.epcString()+"] was found in the list.");
-				TagUnit newTag = new TagUnit(trd.epcString(), trd.getReadCount(), trd.getFrequency(), DatatypeConverter.printHexBinary(trd.getTIDMemData()), DatatypeConverter.printHexBinary(trd.getUserMemData()));
+				TagUnit newTag = new TagUnit(trd.epcString(), trd.getReadCount(), trd.getFrequency());
+				if (showTID) {
+					newTag.setTid(DatatypeConverter.printHexBinary(trd.getTIDMemData()));
+				}
+				
+				if (showUserMemory) {
+					newTag.setUserBank(DatatypeConverter.printHexBinary(trd.getUserMemData()));
+				}
 				newTag.setTime(new Date());
 				newTag.setAntennaId(trd.getAntenna());
 				tagList.add(newTag);
@@ -68,13 +85,13 @@ public class TagList {
 				tag.setAntennaId(trd.getAntenna());
 				tag.setTime(new Date());
 				
-				if (tag.getTid().equals("") && trd.getTIDMemData() != null) {
+				if (showTID && tag.getTid().equals("") && trd.getTIDMemData() != null) {
 					String tid = DatatypeConverter.printHexBinary(trd.getTIDMemData());
 					MyLogger.printLog("set TID: "+tid);
 					tag.setTid(tid);
 				}
 				
-				if (tag.getUserBank().equals("") && trd.getUserMemData() != null) {
+				if (showUserMemory && tag.getUserBank().equals("") && trd.getUserMemData() != null) {
 					String userBank = DatatypeConverter.printHexBinary(trd.getUserMemData());
 					MyLogger.printLog("set User Bank: "+userBank);
 					tag.setUserBank(userBank);

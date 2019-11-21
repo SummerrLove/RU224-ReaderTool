@@ -305,12 +305,12 @@ public class ReaderUtility implements ReadListener {
 			EnumSet<Bank> memBanks = EnumSet.of(Gen2.Bank.EPC);
 			
 			if (includeTID) {
-//				memBanks.add(Bank.TID);
+				memBanks.add(Bank.TID);
 				memBanks.add(Bank.GEN2BANKTIDENABLED);
 			}
 			
 			if (includeUSERBANK) {
-//				memBanks.add(Bank.USER);
+				memBanks.add(Bank.USER);
 				memBanks.add(Bank.GEN2BANKUSERENABLED);
 			}
 			
@@ -790,8 +790,24 @@ public class ReaderUtility implements ReadListener {
 		includeTID = include;
 	}
 	
+	/**
+	 * Get the current setting that if TID is included in inventory.
+	 * @return the boolean value that if TID is included
+	 */
+	public boolean includeTID() {
+		return includeTID;
+	}
+	
 	public void includeUSERBANK(boolean include) {
 		includeUSERBANK = include;
+	}
+	
+	/**
+	 * Get the current setting that if User Memory is included in inventory. 
+	 * @return the boolean value that if User Memory is included
+	 */
+	public boolean includeUSERBANK() {
+		return includeUSERBANK;
 	}
 	
 	public void setEPCFilter(byte[] data) {

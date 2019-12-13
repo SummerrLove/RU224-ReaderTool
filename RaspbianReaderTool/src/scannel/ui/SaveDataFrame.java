@@ -47,9 +47,10 @@ public class SaveDataFrame extends AnchorPane implements EventHandler<ActionEven
 		
 		
 		db_setting = new DBSettingFrame();
-		db_setting.setPrefSize(900, 260);
 		AnchorPane.setLeftAnchor(db_setting, 50.0);
 		AnchorPane.setTopAnchor(db_setting, 150.0);
+		AnchorPane.setRightAnchor(db_setting, 50.0);
+		AnchorPane.setBottomAnchor(db_setting, 270.0);
 		this.getChildren().add(db_setting);
 		db_setting.setDisable(true);
 		
@@ -58,7 +59,7 @@ public class SaveDataFrame extends AnchorPane implements EventHandler<ActionEven
 		btn_apply.setPrefWidth(70);
 		btn_apply.setOnAction(this);
 		AnchorPane.setLeftAnchor(btn_apply, 60.0);
-		AnchorPane.setTopAnchor(btn_apply, 450.0);
+		AnchorPane.setTopAnchor(btn_apply, 530.0);
 		this.getChildren().add(btn_apply);
 	}
 	

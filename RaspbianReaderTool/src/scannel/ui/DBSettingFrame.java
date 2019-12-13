@@ -30,6 +30,8 @@ public class DBSettingFrame extends AnchorPane implements EventHandler<ActionEve
 	private TextField fieldname_epc;
 	private TextField fieldname_readerid;
 	private TextField fieldname_time;
+	private TextField fieldname_tid;
+	private TextField fieldname_antenna;
 	
 	public DBSettingFrame() {
 		this.initComponents();
@@ -117,7 +119,7 @@ public class DBSettingFrame extends AnchorPane implements EventHandler<ActionEve
 		
 		Separator separator = new Separator();
 		separator.setOrientation(Orientation.VERTICAL);
-		AnchorPane.setLeftAnchor(separator, 430.0);
+		AnchorPane.setLeftAnchor(separator, 410.0);
 		AnchorPane.setTopAnchor(separator, 10.0);
 		AnchorPane.setBottomAnchor(separator, 10.0);
 		this.getChildren().add(separator);
@@ -186,6 +188,32 @@ public class DBSettingFrame extends AnchorPane implements EventHandler<ActionEve
 		AnchorPane.setTopAnchor(fieldname_time, 180.0);
 		this.getChildren().add(fieldname_time);
 		
+		
+		Label tid_title = new Label("Field Name (TID):");
+		tid_title.setFont(Font.font("Arial", FontWeight.NORMAL, 16));
+		AnchorPane.setLeftAnchor(tid_title, 480.0);
+		AnchorPane.setTopAnchor(tid_title, 220.0);
+		this.getChildren().add(tid_title);
+		
+		fieldname_tid = new TextField();
+		fieldname_tid.setPrefWidth(160);
+		AnchorPane.setLeftAnchor(fieldname_tid, 680.0);
+		AnchorPane.setTopAnchor(fieldname_tid, 220.0);
+		this.getChildren().add(fieldname_tid);
+		
+		
+		Label antenna_title = new Label("Field Name (Antenna):");
+		antenna_title.setFont(Font.font("Arial", FontWeight.NORMAL, 16));
+		AnchorPane.setLeftAnchor(antenna_title, 480.0);
+		AnchorPane.setTopAnchor(antenna_title, 260.0);
+		this.getChildren().add(antenna_title);
+		
+		fieldname_antenna = new TextField();
+		fieldname_antenna.setPrefWidth(160);
+		AnchorPane.setLeftAnchor(fieldname_antenna, 680.0);
+		AnchorPane.setTopAnchor(fieldname_antenna, 260.0);
+		this.getChildren().add(fieldname_antenna);
+		
 	}
 
 	private ObservableList<DBType> loadDBOption() {
@@ -219,11 +247,13 @@ public class DBSettingFrame extends AnchorPane implements EventHandler<ActionEve
 		ReaderConfig.getInstance().setEPCFieldName(fieldname_epc.getText());
 		ReaderConfig.getInstance().setReaderIdFieldName(fieldname_readerid.getText());
 		ReaderConfig.getInstance().setTimeFieldName(fieldname_time.getText());
+		ReaderConfig.getInstance().setTIDFieldName(fieldname_tid.getText());
+		ReaderConfig.getInstance().setAntennaFieldName(fieldname_antenna.getText());
 		
 		
 		DatabaseUtility.getInstance().setDBType(db_type.getValue());
 		DatabaseUtility.getInstance().setDBParameters(ip.getText(), db_name.getText(), userid.getText(), password.getText());
-		DatabaseUtility.getInstance().setTableParameters(table_name.getText(), fieldname_epc.getText(), fieldname_readerid.getText(), fieldname_time.getText());
+		DatabaseUtility.getInstance().setTableParameters(table_name.getText(), fieldname_epc.getText(), fieldname_readerid.getText(), fieldname_time.getText(), fieldname_tid.getText(), fieldname_antenna.getText());
 		DatabaseUtility.getInstance().setReaderId(readerid.getText());
 	}
 	
@@ -239,10 +269,12 @@ public class DBSettingFrame extends AnchorPane implements EventHandler<ActionEve
 		fieldname_epc.setText(ReaderConfig.getInstance().getEPCFieldName());
 		fieldname_readerid.setText(ReaderConfig.getInstance().getReaderIdFieldName());
 		fieldname_time.setText(ReaderConfig.getInstance().getTimeFieldName());
+		fieldname_tid.setText(ReaderConfig.getInstance().getTIDFieldName());
+		fieldname_antenna.setText(ReaderConfig.getInstance().getAntennaFieldName());
 		
 		DatabaseUtility.getInstance().setDBType(db_type.getValue());
 		DatabaseUtility.getInstance().setDBParameters(ip.getText(), db_name.getText(), userid.getText(), password.getText());
-		DatabaseUtility.getInstance().setTableParameters(table_name.getText(), fieldname_epc.getText(), fieldname_readerid.getText(), fieldname_time.getText());
+		DatabaseUtility.getInstance().setTableParameters(table_name.getText(), fieldname_epc.getText(), fieldname_readerid.getText(), fieldname_time.getText(), fieldname_tid.getText(), fieldname_antenna.getText());
 		DatabaseUtility.getInstance().setReaderId(readerid.getText());
 	}
 }

@@ -26,6 +26,8 @@ public class DatabaseUtility {
 	private String field_epc;
 	private String field_readerid;
 	private String field_time;
+	private String field_tid;
+	private String field_antenna;
 	private String readerId;
 	
 	
@@ -58,11 +60,20 @@ public class DatabaseUtility {
 		this.db_password = password;
 	}
 	
-	public void setTableParameters(String name, String fn_epc, String fn_readerid, String fn_time) {
+//	public void setTableParameters(String name, String fn_epc, String fn_readerid, String fn_time) {
+//		this.db_table = name;
+//		this.field_epc = fn_epc;
+//		this.field_readerid = fn_readerid;
+//		this.field_time = fn_time;
+//	}
+	
+	public void setTableParameters(String name, String fn_epc, String fn_readerid, String fn_time, String fn_tid, String fn_antenna) {
 		this.db_table = name;
 		this.field_epc = fn_epc;
 		this.field_readerid = fn_readerid;
 		this.field_time = fn_time;
+		this.field_tid = fn_tid;
+		this.field_antenna = fn_antenna;
 	}
 	
 	public void setReaderId(String id) {
@@ -97,8 +108,8 @@ public class DatabaseUtility {
 			String url = "jdbc:sqlserver://"+db_url+";databaseName="+db_name+";user="+db_user+";password="+db_password;
 			myConn = DriverManager.getConnection(url);
 			
-			String query = "INSERT INTO "+db_table+" ("+field_epc+", "+field_readerid+", "+field_time+") "
-					+ "VALUES (?, ?, ?)";
+			String query = "INSERT INTO "+db_table+" ("+field_epc+", "+field_readerid+", "+field_time+", "+field_tid+", "+field_antenna+") "
+					+ "VALUES (?, ?, ?, ?, ?)";
 			
 			myStmt = myConn.prepareStatement(query);
 			
@@ -110,6 +121,8 @@ public class DatabaseUtility {
 				myStmt.setString(1, tu.getEPC());
 				myStmt.setString(2, readerId);
 				myStmt.setTimestamp(3, new Timestamp(tu.getTime().getTime()));
+				myStmt.setString(4, tu.getTid());
+				myStmt.setString(5, Integer.toString(tu.getAntennaId()));
 				myStmt.addBatch();
 			}
 			
@@ -166,8 +179,8 @@ public class DatabaseUtility {
 			String url = "jdbc:mysql://"+db_url+"/"+db_name+"?serverTimezone=UTC";
 			myConn = DriverManager.getConnection(url, db_user, db_password);
 			
-			String query = "INSERT INTO "+db_table+" ("+field_epc+", "+field_readerid+", "+field_time+") "
-					+ "VALUES (?, ?, ?)";
+			String query = "INSERT INTO "+db_table+" ("+field_epc+", "+field_readerid+", "+field_time+", "+field_tid+", "+field_antenna+") "
+					+ "VALUES (?, ?, ?, ?, ?)";
 			
 			myStmt = myConn.prepareStatement(query);
 			
@@ -179,6 +192,8 @@ public class DatabaseUtility {
 				myStmt.setString(1, tu.getEPC());
 				myStmt.setString(2, readerId);
 				myStmt.setTimestamp(3, new Timestamp(tu.getTime().getTime()));
+				myStmt.setString(4, tu.getTid());
+				myStmt.setString(5, Integer.toString(tu.getAntennaId()));
 				myStmt.addBatch();
 			}
 			

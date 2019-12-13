@@ -35,6 +35,8 @@ public class ReaderConfig {
 	private final static String KEY_EPC_FIELDNAME = "EPC_FieldName";
 	private final static String KEY_READERID_FIELDNAME = "ReaderID_FieldName";
 	private final static String KEY_TIME_FIELDNAME = "Time_FieldName";
+	private final static String KEY_TID_FIELDNAME = "TID_FieldName";
+	private final static String KEY_ANTENNA_FIELDNAME = "Antenna_FieldName";
 	private final static String KEY_READERID = "ReaderID";
 	private final static String KEY_DI_TRIGGER = "DI_Trigger";
 	private final static String KEY_DO_TRIGGER = "DO_Trigger";
@@ -545,6 +547,22 @@ public class ReaderConfig {
 	
 	public String getTimeFieldName() {
 		return config_properties.getProperty(KEY_TIME_FIELDNAME);
+	}
+	
+	public void setTIDFieldName(String name) {
+		config_properties.setProperty(KEY_TID_FIELDNAME, name);
+	}
+	
+	public String getTIDFieldName() {
+		return config_properties.getProperty(KEY_TID_FIELDNAME);
+	}
+	
+	public void setAntennaFieldName(String name) {
+		config_properties.setProperty(KEY_ANTENNA_FIELDNAME, name);
+	}
+	
+	public String getAntennaFieldName() {
+		return config_properties.getProperty(KEY_ANTENNA_FIELDNAME);
 	}
 	
 	public void setReaderId(String id) {
